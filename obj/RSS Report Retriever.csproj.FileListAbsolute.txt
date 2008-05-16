@@ -1,0 +1,19 @@
+C:\RssExplorer\bin\Debug\RSS Report Retrievers.exe.config
+C:\RssExplorer\obj\Debug\RSS Report Retrievers.exe
+C:\RssExplorer\obj\Debug\RSS Report Retrievers.pdb
+C:\RssExplorer\bin\Debug\RSS Report Retrievers.exe.manifest
+C:\RssExplorer\bin\Debug\RSS Report Retrievers.application
+C:\RssExplorer\bin\Debug\RSS Report Retrievers.exe
+C:\RssExplorer\bin\Debug\RSS Report Retrievers.pdb
+C:\RssExplorer\obj\Debug\ResolveAssemblyReference.cache
+C:\RssExplorer\obj\Debug\RSS_Report_Retrievers.About.resources
+C:\RssExplorer\obj\Debug\RSS_Report_Retrievers.FormProperties.resources
+C:\RssExplorer\obj\Debug\RSS_Report_Retrievers.FormGetName.resources
+C:\RssExplorer\obj\Debug\RSS_Report_Retrievers.FormSSRSExplorer.resources
+C:\RssExplorer\obj\Debug\RSS_Report_Retrievers.FormSelectFilesystemFolder.resources
+C:\RssExplorer\obj\Debug\RSS_Report_Retrievers.FormSettings.resources
+C:\RssExplorer\obj\Debug\RSS_Report_Retrievers.FormSSRSSItemSelector.resources
+C:\RssExplorer\obj\Debug\RSS_Report_Retrievers.Properties.Resources.resources
+C:\RssExplorer\obj\Debug\RSS Report Retriever.csproj.GenerateResource.Cache
+C:\RssExplorer\obj\Debug\RSS Report Retrievers.exe.manifest
+C:\RssExplorer\obj\Debug\RSS Report Retrievers.application

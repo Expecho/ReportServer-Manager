@@ -1,0 +1,34 @@
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\RSS_Report_Retrievers.Properties.Resources.resources
+obj\Debug\RSS Report Retriever.csproj.GenerateResource.Cache
+bin\Debug\RSS Report Retrievers.exe.config
+bin\Debug\RSS Report Retrievers.exe
+bin\Debug\RSS Report Retrievers.pdb
+obj\Debug\RSS Report Retrievers.exe
+obj\Debug\RSS Report Retrievers.pdb
+bin\Debug\RSS Report Retrievers.exe.manifest
+bin\Debug\RSS Report Retrievers.application
+obj\Debug\RSS Report Retrievers.exe.manifest
+obj\Debug\RSS Report Retrievers.application
+bin\Release\RSS Report Retrievers.exe.config
+bin\Release\RSS Report Retrievers.exe.manifest
+bin\Release\RSS Report Retrievers.application
+bin\Release\RSS Report Retrievers.exe
+bin\Release\RSS Report Retrievers.XmlSerializers.dll
+bin\Release\RSS Report Retrievers.pdb
+obj\Release\ResolveAssemblyReference.cache
+obj\Release\RSS_Report_Retrievers.frmMain.resources
+obj\Release\RSS_Report_Retrievers.Properties.Resources.resources
+obj\Release\RSS Report Retriever.csproj.GenerateResource.Cache
+obj\Release\RSS Report Retrievers.exe.manifest
+obj\Release\RSS Report Retrievers.application
+obj\Release\RSS Report Retrievers.exe
+obj\Release\RSS Report Retrievers.pdb
+obj\Release\RSS Report Retrievers.XmlSerializers.dll
+obj\Debug\RSS_Report_Retrievers.FormProperties.resources
+obj\Debug\RSS_Report_Retrievers.FormGetName.resources
+obj\Debug\RSS_Report_Retrievers.FormSSRSExplorer.resources
+obj\Debug\RSS_Report_Retrievers.FormSelectFilesystemFolder.resources
+obj\Debug\RSS_Report_Retrievers.FormSettings.resources
+obj\Debug\RSS_Report_Retrievers.FormSSRSSItemSelector.resources
+obj\Debug\RSS_Report_Retrievers.About.resources
