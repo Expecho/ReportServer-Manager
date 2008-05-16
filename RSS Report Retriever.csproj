@@ -243,7 +243,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Classes\Settings.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="Web References\RSS\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

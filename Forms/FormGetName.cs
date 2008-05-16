@@ -17,7 +17,7 @@ namespace RSS_Report_Retrievers
             this.Text = caption; 
         }
 
-        public string Name
+        new public string Name
         {
             get
             {

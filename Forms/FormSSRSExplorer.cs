@@ -410,7 +410,7 @@ namespace RSS_Report_Retrievers
                 rs.PopulateTreeView();
                 toolStripStatusLabel.Text = String.Format("Connected to {0}", global::RSS_Report_Retrievers.Properties.Settings.Default.RSS_Report_Retrievers_RSS_ReportingService);
             }
-            catch (Exception ex)
+            catch 
             {
                 toolStripStatusLabel.Text = "Not connected";
                 MessageBox.Show("Cannot connect. Check server settings.", "Initialisation failed.", MessageBoxButtons.OK, MessageBoxIcon.Stop);
