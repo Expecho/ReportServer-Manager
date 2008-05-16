@@ -26,7 +26,11 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <IsWebBootstrapper>true</IsWebBootstrapper>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <ApplicationIcon>MessageQueuing.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\MessageQueuing.ico</ApplicationIcon>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -57,79 +61,80 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="About.cs">
+    <Compile Include="Classes\WaitCursor.cs" />
+    <Compile Include="Forms\About.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="About.Designer.cs">
+    <Compile Include="Forms\About.Designer.cs">
       <DependentUpon>About.cs</DependentUpon>
     </Compile>
     <Compile Include="Classes\DefaultMode2005.cs" />
     <Compile Include="Classes\DefaultMode.cs" />
     <Compile Include="Classes\IReportingServicesFactory.cs" />
     <Compile Include="Classes\SharePointIntegrated.cs" />
-    <Compile Include="FormProperties.cs">
+    <Compile Include="Forms\FormProperties.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormProperties.Designer.cs">
+    <Compile Include="Forms\FormProperties.Designer.cs">
       <DependentUpon>FormProperties.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormGetName.cs">
+    <Compile Include="Forms\FormGetName.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormGetName.Designer.cs">
+    <Compile Include="Forms\FormGetName.Designer.cs">
       <DependentUpon>FormGetName.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormSSRSExplorer.cs">
+    <Compile Include="Forms\FormSSRSExplorer.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormSSRSExplorer.Designer.cs">
+    <Compile Include="Forms\FormSSRSExplorer.Designer.cs">
       <DependentUpon>FormSSRSExplorer.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormSelectFilesystemFolder.cs">
+    <Compile Include="Forms\FormSelectFilesystemFolder.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormSelectFilesystemFolder.Designer.cs">
+    <Compile Include="Forms\FormSelectFilesystemFolder.Designer.cs">
       <DependentUpon>FormSelectFilesystemFolder.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormSettings.cs">
+    <Compile Include="Forms\FormSettings.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormSettings.Designer.cs">
+    <Compile Include="Forms\FormSettings.Designer.cs">
       <DependentUpon>FormSettings.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormSSRSSItemSelector.cs">
+    <Compile Include="Forms\FormSSRSSItemSelector.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormSSRSSItemSelector.Designer.cs">
+    <Compile Include="Forms\FormSSRSSItemSelector.Designer.cs">
       <DependentUpon>FormSSRSSItemSelector.cs</DependentUpon>
     </Compile>
-    <Compile Include="Classes\Program.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="About.resx">
+    <EmbeddedResource Include="Forms\About.resx">
       <SubType>Designer</SubType>
       <DependentUpon>About.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormProperties.resx">
+    <EmbeddedResource Include="Forms\FormProperties.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FormProperties.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormGetName.resx">
+    <EmbeddedResource Include="Forms\FormGetName.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FormGetName.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormSSRSExplorer.resx">
+    <EmbeddedResource Include="Forms\FormSSRSExplorer.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FormSSRSExplorer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormSelectFilesystemFolder.resx">
+    <EmbeddedResource Include="Forms\FormSelectFilesystemFolder.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FormSelectFilesystemFolder.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormSettings.resx">
+    <EmbeddedResource Include="Forms\FormSettings.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FormSettings.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormSSRSSItemSelector.resx">
+    <EmbeddedResource Include="Forms\FormSSRSSItemSelector.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FormSSRSSItemSelector.cs</DependentUpon>
     </EmbeddedResource>
@@ -314,7 +319,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="MessageQueuing.ico" />
+    <Content Include="Resources\MessageQueuing.ico" />
     <None Include="Web References\RSS_2005\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>

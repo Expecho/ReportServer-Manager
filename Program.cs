@@ -29,7 +29,16 @@ namespace RSS_Report_Retrievers
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormSSRSExplorer());
+
+            // TODO: Log this error someway
+            try
+            {
+                Application.Run(new FormSSRSExplorer());
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message + "\r\n" + e.StackTrace, "Unhandled exception in Rss Explorer");
+            }
         }
     }
 }
