@@ -5,11 +5,22 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using RSS_Report_Retrievers.Classes;
 
 namespace RSS_Report_Retrievers
 {
+
+    
     public partial class FormSettings : Form
     {
+        private ServerSettingDTO currentSetting = null;
+
+        public ServerSettingDTO CurrentSetting
+        {
+            get { return currentSetting; }
+            set { currentSetting = value; }
+        }
+
         public FormSettings()
         {
             InitializeComponent();
