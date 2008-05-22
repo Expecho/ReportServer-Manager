@@ -11,12 +11,17 @@ using System.Text;
 using System.Xml;
 using System.Windows.Forms;
 using System.IO;
+using RSS_Report_Retrievers.Classes;
 
 namespace RSS_Report_Retrievers
 {
     public partial class FormSSRSExplorer : Form
     {
         private IReportingServicesFactory rs;
+
+        public static ServerSettingsConfigElement SelectedServer = null;
+        ServerSettingsConfigElementCollection serverCollection = null;
+
 
         public FormSSRSExplorer()
         {
@@ -33,7 +38,8 @@ namespace RSS_Report_Retrievers
         /// </summary>
         private void frmReportSelector_Shown(object sender, EventArgs e)
         {
-            Connect();
+            BuildConnectSubMenu();
+            //Connect();
         }
 
         /// <summary>
@@ -221,17 +227,24 @@ namespace RSS_Report_Retrievers
         }
         #endregion
 
+
         /// <summary>
-        /// Display configuration window
+        /// Displays the server-window
         /// </summary>
-        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ShowSelectServer()
         {
-            FormSettings settings = new FormSettings();
-            if(settings.ShowDialog() == DialogResult.OK)
+            FormServers servers = new FormServers();
+
+            servers.ShowDialog();
+
+            if (servers.DialogResult != DialogResult.Cancel)
             {
-                Connect();
+                SelectedServer = servers.SelectedServer;
             }
+
+            BuildConnectSubMenu();
         }
+
 
         /// <summary>
         /// Exit application
@@ -239,6 +252,11 @@ namespace RSS_Report_Retrievers
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void settingsToolStripMenuItem_Click(object s, EventArgs e)
+        {
+            ShowSelectServer();
         }
 
         /// <summary>
@@ -368,54 +386,69 @@ namespace RSS_Report_Retrievers
             frmAbout.ShowDialog(this);  
         }
 
+
+        private void BuildConnectSubMenu()
+        {
+            serverCollection = ServerRegistry.GetServerSettings();
+
+            connectToolStripMenuItem.DropDownItems.Clear();
+
+            foreach (ServerSettingsConfigElement configEl in serverCollection)
+            {
+                ToolStripMenuItem newItem = new ToolStripMenuItem(configEl.Alias, null, connectToolStripMenuItem_Click);
+                connectToolStripMenuItem.DropDownItems.Add(newItem);
+            }
+        }
+
         private void connectToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            SelectedServer = this.serverCollection.Get(((ToolStripMenuItem)sender).Text);
+
             Connect();
         }
 
         private void Connect()
         {
-            if (String.IsNullOrEmpty(global::RSS_Report_Retrievers.Properties.Settings.Default.RSS_Report_Retrievers_RSS_ReportingService))
+            if (SelectedServer != null)
             {
-                FormSettings settings = new FormSettings();
-                if (settings.ShowDialog() != DialogResult.OK)
+                if (String.IsNullOrEmpty(SelectedServer.Url))
                 {
-                    return; // no webservice, so do nothing
-                }
-            }
-
-            if (!String.IsNullOrEmpty(global::RSS_Report_Retrievers.Properties.Settings.Default.RSS_Report_Retrievers_RSS_ReportingService))
-            {
-                // Sharepoint mode
-                if (global::RSS_Report_Retrievers.Properties.Settings.Default.RSS_Report_Retrievers_RSS_ReportingService.ToLower().Contains("2006.asmx"))
-                {
-                    rs = new SharePointIntegrated(tvReportServer, toolStripStatusLabel, lvItems);
-                }
-                else if (global::RSS_Report_Retrievers.Properties.Settings.Default.RSS_Report_Retrievers_RSS_ReportingService.ToLower().Contains("service.asmx"))
-                {
-                    rs = new DefaultMode(tvReportServer, toolStripStatusLabel, lvItems);
-                }
-                else if (global::RSS_Report_Retrievers.Properties.Settings.Default.RSS_Report_Retrievers_RSS_ReportingService.ToLower().Contains("2005.asmx"))
-                {
-                    rs = new DefaultMode2005(tvReportServer, toolStripStatusLabel, lvItems);
+                    ShowSelectServer();
                 }
                 else
                 {
-                    MessageBox.Show("Not a valid webservice url. Check server settings.", "Initialisation failed.", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    // Sharepoint mode
+                    if (SelectedServer.IsSharePointMode)
+                    {
+                        rs = new SharePointIntegrated(tvReportServer, toolStripStatusLabel, lvItems);
+                    }
+                    else if (SelectedServer.IsSQL2000)
+                    {
+                        rs = new DefaultMode(tvReportServer, toolStripStatusLabel, lvItems);
+                    }
+                    else 
+                    {
+                        rs = new DefaultMode2005(tvReportServer, toolStripStatusLabel, lvItems);
+                    }
+                }
+
+                try
+                {
+                    rs.PopulateTreeView();
+                    toolStripStatusLabel.Text = String.Format("Connected to {0}", FormSSRSExplorer.SelectedServer.Url);
+                }
+                catch
+                {
+                    toolStripStatusLabel.Text = "Not connected";
+                    MessageBox.Show("Cannot connect. Check server settings.", "Initialisation failed.", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    rs = null;
                 }
             }
+            else
+            {
+                ShowSelectServer();
+            }
 
-            try
-            {
-                rs.PopulateTreeView();
-                toolStripStatusLabel.Text = String.Format("Connected to {0}", global::RSS_Report_Retrievers.Properties.Settings.Default.RSS_Report_Retrievers_RSS_ReportingService);
-            }
-            catch 
-            {
-                toolStripStatusLabel.Text = "Not connected";
-                MessageBox.Show("Cannot connect. Check server settings.", "Initialisation failed.", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                rs = null;
-            }
         }
     }
 }

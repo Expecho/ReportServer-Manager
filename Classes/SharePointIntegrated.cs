@@ -33,16 +33,16 @@ namespace RSS_Report_Retrievers
             lvItems = listView;
 
             // use windows authentication when indicated
-            if (global::RSS_Report_Retrievers.Properties.Settings.Default.UseWindowsAuthentication)
+            if (FormSSRSExplorer.SelectedServer.UseWindowsAuth)
             {
                 rs.Credentials = System.Net.CredentialCache.DefaultCredentials;
             }
             else
             {
                 rs.Credentials = new System.Net.NetworkCredential(
-                        global::RSS_Report_Retrievers.Properties.Settings.Default.Username,
-                        global::RSS_Report_Retrievers.Properties.Settings.Default.Password,
-                        global::RSS_Report_Retrievers.Properties.Settings.Default.Domain
+                        FormSSRSExplorer.SelectedServer.WindowsUsername,
+                        FormSSRSExplorer.SelectedServer.WindowsPwd,
+                        FormSSRSExplorer.SelectedServer.WindowsDomain
                 );
             }
         }
@@ -118,7 +118,7 @@ namespace RSS_Report_Retrievers
 
             TreeNode root = new TreeNode("Root");
             root.Name = "/";
-            root.ToolTipText = global::RSS_Report_Retrievers.Properties.Settings.Default.ReportLibrary;
+            root.ToolTipText = FormSSRSExplorer.SelectedServer.ReportLibrary;
             root.Tag = ItemTypes.Folder;
             tvReportServer.Nodes.Add(root);
 

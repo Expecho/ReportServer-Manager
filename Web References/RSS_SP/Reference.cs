@@ -207,7 +207,7 @@ namespace RSS_Report_Retrievers.RSS_SP {
         
         /// <remarks/>
         public ReportingService2006() {
-            this.Url = global::RSS_Report_Retrievers.Properties.Settings.Default.RSS_Report_Retrievers_RSS_SP_ReportingService2006;
+            this.Url = FormSSRSExplorer.SelectedServer.Url;
             if ((this.IsLocalFileSystemWebService(this.Url) == true)) {
                 this.UseDefaultCredentials = true;
                 this.useDefaultCredentialsSetExplicitly = false;

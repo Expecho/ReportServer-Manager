@@ -9,6 +9,7 @@ using System.IO;
 using System.Windows.Forms;
 using RSS_Report_Retrievers.RSS_2005;
 using System.Xml;
+using RSS_Report_Retrievers.Classes;
 
 namespace RSS_Report_Retrievers
 {
@@ -18,7 +19,7 @@ namespace RSS_Report_Retrievers
         private TreeView tvReportServer = null;
         private ToolStripStatusLabel toolStripStatusLabel = null;
         private ListView lvItems = null;
-        ViewItems viewItem = ViewItems.Folders;  
+        ViewItems viewItem = ViewItems.Folders;
 
         /// <summary>
         /// Constructor
@@ -33,16 +34,16 @@ namespace RSS_Report_Retrievers
             lvItems = listView;
 
             // use windows authentication when indicated
-            if (global::RSS_Report_Retrievers.Properties.Settings.Default.UseWindowsAuthentication)
+            if (FormSSRSExplorer.SelectedServer.UseWindowsAuth)
             {
                 rs.Credentials = System.Net.CredentialCache.DefaultCredentials;
             }
             else
             {
                 rs.Credentials = new System.Net.NetworkCredential(
-                        global::RSS_Report_Retrievers.Properties.Settings.Default.Username,
-                        global::RSS_Report_Retrievers.Properties.Settings.Default.Password,
-                        global::RSS_Report_Retrievers.Properties.Settings.Default.Domain
+                        FormSSRSExplorer.SelectedServer.WindowsUsername,
+                        FormSSRSExplorer.SelectedServer.WindowsPwd,
+                        FormSSRSExplorer.SelectedServer.WindowsDomain
                 );
             }
         }
@@ -189,6 +190,10 @@ namespace RSS_Report_Retrievers
                     case ItemTypeEnum.DataSource:
                         lvi.Tag = ItemTypes.Datasource; 
                         lvi.ImageIndex = 0;
+                        break;
+                    case ItemTypeEnum.Model:
+                        lvi.Tag = ItemTypes.model;
+                        lvi.ImageIndex = 6;
                         break;
                 }
                 lvItems.Items.Add(lvi);
@@ -474,54 +479,83 @@ namespace RSS_Report_Retrievers
         /// <param name="preserveFolders">if true, the folder structure will be preserved, when false
         /// all files in subfolders will be saved to the destination folder</param>
         /// <remarks>Datasources cannot be downloaded, existing items will be overwritten and empty folders will be skipped</remarks> 
-        public void DownloadItem(string path, string destination, ItemTypes type, bool preserveFolders)
+        public void DownloadItem(string path, string destinationFolder, ItemTypes type, bool preserveFolders)
         {
             switch (type)
             {
                 case ItemTypes.Folder:
                     foreach (CatalogItem catalogItem in rs.ListChildren(path, true))
                     {
-                        DownloadItem(catalogItem.Path, destination, ConvertItemType(catalogItem.Type), preserveFolders);
+                        DownloadItem(catalogItem.Path, destinationFolder, ConvertItemType(catalogItem.Type), preserveFolders);
                     }
                     break;
+
                 case ItemTypes.Report:
-                    try
-                    {
-                        XmlDocument definition = new XmlDocument();
-                        definition.Load(new MemoryStream(rs.GetReportDefinition(path)));
 
-                        string directory = destination;
+                    XmlDocument definition = new XmlDocument();
+                    
+                    definition.Load(new MemoryStream(rs.GetReportDefinition(path)));
 
-                        if (preserveFolders)
-                        {
-                            if (tvReportServer.SelectedNode.ToolTipText != "/")
-                            {
-                                directory = String.Format(@"{0}\{1}", destination, FormSSRSExplorer.GetItemPath("/" + path.ToLower().Replace(tvReportServer.SelectedNode.ToolTipText.ToLower(), ""), true));
-                            }
-                            else
-                            {
-                                directory = String.Format(@"{0}\{1}", destination, FormSSRSExplorer.GetItemPath(path, true));
-                            }
-                        }
-                        
-                        string filename = FormSSRSExplorer.GetItemName(path);
+                    SaveItem(path, type, destinationFolder,preserveFolders, definition);
 
-                        if (!Directory.Exists(directory))
-                        {
-                            Directory.CreateDirectory(directory);
-                        }
+                    break;
 
-                        definition.Save(String.Format(@"{0}\{1}.rdl", directory, filename));
+                case ItemTypes.model:
+                    XmlDocument model = new XmlDocument();
 
-                        toolStripStatusLabel.Text = String.Format("Downloaded '{0}'", filename);
-                        Application.DoEvents();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(String.Format("An error has occured: {0}", ex.Message));
-                    }
+                    model.Load(new MemoryStream(rs.GetModelDefinition(path)));
+
+                    SaveItem(path, type, destinationFolder, preserveFolders, model);
+
                     break;
             }
+
+            toolStripStatusLabel.Text = String.Format("Downloaded '{0}'", path);
+            Application.DoEvents();
+        }
+
+        private string AppendFileSuffix(string path, ItemTypes type)
+        {
+            string filename = path;
+
+            switch (type)
+            {
+                case ItemTypes.model:
+                    filename = filename + ".smdl";
+                    break;
+                case ItemTypes.Report:
+                    filename = filename + ".rdl";
+                    break;
+            }
+
+            return filename;
+        }
+
+        private void SaveItem(string filename, ItemTypes type, string destination, bool preserveFolders, XmlDocument definition)
+        {
+            filename = AppendFileSuffix(filename, type);
+
+            if (preserveFolders)
+            {
+                string sourceBaseDirectory = tvReportServer.SelectedNode.ToolTipText;
+
+                //Create destinationdirectory by removing the base-directory from the clicked item
+
+                string relativeFilePath = Path.GetDirectoryName(filename.Substring(sourceBaseDirectory.Length+1));
+                
+                destination += relativeFilePath;
+                destination = destination.Replace('/','\\');
+            }
+
+            filename = Path.GetFileName(filename);
+
+            if (!Directory.Exists(destination))
+            {
+                Directory.CreateDirectory(destination);
+            }
+
+            definition.Save(String.Format(@"{0}\{1}", destination, filename));
+
         }
         #endregion
     }

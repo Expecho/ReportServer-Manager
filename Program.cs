@@ -9,7 +9,9 @@ namespace RSS_Report_Retrievers
         Folder = 0,
         Datasource = 1,
         Report = 2,
-        Unknown = 3
+        model = 3,
+        Unknown = 4
+
     }
 
     public enum ViewItems

@@ -1,38 +1,53 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Configuration;
 
 namespace RSS_Report_Retrievers.Classes
 {
     class ServerRegistry
     {
-        public IList<ServerSettingDTO> GetServerSettings()
+        private static ServerSettingsSection section = null;
+        private static Configuration config = null;
+
+        public static ServerSettingsConfigElementCollection GetServerSettings()
         {
-            return null;
+            InitConfig();
+            
+            return section.Servers;
         }
 
-        public bool StoreNewSetting(ServerSettingDTO newSetting)
+        private static void InitConfig()
         {
-            return false;
+            config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+
+            ConfigurationSectionGroupCollection sectionGroups = config.SectionGroups;
+
+            ConfigurationSectionGroup sectionGroup = sectionGroups["applicationSettings"];
+
+            section = (ServerSettingsSection)sectionGroup.Sections["ServerSettings"];
         }
 
-        public bool DeleteSetting(ServerSettingDTO existingSetting)
+        public static void AddElement(ServerSettingsConfigElement el)
         {
-            return false;
+            section.Servers.Add(el);
         }
-    }
 
-    public class ServerSettingDTO
-    {
-        public string VisibleName;
-        
-        public string url = null;
-        public bool isSharePointMode = false;
-        public string reportLibrary = null;
+        public static void StoreSettings()
+        {
+ //           System.Configuration.Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            //config.Sections.Remove("ServerSettings");
 
-        public bool useWindowsAuth = false;
-        public string windowsDomain = null;
-        public string windowsUsername = null;
-        public string windowsPassword = null;
+//            ServerSettingsSection newSection = new ServerSettingsSection();
+
+//            config.Sections.Add("ServerSettings", newSection);
+
+            config.Save(ConfigurationSaveMode.Full);
+        }
+
+        public static void RemoveElement(ServerSettingsConfigElement el)
+        {
+            section.Servers.Remove(el);
+        }
     }
 }

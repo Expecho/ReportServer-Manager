@@ -27,7 +27,7 @@ namespace RSS_Report_Retrievers
         {
             InitializeComponent();
             viewItem = viewItems;
-            if (global::RSS_Report_Retrievers.Properties.Settings.Default.SharePointMode)
+            if (FormSSRSExplorer.SelectedServer.IsSharePointMode)
             {
                 rs = new SharePointIntegrated(tvReportServer, null, null);
             }

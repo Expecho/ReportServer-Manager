@@ -80,7 +80,7 @@ namespace RSS_Report_Retrievers
             this.tvReportServer.ImageIndex = 2;
             this.tvReportServer.ImageList = this.imageList;
             this.tvReportServer.Location = new System.Drawing.Point(4, 4);
-            this.tvReportServer.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tvReportServer.Margin = new System.Windows.Forms.Padding(4);
             this.tvReportServer.Name = "tvReportServer";
             this.tvReportServer.SelectedImageIndex = 3;
             this.tvReportServer.Size = new System.Drawing.Size(337, 506);
@@ -97,6 +97,7 @@ namespace RSS_Report_Retrievers
             this.imageList.Images.SetKeyName(3, "");
             this.imageList.Images.SetKeyName(4, "");
             this.imageList.Images.SetKeyName(5, "");
+            this.imageList.Images.SetKeyName(6, "model.gif");
             // 
             // contextMenuStrip
             // 
@@ -203,7 +204,7 @@ namespace RSS_Report_Retrievers
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOK.Location = new System.Drawing.Point(925, 527);
-            this.btnOK.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnOK.Margin = new System.Windows.Forms.Padding(4);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(100, 28);
             this.btnOK.TabIndex = 1;
@@ -218,7 +219,7 @@ namespace RSS_Report_Retrievers
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.lvItems.ContextMenuStrip = this.contextMenuStrip;
             this.lvItems.Location = new System.Drawing.Point(4, 4);
-            this.lvItems.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.lvItems.Margin = new System.Windows.Forms.Padding(4);
             this.lvItems.Name = "lvItems";
             this.lvItems.ShowItemToolTips = true;
             this.lvItems.Size = new System.Drawing.Size(681, 506);
@@ -232,7 +233,7 @@ namespace RSS_Report_Retrievers
             // 
             this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.splitContainer.Margin = new System.Windows.Forms.Padding(4);
             this.splitContainer.Name = "splitContainer";
             // 
             // splitContainer.Panel1
@@ -300,26 +301,25 @@ namespace RSS_Report_Retrievers
             // connectToolStripMenuItem
             // 
             this.connectToolStripMenuItem.Name = "connectToolStripMenuItem";
-            this.connectToolStripMenuItem.Size = new System.Drawing.Size(132, 24);
+            this.connectToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
             this.connectToolStripMenuItem.Text = "&Connect";
-            this.connectToolStripMenuItem.Click += new System.EventHandler(this.connectToolStripMenuItem_Click);
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(132, 24);
-            this.settingsToolStripMenuItem.Text = "&Settings";
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
+            this.settingsToolStripMenuItem.Text = "&Servers...";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
             // toolStripMenuItem6
             // 
             this.toolStripMenuItem6.Name = "toolStripMenuItem6";
-            this.toolStripMenuItem6.Size = new System.Drawing.Size(129, 6);
+            this.toolStripMenuItem6.Size = new System.Drawing.Size(149, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(132, 24);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
             this.exitToolStripMenuItem.Text = "&Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -348,11 +348,11 @@ namespace RSS_Report_Retrievers
             // toolStripContainer.ContentPanel
             // 
             this.toolStripContainer.ContentPanel.Controls.Add(this.splitContainer);
-            this.toolStripContainer.ContentPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.toolStripContainer.ContentPanel.Margin = new System.Windows.Forms.Padding(4);
             this.toolStripContainer.ContentPanel.Size = new System.Drawing.Size(1041, 514);
             this.toolStripContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStripContainer.Location = new System.Drawing.Point(0, 0);
-            this.toolStripContainer.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.toolStripContainer.Margin = new System.Windows.Forms.Padding(4);
             this.toolStripContainer.Name = "toolStripContainer";
             this.toolStripContainer.Size = new System.Drawing.Size(1041, 567);
             this.toolStripContainer.TabIndex = 4;
@@ -370,7 +370,7 @@ namespace RSS_Report_Retrievers
             this.Controls.Add(this.toolStripContainer);
             this.Controls.Add(this.btnOK);
             this.MainMenuStrip = this.menuStripMain;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormSSRSExplorer";
             this.Text = "SSRS Explorer";
             this.Shown += new System.EventHandler(this.frmReportSelector_Shown);
