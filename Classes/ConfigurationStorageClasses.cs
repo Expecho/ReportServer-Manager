@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Configuration;
+using System.Security;
 
 namespace RSS_Report_Retrievers.Classes
 {
@@ -110,8 +111,17 @@ namespace RSS_Report_Retrievers.Classes
         [ConfigurationProperty("windowsPwd")]
         public string WindowsPwd
         {
-            get { return (string)this["windowsPwd"]; }
-            set { this["windowsPwd"] = value; }
+            get { 
+                try
+                {
+                    return CryptoHelper.ToInsecureString(CryptoHelper.DecryptString((string)this["windowsPwd"]));
+                }
+                catch{
+                    return (string)this["windowsPwd"];
+                }
+            }
+
+            set { this["windowsPwd"] = CryptoHelper.EncryptString(CryptoHelper.ToSecureString(value)); }
         }
 
         [ConfigurationProperty("windowsUsername")]
