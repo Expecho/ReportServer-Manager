@@ -12,7 +12,7 @@ using System.Xml;
 
 namespace RSS_Report_Retrievers
 {
-    class DefaultMode : IReportingServicesFactory
+    class DefaultMode : IReportingServices
     {
         private ReportingService rs = new ReportingService();
         private TreeView tvReportServer = null;

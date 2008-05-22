@@ -13,7 +13,7 @@ using RSS_Report_Retrievers.Classes;
 
 namespace RSS_Report_Retrievers
 {
-    class DefaultMode2005 : IReportingServicesFactory
+    class DefaultMode2005 : IReportingServices
     {
         private ReportingService2005 rs = new ReportingService2005();
         private TreeView tvReportServer = null;
@@ -130,7 +130,7 @@ namespace RSS_Report_Retrievers
         {
             foreach (CatalogItem item in rs.ListChildren(parent.ToolTipText, false))
             {
-                if (item.Type == ItemTypeEnum.Folder && (viewItem == ViewItems.Folders || viewItem == ViewItems.All))
+                if (item.Type == ItemTypeEnum.Folder && (viewItem == ViewItems.Folders || viewItem == ViewItems.All || viewItem == ViewItems.Datasources))
                 {
                     TreeNode folder = new TreeNode(item.Name);
                     folder.Name = item.Name;
@@ -321,8 +321,6 @@ namespace RSS_Report_Retrievers
         /// <param name="datasource">path of the datasource to bind</param>
         public void SetDatasource(string item, string datasource, ItemTypes type)
         {
-            string dataSourceName = ("/" + datasource.Split('/')[datasource.Split('/').GetUpperBound(0)]).Trim('/');
-
             switch (type)
             {
                 case ItemTypes.Folder:
@@ -332,34 +330,24 @@ namespace RSS_Report_Retrievers
                     }
                     break;
                 case ItemTypes.Report:
-                    foreach (DataSource availableDataSource in rs.GetItemDataSources(item))
+                case ItemTypes.model:
+
+                    DataSource[] reportDataSources = rs.GetItemDataSources(item);
+
+                    foreach (DataSource existingDataSource in reportDataSources)
                     {
-                        // Only update the report when the selected datasource is used in that report
-                        if (availableDataSource.Name == dataSourceName)
-                        {
-                            try
-                            {
-                                DataSourceReference dsr = new DataSourceReference();
-                                dsr.Reference = datasource;
+                        DataSourceReference dsr = new DataSourceReference();
+                        dsr.Reference = datasource;
 
-                                DataSource[] dataSources = new DataSource[1];
-
-                                DataSource ds = new DataSource();
-                                ds.Item = (DataSourceDefinitionOrReference)dsr;
-                                ds.Name = ("/" + datasource.Split('/')[datasource.Split('/').GetUpperBound(0)]).Trim('/');
-                                dataSources[0] = ds;
-
-                                rs.SetItemDataSources(item, dataSources);
-
-                                toolStripStatusLabel.Text = String.Format("Updated datasource of {0}", item);
-                            }
-                            catch (Exception ex)
-                            {
-                                throw new Exception(String.Format("An error has occured: {0}", ex.Message));
-                            }
-                        }
+                        existingDataSource.Item = dsr;
                     }
+
+                    rs.SetItemDataSources(item, reportDataSources);
+
+                    toolStripStatusLabel.Text = String.Format("Updated datasource of {0}", item);
+                    
                     break;
+
                 default:
                     toolStripStatusLabel.Text = String.Format("Cannot set datasource of item {0}", item);
                     break;

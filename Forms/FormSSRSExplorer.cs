@@ -17,7 +17,7 @@ namespace RSS_Report_Retrievers
 {
     public partial class FormSSRSExplorer : Form
     {
-        private IReportingServicesFactory rs;
+        private IReportingServices rs;
 
         public static ServerSettingsConfigElement SelectedServer = null;
         ServerSettingsConfigElementCollection serverCollection = null;
@@ -417,19 +417,7 @@ namespace RSS_Report_Retrievers
                 }
                 else
                 {
-                    // Sharepoint mode
-                    if (SelectedServer.IsSharePointMode)
-                    {
-                        rs = new SharePointIntegrated(tvReportServer, toolStripStatusLabel, lvItems);
-                    }
-                    else if (SelectedServer.IsSQL2000)
-                    {
-                        rs = new DefaultMode(tvReportServer, toolStripStatusLabel, lvItems);
-                    }
-                    else 
-                    {
-                        rs = new DefaultMode2005(tvReportServer, toolStripStatusLabel, lvItems);
-                    }
+                    rs = ReportingServicesFactory.CreateFromSettings(SelectedServer,tvReportServer, toolStripStatusLabel, lvItems);
                 }
 
                 try

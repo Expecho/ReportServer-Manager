@@ -11,7 +11,7 @@ namespace RSS_Report_Retrievers
     public partial class FormSSRSSItemSelector : Form
     {
         private ViewItems viewItem = ViewItems.Folders;
-        private IReportingServicesFactory rs;
+        private IReportingServices rs;
         
         #region Properties
         public string SelectedItemPath
@@ -27,15 +27,9 @@ namespace RSS_Report_Retrievers
         {
             InitializeComponent();
             viewItem = viewItems;
-            if (FormSSRSExplorer.SelectedServer.IsSharePointMode)
-            {
-                rs = new SharePointIntegrated(tvReportServer, null, null);
-            }
-            else
-            {
-                rs = new DefaultMode(tvReportServer, null, null);
-            }
 
+            rs = ReportingServicesFactory.CreateFromSettings(FormSSRSExplorer.SelectedServer,tvReportServer,null,null);
+            
             rs.ViewItem = viewItem; 
         }
 

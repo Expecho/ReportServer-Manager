@@ -12,7 +12,7 @@ using System.Xml;
 
 namespace RSS_Report_Retrievers
 {
-    class SharePointIntegrated : IReportingServicesFactory
+    class SharePointIntegrated : IReportingServices
     {
         private ReportingService2006 rs = new ReportingService2006();
         private TreeView tvReportServer = null;

@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace RSS_Report_Retrievers
 {
-    interface IReportingServicesFactory
+    interface IReportingServices
     {
         void PopulateTreeView();
         void PopulateItems(string path);
@@ -22,5 +22,27 @@ namespace RSS_Report_Retrievers
         void DownloadItem(string path, string destination, ItemTypes type, bool preserveFolders);
 
         ViewItems ViewItem { get; set; }
+    }
+
+    class ReportingServicesFactory
+    {
+        public static IReportingServices CreateFromSettings(Classes.ServerSettingsConfigElement config,TreeView tvReportServer, ToolStripStatusLabel lbl, ListView lv)
+        {
+            IReportingServices rs;
+
+            if (config.IsSharePointMode)
+            {
+                rs = new SharePointIntegrated(tvReportServer, lbl, lv);
+            }
+            else
+            {
+                if (config.IsSQL2000)
+                    rs = new DefaultMode(tvReportServer, lbl, lv);
+                else
+                    rs = new DefaultMode2005(tvReportServer, lbl, lv);
+            }
+
+            return rs;
+        }
     }
 }

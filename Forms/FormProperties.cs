@@ -12,7 +12,7 @@ namespace RSS_Report_Retrievers
     {
         private string path;
         private ItemTypes itemType;
-        private IReportingServicesFactory rs; 
+        private IReportingServices rs; 
 
         /// <summary>
         /// Constructor
@@ -24,14 +24,7 @@ namespace RSS_Report_Retrievers
         {
             InitializeComponent();
 
-            if (FormSSRSExplorer.SelectedServer.IsSharePointMode)
-            {
-                rs = new SharePointIntegrated(null, null, null);
-            }
-            else
-            {
-                rs = new DefaultMode(null, null, null);
-            }
+            rs = ReportingServicesFactory.CreateFromSettings(FormSSRSExplorer.SelectedServer,null,null,null);
 
             path = _path;
             itemType = _type; 
