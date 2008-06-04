@@ -35,13 +35,6 @@ namespace RSS_Report_Retrievers.Classes
 
         public static void StoreSettings()
         {
- //           System.Configuration.Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            //config.Sections.Remove("ServerSettings");
-
-//            ServerSettingsSection newSection = new ServerSettingsSection();
-
-//            config.Sections.Add("ServerSettings", newSection);
-
             config.Save(ConfigurationSaveMode.Full);
         }
 

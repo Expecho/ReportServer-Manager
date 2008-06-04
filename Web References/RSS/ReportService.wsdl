@@ -2061,13 +2061,13 @@
   <message name="SetPropertiesServerInfoHeader">
     <part name="ServerInfoHeader" element="s0:ServerInfoHeader" />
   </message>
-  <message name="GetItemTypeSoapIn">
+  <message name="GetReportItemTypesoapIn">
     <part name="parameters" element="s0:GetItemType" />
   </message>
-  <message name="GetItemTypeSoapOut">
+  <message name="GetReportItemTypesoapOut">
     <part name="parameters" element="s0:GetItemTypeResponse" />
   </message>
-  <message name="GetItemTypeServerInfoHeader">
+  <message name="GetReportItemTypeserverInfoHeader">
     <part name="ServerInfoHeader" element="s0:ServerInfoHeader" />
   </message>
   <message name="CreateFolderSoapIn">
@@ -2968,8 +2968,8 @@
       <output message="s0:SetPropertiesSoapOut" />
     </operation>
     <operation name="GetItemType">
-      <input message="s0:GetItemTypeSoapIn" />
-      <output message="s0:GetItemTypeSoapOut" />
+      <input message="s0:GetReportItemTypesoapIn" />
+      <output message="s0:GetReportItemTypesoapOut" />
     </operation>
     <operation name="CreateFolder">
       <input message="s0:CreateFolderSoapIn" />
@@ -3421,7 +3421,7 @@
       </input>
       <output>
         <soap:body use="literal" />
-        <soap:header message="s0:GetItemTypeServerInfoHeader" part="ServerInfoHeader" use="literal" />
+        <soap:header message="s0:GetReportItemTypeserverInfoHeader" part="ServerInfoHeader" use="literal" />
       </output>
     </operation>
     <operation name="CreateFolder">

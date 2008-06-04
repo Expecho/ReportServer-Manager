@@ -5,14 +5,15 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using RSS_Report_Retrievers.Classes;
 
 namespace RSS_Report_Retrievers
 {
     public partial class FormProperties : Form
     {
         private string path;
-        private ItemTypes itemType;
-        private IReportingServices rs; 
+        private ReportItemTypes itemType;
+        private IController rs; 
 
         /// <summary>
         /// Constructor
@@ -20,7 +21,7 @@ namespace RSS_Report_Retrievers
         /// <param name="_path">path of selected item</param>
         /// <param name="_rs">instance of ReportService class</param>
         /// <param name="_type">type of the selected item</param> 
-        public FormProperties(string _path, ItemTypes _type)
+        public FormProperties(string _path, ReportItemTypes _type)
         {
             InitializeComponent();
 
@@ -81,7 +82,7 @@ namespace RSS_Report_Retrievers
 
                 Application.DoEvents();
 
-                if (itemType == ItemTypes.Report)
+                if (itemType == ReportItemTypes.Report)
                 {
                     foreach (string datasource in rs.GetReportDatasources(path))
                     {

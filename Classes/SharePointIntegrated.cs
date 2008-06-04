@@ -8,7 +8,8 @@ using System.Text;
 using System.IO;
 using System.Windows.Forms; 
 using RSS_Report_Retrievers.RSS_SP;
-using System.Xml; 
+using System.Xml;
+using RSS_Report_Retrievers.Classes;
 
 namespace RSS_Report_Retrievers
 {
@@ -68,15 +69,15 @@ namespace RSS_Report_Retrievers
         /// </summary>
         /// <param name="type">The reportserver type to convert</param>
         /// <returns>The converted type</returns>
-        private ItemTypes ConvertItemType(ItemTypeEnum type)
+        private ReportItemTypes ConvertItemType(ItemTypeEnum type)
         {
-            ItemTypes convertedType = ItemTypes.Unknown;
+            ReportItemTypes convertedType = ReportItemTypes.Unknown;
 
             switch (type)
             {
-                case ItemTypeEnum.Folder: convertedType = ItemTypes.Folder; break;
-                case ItemTypeEnum.Report: convertedType = ItemTypes.Report; break;
-                case ItemTypeEnum.DataSource: convertedType = ItemTypes.Datasource; break;
+                case ItemTypeEnum.Folder: convertedType = ReportItemTypes.Folder; break;
+                case ItemTypeEnum.Report: convertedType = ReportItemTypes.Report; break;
+                case ItemTypeEnum.DataSource: convertedType = ReportItemTypes.Datasource; break;
             }
 
             return convertedType;
@@ -119,7 +120,7 @@ namespace RSS_Report_Retrievers
             TreeNode root = new TreeNode("Root");
             root.Name = "/";
             root.ToolTipText = FormSSRSExplorer.SelectedServer.ReportLibrary;
-            root.Tag = ItemTypes.Folder;
+            root.Tag = ReportItemTypes.Folder;
             tvReportServer.Nodes.Add(root);
 
             if (toolStripStatusLabel != null)
@@ -160,7 +161,7 @@ namespace RSS_Report_Retrievers
                     TreeNode folder = new TreeNode(item.Name);
                     folder.Name = item.Name;
                     folder.ImageIndex = item.Hidden ? 4 : 2;
-                    folder.Tag = ItemTypes.Folder;
+                    folder.Tag = ReportItemTypes.Folder;
                     folder.ToolTipText = item.Path;
                     parent.Nodes.Add(folder);
                     ExpandNodeContent(folder); //Explore subfolders on the report server
@@ -170,7 +171,7 @@ namespace RSS_Report_Retrievers
                     TreeNode datasource = new TreeNode(item.Name);
                     datasource.Name = item.Name;
                     datasource.ImageIndex = 0;
-                    datasource.Tag = ItemTypes.Datasource;
+                    datasource.Tag = ReportItemTypes.Datasource;
                     datasource.ToolTipText = item.Path;
                     parent.Nodes.Add(datasource);
                 }
@@ -179,7 +180,7 @@ namespace RSS_Report_Retrievers
                     TreeNode report = new TreeNode(item.Name);
                     report.Name = item.Name;
                     report.ImageIndex = 1;
-                    report.Tag = ItemTypes.Report;
+                    report.Tag = ReportItemTypes.Report;
                     report.ToolTipText = item.Path;
                     parent.Nodes.Add(report);
                 }
@@ -205,15 +206,15 @@ namespace RSS_Report_Retrievers
                 {
                     case ItemTypeEnum.Folder:
                         lvi.ImageIndex = item.Hidden ? 4 : 2; ;
-                        lvi.Tag = ItemTypes.Folder;  
+                        lvi.Tag = ReportItemTypes.Folder;  
                         break;
                     case ItemTypeEnum.Report:
                         lvi.ImageIndex = item.Hidden ? 5 : 1;
-                        lvi.Tag = ItemTypes.Report; 
+                        lvi.Tag = ReportItemTypes.Report; 
                         break;
                     case ItemTypeEnum.DataSource:
                         lvi.ImageIndex = 0;
-                        lvi.Tag = ItemTypes.Datasource;
+                        lvi.Tag = ReportItemTypes.Datasource;
                         break;
                 }
                 lvItems.Items.Add(lvi);
@@ -266,7 +267,7 @@ namespace RSS_Report_Retrievers
             TreeNode folder = new TreeNode(name);
             folder.Name = name;
             folder.ImageIndex = 2;
-            folder.Tag = ItemTypes.Folder;
+            folder.Tag = ReportItemTypes.Folder;
 
             if (parent.ToolTipText.EndsWith("/"))
             {
@@ -340,19 +341,19 @@ namespace RSS_Report_Retrievers
         /// </summary>
         /// <param name="item">path of the item</param>
         /// <param name="datasource">path of the datasource to bind</param>
-        public void SetDatasource(string item, string datasource, ItemTypes type)
+        public void SetDatasource(string item, string datasource, ReportItemTypes type)
         {
             string dataSourceName = ("/" + datasource.Split('/')[datasource.Split('/').GetUpperBound(0)]).Trim('/').Replace(".rsds", "");
             
             switch (type)
             {
-                case ItemTypes.Folder:
+                case ReportItemTypes.Folder:
                     foreach (CatalogItem catalogItem in GetCatalogItems(item, true))
                     {
                         SetDatasource(catalogItem.Path, datasource, ConvertItemType(catalogItem.Type));       
                     }
                     break;
-                case ItemTypes.Report:
+                case ReportItemTypes.Report:
                     try
                     {
                         foreach(DataSource availableDataSource in rs.GetItemDataSources(item))
@@ -396,13 +397,13 @@ namespace RSS_Report_Retrievers
         /// <param name="source">source path</param>
         /// <param name="destination">destionation path</param>
         /// <param name="type">Type of item</param> 
-        public void MoveItem(string source, string destination, ItemTypes type)
+        public void MoveItem(string source, string destination, ReportItemTypes type)
         {
-            if (!destination.EndsWith(".rsds") && type == ItemTypes.Datasource )
+            if (!destination.EndsWith(".rsds") && type == ReportItemTypes.Datasource )
             {
                 destination += ".rsds";
             }
-            else if (!destination.EndsWith(".rdl") && type == ItemTypes.Report)
+            else if (!destination.EndsWith(".rdl") && type == ReportItemTypes.Report)
             {
                 destination += ".rdl";
             }
@@ -519,17 +520,17 @@ namespace RSS_Report_Retrievers
         /// <param name="preserveFolders">if true, the folder structure will be preserved, when false
         /// all files in subfolders will be saved to the destination folder</param>
         /// <remarks>Datasources cannot be downloaded, existing items will be overwritten and empty folders will be skipped</remarks> 
-        public void DownloadItem(string path, string destination, ItemTypes type, bool preserveFolders)
+        public void DownloadItem(string path, string destination, ReportItemTypes type, bool preserveFolders)
         {
             switch (type)
             {
-                case ItemTypes.Folder:
+                case ReportItemTypes.Folder:
                     foreach (CatalogItem catalogItem in GetCatalogItems(path, true))
                     {
                         DownloadItem(catalogItem.Path, destination, ConvertItemType(catalogItem.Type), preserveFolders);
                     }
                     break;
-                case ItemTypes.Report:
+                case ReportItemTypes.Report:
                     try
                     {
                         XmlDocument definition = new XmlDocument();

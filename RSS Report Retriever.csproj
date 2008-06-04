@@ -64,6 +64,11 @@
   <ItemGroup>
     <Compile Include="Classes\ConfigurationStorageClasses.cs" />
     <Compile Include="Classes\CryptoHelper.cs" />
+    <Compile Include="Classes\IRSFacade.cs" />
+    <Compile Include="Classes\ReportItemEnums.cs" />
+    <Compile Include="Classes\RS2000Facade.cs" />
+    <Compile Include="Classes\RS2005Facade.cs" />
+    <Compile Include="Classes\RS2005SharePointFacade.cs" />
     <Compile Include="Classes\ServerRegistry.cs" />
     <Compile Include="Forms\About.cs">
       <SubType>Form</SubType>
@@ -71,10 +76,8 @@
     <Compile Include="Forms\About.Designer.cs">
       <DependentUpon>About.cs</DependentUpon>
     </Compile>
-    <Compile Include="Classes\DefaultMode2005.cs" />
-    <Compile Include="Classes\DefaultMode.cs" />
+    <Compile Include="Classes\Controller.cs" />
     <Compile Include="Classes\IReportingServicesFactory.cs" />
-    <Compile Include="Classes\SharePointIntegrated.cs" />
     <Compile Include="Forms\FormProperties.cs">
       <SubType>Form</SubType>
     </Compile>

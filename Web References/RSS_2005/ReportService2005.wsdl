@@ -2287,13 +2287,13 @@
   <wsdl:message name="SetPropertiesServerInfoHeader">
     <wsdl:part name="ServerInfoHeader" element="tns:ServerInfoHeader" />
   </wsdl:message>
-  <wsdl:message name="GetItemTypeSoapIn">
+  <wsdl:message name="GetReportItemTypesoapIn">
     <wsdl:part name="parameters" element="tns:GetItemType" />
   </wsdl:message>
-  <wsdl:message name="GetItemTypeSoapOut">
+  <wsdl:message name="GetReportItemTypesoapOut">
     <wsdl:part name="parameters" element="tns:GetItemTypeResponse" />
   </wsdl:message>
-  <wsdl:message name="GetItemTypeServerInfoHeader">
+  <wsdl:message name="GetReportItemTypeserverInfoHeader">
     <wsdl:part name="ServerInfoHeader" element="tns:ServerInfoHeader" />
   </wsdl:message>
   <wsdl:message name="CreateFolderSoapIn">
@@ -3297,8 +3297,8 @@
       <wsdl:output message="tns:SetPropertiesSoapOut" />
     </wsdl:operation>
     <wsdl:operation name="GetItemType">
-      <wsdl:input message="tns:GetItemTypeSoapIn" />
-      <wsdl:output message="tns:GetItemTypeSoapOut" />
+      <wsdl:input message="tns:GetReportItemTypesoapIn" />
+      <wsdl:output message="tns:GetReportItemTypesoapOut" />
     </wsdl:operation>
     <wsdl:operation name="CreateFolder">
       <wsdl:input message="tns:CreateFolderSoapIn" />
@@ -3796,7 +3796,7 @@
       </wsdl:input>
       <wsdl:output>
         <soap:body use="literal" />
-        <soap:header message="tns:GetItemTypeServerInfoHeader" part="ServerInfoHeader" use="literal" />
+        <soap:header message="tns:GetReportItemTypeserverInfoHeader" part="ServerInfoHeader" use="literal" />
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="CreateFolder">
@@ -4882,7 +4882,7 @@
       </wsdl:input>
       <wsdl:output>
         <soap12:body use="literal" />
-        <soap12:header message="tns:GetItemTypeServerInfoHeader" part="ServerInfoHeader" use="literal" />
+        <soap12:header message="tns:GetReportItemTypeserverInfoHeader" part="ServerInfoHeader" use="literal" />
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="CreateFolder">

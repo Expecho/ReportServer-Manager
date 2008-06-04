@@ -17,7 +17,7 @@ namespace RSS_Report_Retrievers
 {
     public partial class FormSSRSExplorer : Form
     {
-        private IReportingServices rs;
+        private IController rs;
 
         public static ServerSettingsConfigElement SelectedServer = null;
         ServerSettingsConfigElementCollection serverCollection = null;
@@ -86,7 +86,7 @@ namespace RSS_Report_Retrievers
             if (e.Button == MouseButtons.Left)
             {
                 ListViewItem lvi = lvItems.GetItemAt(e.X, e.Y);
-                if (lvi != null && (ItemTypes)lvi.Tag == ItemTypes.Folder)
+                if (lvi != null && (ReportItemTypes)lvi.Tag == ReportItemTypes.Folder)
                 {
                     foreach (TreeNode node in tvReportServer.Nodes.Find(lvi.Text, true))
                     {
@@ -185,7 +185,7 @@ namespace RSS_Report_Retrievers
                 {
                     rs.DeleteItem(item.ToolTipText);
 
-                    if ((ItemTypes)item.Tag == ItemTypes.Folder)
+                    if ((ReportItemTypes)item.Tag == ReportItemTypes.Folder)
                     {
                         foreach (TreeNode node in tvReportServer.SelectedNode.Nodes)
                         {
@@ -270,10 +270,10 @@ namespace RSS_Report_Retrievers
             {
                 try
                 {
-                    rs.MoveItem(lvItems.SelectedItems[0].ToolTipText, GetItemPath(lvItems.SelectedItems[0].ToolTipText, false) + "/" + GetName.Name, (ItemTypes)lvItems.SelectedItems[0].Tag);
+                    rs.MoveItem(lvItems.SelectedItems[0].ToolTipText, GetItemPath(lvItems.SelectedItems[0].ToolTipText, false) + "/" + GetName.Name, (ReportItemTypes)lvItems.SelectedItems[0].Tag);
                     toolStripStatusLabel.Text = String.Format("Renamed item '{0}' to '{1}'", lvItems.SelectedItems[0].Text, GetItemPath(lvItems.SelectedItems[0].ToolTipText, false) + "/" + GetName.Name);
 
-                    if ((ItemTypes)lvItems.SelectedItems[0].Tag == ItemTypes.Folder)
+                    if ((ReportItemTypes)lvItems.SelectedItems[0].Tag == ReportItemTypes.Folder)
                     {
                         rs.PopulateTreeView();
                     }
@@ -292,7 +292,7 @@ namespace RSS_Report_Retrievers
         /// </summary>
         private void propertiesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FormProperties frmProperties = new FormProperties(lvItems.SelectedItems[0].ToolTipText, (ItemTypes)lvItems.SelectedItems[0].Tag);
+            FormProperties frmProperties = new FormProperties(lvItems.SelectedItems[0].ToolTipText, (ReportItemTypes)lvItems.SelectedItems[0].Tag);
             frmProperties.ShowDialog();
         }
 
@@ -308,7 +308,7 @@ namespace RSS_Report_Retrievers
             {
                 foreach (ListViewItem item in lvItems.SelectedItems)
                 {
-                    rs.SetDatasource(item.ToolTipText, ssrsExplorer.SelectedItemPath, (ItemTypes)item.Tag);
+                    rs.SetDatasource(item.ToolTipText, ssrsExplorer.SelectedItemPath, (ReportItemTypes)item.Tag);
                 }
             }
         }
@@ -327,7 +327,7 @@ namespace RSS_Report_Retrievers
                 {
                     try
                     {
-                        rs.MoveItem(item.ToolTipText, ssrsExplorer.SelectedItemPath.Trim('/') + "/" + item.Text, (ItemTypes)item.Tag);
+                        rs.MoveItem(item.ToolTipText, ssrsExplorer.SelectedItemPath.Trim('/') + "/" + item.Text, (ReportItemTypes)item.Tag);
                         toolStripStatusLabel.Text = String.Format("Moved item '{0}' to {1}", item.Text, ssrsExplorer.SelectedItemPath);
                         Application.DoEvents();
                     }
@@ -355,7 +355,7 @@ namespace RSS_Report_Retrievers
                 bool askToPreserveFolders = false;
                 foreach (ListViewItem item in lvItems.SelectedItems)
                 {
-                    if ((ItemTypes)item.Tag == ItemTypes.Folder)
+                    if ((ReportItemTypes)item.Tag == ReportItemTypes.Folder)
                     {
                         askToPreserveFolders = true;
                         break;
@@ -373,7 +373,7 @@ namespace RSS_Report_Retrievers
 
                 foreach (ListViewItem item in lvItems.SelectedItems)
                 {
-                    rs.DownloadItem(item.ToolTipText, folderSelector.Foldername, (ItemTypes)item.Tag, preserveFolders);
+                    rs.DownloadItem(item.ToolTipText, folderSelector.Foldername, (ReportItemTypes)item.Tag, preserveFolders);
                 }
 
                 this.Cursor = Cursors.Default;

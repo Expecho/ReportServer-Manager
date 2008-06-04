@@ -5,13 +5,14 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using RSS_Report_Retrievers.Classes;
 
 namespace RSS_Report_Retrievers
 {
     public partial class FormSSRSSItemSelector : Form
     {
         private ViewItems viewItem = ViewItems.Folders;
-        private IReportingServices rs;
+        private IController rs;
         
         #region Properties
         public string SelectedItemPath
@@ -63,12 +64,12 @@ namespace RSS_Report_Retrievers
                     MessageBox.Show(String.Format("Please select a {0}.", viewItem == ViewItems.Folders ? "folder" : "datasource"), "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     e.Cancel = true;
                 }
-                else if (viewItem == ViewItems.Datasources && (ItemTypes)tvReportServer.SelectedNode.Tag != ItemTypes.Datasource)
+                else if (viewItem == ViewItems.Datasources && (ReportItemTypes)tvReportServer.SelectedNode.Tag != ReportItemTypes.Datasource)
                 {
                     MessageBox.Show("Please select a datasource.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     e.Cancel = true;
                 }
-                else if (viewItem == ViewItems.Folders && (ItemTypes)tvReportServer.SelectedNode.Tag != ItemTypes.Folder)
+                else if (viewItem == ViewItems.Folders && (ReportItemTypes)tvReportServer.SelectedNode.Tag != ReportItemTypes.Folder)
                 {
                     MessageBox.Show("Please select a folder.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     e.Cancel = true;

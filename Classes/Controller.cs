@@ -7,15 +7,14 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Windows.Forms;
-using RSS_Report_Retrievers.RSS_2005;
 using System.Xml;
 using RSS_Report_Retrievers.Classes;
 
 namespace RSS_Report_Retrievers
 {
-    class DefaultMode2005 : IReportingServices
+    class Controller : IController
     {
-        private ReportingService2005 rs = new ReportingService2005();
+        public IRSFacade RsFacade;
         private TreeView tvReportServer = null;
         private ToolStripStatusLabel toolStripStatusLabel = null;
         private ListView lvItems = null;
@@ -27,25 +26,12 @@ namespace RSS_Report_Retrievers
         /// <param name="treeView">The treeview to use for building a list of folders on the server</param>
         /// <param name="label">The toolstrip status label to use for information messages</param>
         /// <param name="listView">The listview to use for displaying the folders and report on the server</param>
-        public DefaultMode2005(TreeView treeView, ToolStripStatusLabel label, ListView listView)
+        public Controller(TreeView treeView, ToolStripStatusLabel label, ListView listView)
         {
             tvReportServer = treeView;
             toolStripStatusLabel = label;
             lvItems = listView;
 
-            // use windows authentication when indicated
-            if (FormSSRSExplorer.SelectedServer.UseWindowsAuth)
-            {
-                rs.Credentials = System.Net.CredentialCache.DefaultCredentials;
-            }
-            else
-            {
-                rs.Credentials = new System.Net.NetworkCredential(
-                        FormSSRSExplorer.SelectedServer.WindowsUsername,
-                        FormSSRSExplorer.SelectedServer.WindowsPwd,
-                        FormSSRSExplorer.SelectedServer.WindowsDomain
-                );
-            }
         }
 
         /// <summary>
@@ -64,25 +50,6 @@ namespace RSS_Report_Retrievers
             }
         }
 
-        /// <summary>
-        /// Convert the item type of the reportserver class to our own item type enum
-        /// </summary>
-        /// <param name="type">The reportserver type to convert</param>
-        /// <returns>The converted type</returns>
-        private ItemTypes ConvertItemType(ItemTypeEnum type)
-        {
-            ItemTypes convertedType = ItemTypes.Unknown;
-
-            switch (type)
-            {
-                case ItemTypeEnum.Folder: convertedType = ItemTypes.Folder; break;
-                case ItemTypeEnum.Report: convertedType = ItemTypes.Report; break;
-                case ItemTypeEnum.DataSource: convertedType = ItemTypes.Datasource; break;
-            }
-
-            return convertedType;
-        }
-
         #region Populate TreeView
         /// <summary>
         /// Populate treeview on startup
@@ -94,7 +61,7 @@ namespace RSS_Report_Retrievers
             TreeNode root = new TreeNode("Root");
             root.Name = "/";
             root.ToolTipText = "/";
-            root.Tag = ItemTypes.Folder;
+            root.Tag = ReportItemTypes.Folder;
             tvReportServer.Nodes.Add(root);
 
             if (toolStripStatusLabel != null)
@@ -128,33 +95,33 @@ namespace RSS_Report_Retrievers
         /// <param name="parent">TreeNode to which child nodes are appended</param>
         private void ExpandNodeContent(TreeNode parent)
         {
-            foreach (CatalogItem item in rs.ListChildren(parent.ToolTipText, false))
+            foreach (ReportItemDTO item in RsFacade.ListChildren(parent.ToolTipText, false))
             {
-                if (item.Type == ItemTypeEnum.Folder && (viewItem == ViewItems.Folders || viewItem == ViewItems.All || viewItem == ViewItems.Datasources))
+                if (item.Type == ReportItemTypes.Folder && (viewItem == ViewItems.Folders || viewItem == ViewItems.All || viewItem == ViewItems.Datasources))
                 {
                     TreeNode folder = new TreeNode(item.Name);
                     folder.Name = item.Name;
                     folder.ImageIndex = item.Hidden ? 4 : 2;
-                    folder.Tag = ItemTypes.Folder;
+                    folder.Tag = ReportItemTypes.Folder;
                     folder.ToolTipText = item.Path;
                     parent.Nodes.Add(folder);
                     ExpandNodeContent(folder); //Explore subfolders on the report server
                 }
-                else if (item.Type == ItemTypeEnum.DataSource && (viewItem == ViewItems.Datasources || viewItem == ViewItems.All))
+                else if (item.Type == ReportItemTypes.Datasource && (viewItem == ViewItems.Datasources || viewItem == ViewItems.All))
                 {
                     TreeNode datasource = new TreeNode(item.Name);
                     datasource.Name = item.Name;
                     datasource.ImageIndex = 0;
-                    datasource.Tag = ItemTypes.Datasource;
+                    datasource.Tag = ReportItemTypes.Datasource;
                     datasource.ToolTipText = item.Path;
                     parent.Nodes.Add(datasource);
                 }
-                else if (item.Type == ItemTypeEnum.Report && viewItem == ViewItems.All)
+                else if (item.Type == ReportItemTypes.Report && viewItem == ViewItems.All)
                 {
                     TreeNode report = new TreeNode(item.Name);
                     report.Name = item.Name;
                     report.ImageIndex = 1;
-                    report.Tag = ItemTypes.Report;
+                    report.Tag = ReportItemTypes.Report;
                     report.ToolTipText = item.Path;
                     parent.Nodes.Add(report);
                 }
@@ -171,7 +138,7 @@ namespace RSS_Report_Retrievers
         {
             lvItems.Items.Clear();
 
-            foreach (CatalogItem item in rs.ListChildren(path, false))
+            foreach (ReportItemDTO item in RsFacade.ListChildren(path, false))
             {
                 ListViewItem lvi = new ListViewItem();
                 lvi.Text = item.Name;
@@ -179,20 +146,20 @@ namespace RSS_Report_Retrievers
               
                 switch (item.Type)
                 {
-                    case ItemTypeEnum.Folder:
+                    case ReportItemTypes.Folder:
                         lvi.ImageIndex = item.Hidden ? 4 : 2; ;
-                        lvi.Tag = ItemTypes.Folder;
+                        lvi.Tag = ReportItemTypes.Folder;
                         break;
-                    case ItemTypeEnum.Report:
+                    case ReportItemTypes.Report:
                         lvi.ImageIndex = item.Hidden ? 5 : 1;
-                        lvi.Tag = ItemTypes.Report; 
+                        lvi.Tag = ReportItemTypes.Report; 
                         break;
-                    case ItemTypeEnum.DataSource:
-                        lvi.Tag = ItemTypes.Datasource; 
+                    case ReportItemTypes.Datasource:
+                        lvi.Tag = ReportItemTypes.Datasource; 
                         lvi.ImageIndex = 0;
                         break;
-                    case ItemTypeEnum.Model:
-                        lvi.Tag = ItemTypes.model;
+                    case ReportItemTypes.model:
+                        lvi.Tag = ReportItemTypes.model;
                         lvi.ImageIndex = 6;
                         break;
                 }
@@ -210,7 +177,7 @@ namespace RSS_Report_Retrievers
         {
             try
             {
-                rs.DeleteItem(path);
+                RsFacade.DeleteItem(path);
 
                 toolStripStatusLabel.Text = String.Format("'{0}' deleted", path);
                 Application.DoEvents();
@@ -233,7 +200,7 @@ namespace RSS_Report_Retrievers
         {
             try
             {
-                rs.CreateFolder(name, parent.ToolTipText, null);
+                RsFacade.CreateFolder(name, parent.ToolTipText, null);
             }
             catch (Exception ex)
             {
@@ -246,7 +213,7 @@ namespace RSS_Report_Retrievers
             TreeNode folder = new TreeNode(name);
             folder.Name = name;
             folder.ImageIndex = 2;
-            folder.Tag = ItemTypes.Folder;
+            folder.Tag = ReportItemTypes.Folder;
 
             // The ToolTipText contains the full path of the new folder
             if (parent.ToolTipText.EndsWith("/"))
@@ -301,7 +268,8 @@ namespace RSS_Report_Retrievers
                 stream.Read(definition, 0, (int)stream.Length);
                 stream.Close();
 
-                rs.CreateReport(Path.GetFileNameWithoutExtension(filename), destination, overwrite, definition, null);
+                ReportWarning[] warnings;
+                RsFacade.CreateReport(Path.GetFileNameWithoutExtension(filename), destination, overwrite, definition, null,out warnings);
 
                 toolStripStatusLabel.Text = String.Format("Uploaded report {0}", Path.GetFileName(filename));
                 Application.DoEvents();
@@ -319,30 +287,20 @@ namespace RSS_Report_Retrievers
         /// </summary>
         /// <param name="item">path of the item</param>
         /// <param name="datasource">path of the datasource to bind</param>
-        public void SetDatasource(string item, string datasource, ItemTypes type)
+        public void SetDatasource(string item, string datasource, ReportItemTypes type)
         {
             switch (type)
             {
-                case ItemTypes.Folder:
-                    foreach (CatalogItem catalogItem in rs.ListChildren(item, true))
+                case ReportItemTypes.Folder:
+                    foreach (ReportItemDTO catalogItem in RsFacade.ListChildren(item, true))
                     {
-                        SetDatasource(catalogItem.Path, datasource, ConvertItemType(catalogItem.Type));
+                        SetDatasource(catalogItem.Path, datasource, catalogItem.Type);
                     }
                     break;
-                case ItemTypes.Report:
-                case ItemTypes.model:
+                case ReportItemTypes.Report:
+                case ReportItemTypes.model:
 
-                    DataSource[] reportDataSources = rs.GetItemDataSources(item);
-
-                    foreach (DataSource existingDataSource in reportDataSources)
-                    {
-                        DataSourceReference dsr = new DataSourceReference();
-                        dsr.Reference = datasource;
-
-                        existingDataSource.Item = dsr;
-                    }
-
-                    rs.SetItemDataSources(item, reportDataSources);
+                    RsFacade.SetItemDataSources(item, datasource);
 
                     toolStripStatusLabel.Text = String.Format("Updated datasource of {0}", item);
                     
@@ -363,9 +321,9 @@ namespace RSS_Report_Retrievers
         /// <param name="source">source path</param>
         /// <param name="destination">destionation path</param>
         /// <param name="type">Type of item</param> 
-        public void MoveItem(string source, string destination, ItemTypes type)
+        public void MoveItem(string source, string destination, ReportItemTypes type)
         {
-            rs.MoveItem(source, destination.StartsWith("/") ? destination : "/" + destination);
+            RsFacade.MoveItem(source, destination,type);
         }
         #endregion
 
@@ -377,21 +335,7 @@ namespace RSS_Report_Retrievers
         /// <returns>A list with parameters and their information</returns>
         public List<List<String>> GetReportParameters(string path)
         {
-            List<List<String>> parameters = new List<List<string>>();
-
-            foreach (RSS_2005.ReportParameter parameter in rs.GetReportParameters(path, null, false, null, null))
-            {
-                List<String> parameterinfo = new List<String>();
-                parameterinfo.Add(parameter.Name);
-                parameterinfo.Add(parameter.Type.ToString());
-                parameterinfo.Add(parameter.AllowBlank.ToString());
-                parameterinfo.Add(parameter.Nullable.ToString());
-                parameterinfo.Add(parameter.MultiValue.ToString());
-                parameterinfo.Add(parameter.Prompt);
-                parameters.Add(parameterinfo);
-            }
-
-            return parameters;
+            return RsFacade.GetReportParameters(path);
         }
 
         /// <summary>
@@ -401,13 +345,7 @@ namespace RSS_Report_Retrievers
         /// <returns>A list of datasource names used in a report</returns>
         public List<String> GetReportDatasources(string path)
         {
-            List<String> datasources = new List<string>();
-            foreach (DataSource ds in rs.GetItemDataSources(path))
-            {
-                datasources.Add(ds.Name);
-            }
-
-            return datasources;
+            return RsFacade.GetReportDatasources(path);
         }
 
         /// <summary>
@@ -417,16 +355,8 @@ namespace RSS_Report_Retrievers
         /// <returns>A list of item properties and their values</returns>
         public List<List<String>> GetItemProperties(string path)
         {
-            List<List<String>> properties = new List<List<string>>(); 
-            foreach (Property property in rs.GetProperties(path, null))
-            {
-                List<String> propertieinfo = new List<String>();
-                propertieinfo.Add(property.Name);
-                propertieinfo.Add(property.Value);
-                properties.Add(propertieinfo);   
-            }
 
-            return properties; 
+            return RsFacade.GetItemProperties(path); 
         }
 
         /// <summary>
@@ -436,24 +366,7 @@ namespace RSS_Report_Retrievers
         /// <returns>A list of item permissions and their roles</returns>
         public List<List<String>> GetItemSecurity(string path)
         {
-            bool inheritParent;
-
-            List<List<String>> permissions = new List<List<string>>();
-            foreach (Policy permission in rs.GetPolicies(path, out inheritParent))
-            {
-                List<String> permissioninfo = new List<String>();
-                string roles = "";
-                permissioninfo.Add(permission.GroupUserName);
-                foreach (Role role in permission.Roles)
-                {
-                    roles += role.Name + ",";
-                }
-                permissioninfo.Add(inheritParent.ToString());
-                permissioninfo.Add(roles.TrimEnd(','));
-                permissions.Add(permissioninfo);
-            }
-
-            return permissions;
+            return RsFacade.GetItemSecurity(path);
         }
         #endregion
 
@@ -467,31 +380,31 @@ namespace RSS_Report_Retrievers
         /// <param name="preserveFolders">if true, the folder structure will be preserved, when false
         /// all files in subfolders will be saved to the destination folder</param>
         /// <remarks>Datasources cannot be downloaded, existing items will be overwritten and empty folders will be skipped</remarks> 
-        public void DownloadItem(string path, string destinationFolder, ItemTypes type, bool preserveFolders)
+        public void DownloadItem(string path, string destinationFolder, ReportItemTypes type, bool preserveFolders)
         {
             switch (type)
             {
-                case ItemTypes.Folder:
-                    foreach (CatalogItem catalogItem in rs.ListChildren(path, true))
+                case ReportItemTypes.Folder:
+                    foreach (ReportItemDTO catalogItem in RsFacade.ListChildren(path, true))
                     {
-                        DownloadItem(catalogItem.Path, destinationFolder, ConvertItemType(catalogItem.Type), preserveFolders);
+                        DownloadItem(catalogItem.Path, destinationFolder, catalogItem.Type, preserveFolders);
                     }
                     break;
 
-                case ItemTypes.Report:
+                case ReportItemTypes.Report:
 
                     XmlDocument definition = new XmlDocument();
                     
-                    definition.Load(new MemoryStream(rs.GetReportDefinition(path)));
+                    definition.Load(new MemoryStream(RsFacade.GetReportDefinition(path)));
 
                     SaveItem(path, type, destinationFolder,preserveFolders, definition);
 
                     break;
 
-                case ItemTypes.model:
+                case ReportItemTypes.model:
                     XmlDocument model = new XmlDocument();
 
-                    model.Load(new MemoryStream(rs.GetModelDefinition(path)));
+                    model.Load(new MemoryStream(RsFacade.GetModelDefinition(path)));
 
                     SaveItem(path, type, destinationFolder, preserveFolders, model);
 
@@ -502,16 +415,16 @@ namespace RSS_Report_Retrievers
             Application.DoEvents();
         }
 
-        private string AppendFileSuffix(string path, ItemTypes type)
+        private string AppendFileSuffix(string path, ReportItemTypes type)
         {
             string filename = path;
 
             switch (type)
             {
-                case ItemTypes.model:
+                case ReportItemTypes.model:
                     filename = filename + ".smdl";
                     break;
-                case ItemTypes.Report:
+                case ReportItemTypes.Report:
                     filename = filename + ".rdl";
                     break;
             }
@@ -519,7 +432,7 @@ namespace RSS_Report_Retrievers
             return filename;
         }
 
-        private void SaveItem(string filename, ItemTypes type, string destination, bool preserveFolders, XmlDocument definition)
+        private void SaveItem(string filename, ReportItemTypes type, string destination, bool preserveFolders, XmlDocument definition)
         {
             filename = AppendFileSuffix(filename, type);
 
