@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace RSS_Report_Retrievers.Classes
 {
     interface IRSFacade
-    {
+    { 
         void CreateFolder(string Folder, string Parent, string properties);
         void CreateReport(string filename, string destination, bool overwrite, byte[] definition, string Properties,out ReportWarning[] warnings);
         System.Net.ICredentials Credentials { get; set; }
