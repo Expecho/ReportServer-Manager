@@ -301,25 +301,25 @@ namespace RSS_Report_Retrievers
             // connectToolStripMenuItem
             // 
             this.connectToolStripMenuItem.Name = "connectToolStripMenuItem";
-            this.connectToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
+            this.connectToolStripMenuItem.Size = new System.Drawing.Size(134, 24);
             this.connectToolStripMenuItem.Text = "&Connect";
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(134, 24);
             this.settingsToolStripMenuItem.Text = "&Servers...";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
             // toolStripMenuItem6
             // 
             this.toolStripMenuItem6.Name = "toolStripMenuItem6";
-            this.toolStripMenuItem6.Size = new System.Drawing.Size(149, 6);
+            this.toolStripMenuItem6.Size = new System.Drawing.Size(131, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(134, 24);
             this.exitToolStripMenuItem.Text = "&Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -372,7 +372,7 @@ namespace RSS_Report_Retrievers
             this.MainMenuStrip = this.menuStripMain;
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormSSRSExplorer";
-            this.Text = "SSRS Explorer";
+            this.Text = "SSRS Explorer ";
             this.Shown += new System.EventHandler(this.frmReportSelector_Shown);
             this.contextMenuStrip.ResumeLayout(false);
             this.splitContainer.Panel1.ResumeLayout(false);

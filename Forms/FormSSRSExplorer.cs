@@ -403,7 +403,6 @@ namespace RSS_Report_Retrievers
         private void connectToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SelectedServer = this.serverCollection.Get(((ToolStripMenuItem)sender).Text);
-
             Connect();
         }
 
@@ -424,11 +423,17 @@ namespace RSS_Report_Retrievers
                 {
                     rs.PopulateTreeView();
                     toolStripStatusLabel.Text = String.Format("Connected to {0}", FormSSRSExplorer.SelectedServer.Url);
+
+                    this.Text = "SSRS Explorer - connected to " + SelectedServer.Alias;
                 }
                 catch
                 {
+                    this.Text = "SSRS Explorer - not connected";
+
                     toolStripStatusLabel.Text = "Not connected";
+                    
                     MessageBox.Show("Cannot connect. Check server settings.", "Initialisation failed.", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    
                     rs = null;
                 }
             }

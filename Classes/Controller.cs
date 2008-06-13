@@ -442,9 +442,9 @@ namespace RSS_Report_Retrievers
 
                 //Create destinationdirectory by removing the base-directory from the clicked item
 
-                string relativeFilePath = Path.GetDirectoryName(filename.Substring(sourceBaseDirectory.Length+1));
-                
-                destination += relativeFilePath;
+                string relativeFilePath = Path.GetDirectoryName(filename.Substring(sourceBaseDirectory.Length));
+
+                destination = System.IO.Path.Combine(destination, relativeFilePath);
                 destination = destination.Replace('/','\\');
             }
 
