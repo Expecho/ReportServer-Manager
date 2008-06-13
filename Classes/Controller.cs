@@ -125,6 +125,16 @@ namespace RSS_Report_Retrievers
                     report.ToolTipText = item.Path;
                     parent.Nodes.Add(report);
                 }
+                else if (item.Type == ReportItemTypes.model && (viewItem == ViewItems.Datasources || viewItem == ViewItems.All))
+                {
+                    TreeNode model = new TreeNode(item.Name);
+                    model.Name = item.Name;
+                    model.ImageIndex = 0;
+                    model.Tag = ReportItemTypes.model;
+                    model.ToolTipText = item.Path;
+                    parent.Nodes.Add(model);
+                }
+
             }
         }
         #endregion

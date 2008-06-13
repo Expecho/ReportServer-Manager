@@ -64,7 +64,7 @@ namespace RSS_Report_Retrievers
                     MessageBox.Show(String.Format("Please select a {0}.", viewItem == ViewItems.Folders ? "folder" : "datasource"), "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     e.Cancel = true;
                 }
-                else if (viewItem == ViewItems.Datasources && (ReportItemTypes)tvReportServer.SelectedNode.Tag != ReportItemTypes.Datasource)
+                else if (viewItem == ViewItems.Datasources && (ReportItemTypes)tvReportServer.SelectedNode.Tag != ReportItemTypes.Datasource && (ReportItemTypes)tvReportServer.SelectedNode.Tag != ReportItemTypes.model)
                 {
                     MessageBox.Show("Please select a datasource.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     e.Cancel = true;
