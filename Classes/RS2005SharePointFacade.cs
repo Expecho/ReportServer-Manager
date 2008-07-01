@@ -12,6 +12,14 @@ namespace RSS_Report_Retrievers.Classes
 
         #region IRSFacade Members
 
+        private string baseUrl;
+
+        public string BaseUrl
+        {
+            get { return baseUrl; }
+            set { baseUrl = value; }
+        }
+
         public void CreateFolder(string Folder, string text, string properties)
         {
             rs.CreateFolder(Folder, text);

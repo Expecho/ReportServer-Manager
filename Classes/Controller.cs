@@ -60,7 +60,7 @@ namespace RSS_Report_Retrievers
 
             TreeNode root = new TreeNode("Root");
             root.Name = "/";
-            root.ToolTipText = "/";
+            root.ToolTipText = RsFacade.BaseUrl; 
             root.Tag = ReportItemTypes.Folder;
             tvReportServer.Nodes.Add(root);
 

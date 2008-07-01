@@ -8,6 +8,14 @@ namespace RSS_Report_Retrievers.Classes
     {
         private ReportingService2005 rs = new ReportingService2005();
 
+        private string baseUrl;
+
+        public string BaseUrl
+        {
+            get { return baseUrl; }
+            set { baseUrl = value; }
+        }
+	
         public System.Net.ICredentials Credentials
         {
             get { return rs.Credentials; }
