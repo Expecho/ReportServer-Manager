@@ -9,6 +9,16 @@ namespace RSS_Report_Retrievers.Classes
     public class RS2000Facade : IRSFacade
     {
         private ReportingService rs = new ReportingService();
+
+        private string baseUrl;
+
+        public string BaseUrl
+        {
+            get { return baseUrl; }
+            set { baseUrl = value; }
+        }
+	
+
         #region IRSFacade Members
 
         public void CreateFolder(string Folder, string text, string properties)

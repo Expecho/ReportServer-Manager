@@ -8,6 +8,7 @@ namespace RSS_Report_Retrievers.Classes
         void CreateFolder(string Folder, string Parent, string properties);
         void CreateReport(string filename, string destination, bool overwrite, byte[] definition, string Properties,out ReportWarning[] warnings);
         System.Net.ICredentials Credentials { get; set; }
+        string BaseUrl { get; set; }
         void DeleteItem(string path);
         List<List<string>> GetItemProperties(string path);
         List<List<string>> GetItemSecurity(string path);

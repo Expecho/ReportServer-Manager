@@ -43,6 +43,7 @@ namespace RSS_Report_Retrievers
             if (config.IsSharePointMode)
             {
                 facade = new RS2005SharePointFacade();
+                facade.BaseUrl = config.ReportLibrary; 
             }
             else
             {
@@ -50,6 +51,8 @@ namespace RSS_Report_Retrievers
                     facade = new RS2000Facade();
                 else
                     facade = new RS2005Facade();
+
+                facade.BaseUrl = "/";
             }
 
             // use windows authentication when indicated
