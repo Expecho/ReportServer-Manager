@@ -191,5 +191,80 @@ namespace RSS_Report_Retrievers.Classes
             return returnItem;
         }
 
+        private static CredentialRetrievalEnum GetSSRSCredentialRetrievalTypeFromEnum(CredentialRetrievalTypes type)
+        {
+            CredentialRetrievalEnum convertedType = CredentialRetrievalEnum.None;
+
+            switch (type)
+            {
+                case CredentialRetrievalTypes.Integrated: convertedType = CredentialRetrievalEnum.Integrated; break;
+                case CredentialRetrievalTypes.None: convertedType = CredentialRetrievalEnum.None; break;
+                case CredentialRetrievalTypes.Prompt: convertedType = CredentialRetrievalEnum.Prompt; break;
+                case CredentialRetrievalTypes.Store: convertedType = CredentialRetrievalEnum.Store; break;
+            }
+
+            return convertedType;
+        }
+
+        public void CreateDataSource(Datasource datasource, string parent)
+        {
+            DataSourceDefinition def = new DataSourceDefinition();
+            def.ConnectString = datasource.ConnectionString;
+            def.Enabled = datasource.Enabled;
+            def.Extension = datasource.Extension;
+            def.Password = datasource.Password;
+            def.Prompt = datasource.Prompt;
+            def.UserName = datasource.Username;
+            def.ImpersonateUser = datasource.SetExecutionContext;
+            def.WindowsCredentials = datasource.UsePromptedCredentialsAsWindowsCredentials || datasource.UseStoredCredentialsAsWindowsCredentials;
+            def.CredentialRetrieval = GetSSRSCredentialRetrievalTypeFromEnum(datasource.CredentialRetrievalType);
+
+            rs.CreateDataSource(datasource.Name, parent, true, def, null);
+        }
+
+        public List<DatasourceExtension> GetDataExtensions()
+        {
+            List<DatasourceExtension> extensions = new List<DatasourceExtension>();
+
+            foreach (Extension extension in rs.ListExtensions(ExtensionTypeEnum.Data))
+            {
+                extensions.Add(new DatasourceExtension(extension.Name, extension.LocalizedName));
+            }
+
+            return extensions;
+        }
+
+        private static CredentialRetrievalTypes GetCredentialRetrievalTypeFromSSRSType(CredentialRetrievalEnum type)
+        {
+            CredentialRetrievalTypes convertedType = CredentialRetrievalTypes.None;
+
+            switch (type)
+            {
+                case CredentialRetrievalEnum.Integrated: convertedType = CredentialRetrievalTypes.Integrated; break;
+                case CredentialRetrievalEnum.None: convertedType = CredentialRetrievalTypes.None; break;
+                case CredentialRetrievalEnum.Prompt: convertedType = CredentialRetrievalTypes.Prompt; break;
+                case CredentialRetrievalEnum.Store: convertedType = CredentialRetrievalTypes.Store; break;
+            }
+
+            return convertedType;
+        }
+
+        public Datasource GetDatasource(string path)
+        {
+            DataSourceDefinition def = rs.GetDataSourceContents(path);
+            Datasource ds = new Datasource();
+            ds.ConnectionString = def.ConnectString;
+            ds.CredentialRetrievalType = GetCredentialRetrievalTypeFromSSRSType(def.CredentialRetrieval);
+            ds.Enabled = def.Enabled;
+            ds.Extension = def.Extension;
+            ds.Username = def.UserName;
+            ds.Password = def.Password;
+            ds.Prompt = def.Prompt;
+            ds.SetExecutionContext = def.ImpersonateUser;
+            ds.UseStoredCredentialsAsWindowsCredentials = def.WindowsCredentials;
+            ds.UsePromptedCredentialsAsWindowsCredentials = def.WindowsCredentials;
+
+            return ds;
+        }
     }
 }
