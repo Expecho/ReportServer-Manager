@@ -13,6 +13,14 @@ namespace RSS_Report_Retrievers.Classes
         Unknown = 4
     }
 
+    public enum CredentialRetrievalTypes
+    {
+        None = 0,
+        Prompt = 1,
+        Integrated = 2,
+        Store = 3
+    }
+
     public enum ViewItems
     {
         All = 0,
@@ -26,6 +34,33 @@ namespace RSS_Report_Retrievers.Classes
         public bool Hidden;
         public ReportItemTypes Type;
         public string Path;
+    }
+
+    public struct DatasourceExtension
+    {
+        public DatasourceExtension(string name, string friendlyName)
+        {
+            Name = name;
+            FriendlyName = friendlyName; 
+        }
+
+        public string Name;
+        public string FriendlyName;
+    }
+
+    public struct Datasource
+    {
+        public string Name;
+        public string ConnectionString;
+        public CredentialRetrievalTypes CredentialRetrievalType;
+        public bool UsePromptedCredentialsAsWindowsCredentials;
+        public string Prompt;
+        public string Username;
+        public string Password;
+        public string Extension;
+        public bool Enabled;
+        public bool UseStoredCredentialsAsWindowsCredentials;
+        public bool SetExecutionContext;
     }
 
     public struct ReportWarning

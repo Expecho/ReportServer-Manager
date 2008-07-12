@@ -56,12 +56,15 @@ namespace RSS_Report_Retrievers
                 moveToolStripMenuItem.Visible = lvItems.SelectedItems.Count > 0;
                 deleteToolStripMenuItem.Visible = lvItems.SelectedItems.Count > 0;
                 toolStripMenuItemSep2.Visible = lvItems.SelectedItems.Count > 0;
-                downloadToolStripMenuItem.Visible = lvItems.SelectedItems.Count > 0;
+                downloadToolStripMenuItem.Visible = lvItems.SelectedItems.Count > 0 && (ReportItemTypes)lvItems.SelectedItems[0].Tag != ReportItemTypes.Datasource;
                 renameToolStripMenuItem.Visible = lvItems.SelectedItems.Count == 1;
                 propertiesToolStripMenuItem.Visible = lvItems.SelectedItems.Count == 1;
                 newFolderToolStripMenuItem.Visible = lvItems.SelectedItems.Count == 0;
+                createDatasourceToolStripMenuItem.Visible = lvItems.SelectedItems.Count == 0;
                 uploadToolStripMenuItem.Visible = lvItems.SelectedItems.Count == 0;
-                setDatasourceToolStripMenuItem.Visible = lvItems.SelectedItems.Count > 0;
+                setDatasourceToolStripMenuItem.Visible = lvItems.SelectedItems.Count > 0 && (ReportItemTypes)lvItems.SelectedItems[0].Tag != ReportItemTypes.Datasource;
+                editToolStripMenuItem.Visible = lvItems.SelectedItems.Count > 0 && (ReportItemTypes)lvItems.SelectedItems[0].Tag == ReportItemTypes.Datasource;
+                toolStripMenuItemSep1.Visible = toolStripMenuItemSep1.Visible && lvItems.SelectedItems.Count > 0 && (ReportItemTypes)lvItems.SelectedItems[0].Tag != ReportItemTypes.Datasource;
             }
         }
 
@@ -442,6 +445,48 @@ namespace RSS_Report_Retrievers
                 ShowSelectServer();
             }
 
+        }
+
+        private void createDatasourceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormDatasource frmDatasource = new FormDatasource();
+            frmDatasource.Extensions = rs.GetDataExtensions(); 
+
+            if (frmDatasource.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    rs.CreateDataSource(frmDatasource.Datasource, tvReportServer.SelectedNode.ToolTipText);
+                    rs.PopulateItems(tvReportServer.SelectedNode.ToolTipText);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(String.Format("An error has occured: {0}", ex.Message));
+                }
+            }
+        }
+
+        private void editToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormDatasource frmDatasource = new FormDatasource();
+            frmDatasource.Extensions = rs.GetDataExtensions();
+
+            Datasource ds = rs.GetDatasource(lvItems.SelectedItems[0].ToolTipText);
+            ds.Name = lvItems.SelectedItems[0].Text;     
+            frmDatasource.Datasource = ds;
+            
+            if (frmDatasource.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    rs.CreateDataSource(frmDatasource.Datasource, tvReportServer.SelectedNode.ToolTipText);
+                    rs.PopulateItems(tvReportServer.SelectedNode.ToolTipText);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(String.Format("An error has occured: {0}", ex.Message));
+                }
+            }
         }
     }
 }

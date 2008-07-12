@@ -19,5 +19,8 @@ namespace RSS_Report_Retrievers.Classes
         ReportItemDTO[] ListChildren(string item, bool recursive);
         void MoveItem(string source, string destination, ReportItemTypes type);
         void SetItemDataSources(string item, string dataSourceName);
+        void CreateDataSource(Datasource datasource, string parent);
+        List<DatasourceExtension> GetDataExtensions();
+        Datasource GetDatasource(string path);
     }
 }

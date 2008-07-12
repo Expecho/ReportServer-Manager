@@ -21,8 +21,10 @@ namespace RSS_Report_Retrievers
         List<List<String>> GetItemProperties(string path);
         List<List<String>> GetItemSecurity(string path);
         void DownloadItem(string path, string destination, ReportItemTypes type, bool preserveFolders);
-
+        void CreateDataSource(Datasource datasource, string path);
+        List<DatasourceExtension> GetDataExtensions();
         ViewItems ViewItem { get; set; }
+        Datasource GetDatasource(string path);
     }
 
     class ReportingServicesFactory

@@ -469,5 +469,31 @@ namespace RSS_Report_Retrievers
 
         }
         #endregion
+
+        public void CreateDataSource(Datasource datasource, string path)
+        {
+            try
+            {
+                RsFacade.CreateDataSource(datasource, path);
+
+                toolStripStatusLabel.Text = String.Format("Updated / Created new datasource '{0}'", datasource.Name);
+                Application.DoEvents();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(String.Format("An error occured: {0}", ex.Message));
+            }
+            
+        }
+
+        public List<DatasourceExtension> GetDataExtensions()
+        {
+            return RsFacade.GetDataExtensions(); 
+        }
+
+        public Datasource GetDatasource(string path)
+        {
+            return RsFacade.GetDatasource(path);  
+        }
     }
 }
