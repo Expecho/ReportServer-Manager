@@ -17,6 +17,9 @@ namespace RSS_Report_Retrievers
 {
     public partial class FormSSRSExplorer : Form
     {
+        private const string REPORT_FILTER_STRING = "Reports|*.rdl";
+        private const string MODEL_FILTER_STRING = "Models|*.smdl";
+
         private IController rs;
 
         public static ServerSettingsConfigElement SelectedServer = null;
@@ -65,6 +68,8 @@ namespace RSS_Report_Retrievers
                 setDatasourceToolStripMenuItem.Visible = lvItems.SelectedItems.Count > 0 && (ReportItemTypes)lvItems.SelectedItems[0].Tag != ReportItemTypes.Datasource;
                 editToolStripMenuItem.Visible = lvItems.SelectedItems.Count > 0 && (ReportItemTypes)lvItems.SelectedItems[0].Tag == ReportItemTypes.Datasource;
                 toolStripMenuItemSep1.Visible = toolStripMenuItemSep1.Visible && lvItems.SelectedItems.Count > 0 && (ReportItemTypes)lvItems.SelectedItems[0].Tag != ReportItemTypes.Datasource;
+
+                replaceModelToolStripMenuItem.Visible = lvItems.SelectedItems.Count > 0 && (ReportItemTypes)lvItems.SelectedItems[0].Tag == ReportItemTypes.model;
             }
         }
 
@@ -138,6 +143,7 @@ namespace RSS_Report_Retrievers
         /// </summary>
         private void filesToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            openFileDialog.Filter = REPORT_FILTER_STRING;
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 bool overwrite = MessageBox.Show("Overwrite existing items?", "Upload", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
@@ -146,7 +152,7 @@ namespace RSS_Report_Retrievers
 
                 foreach (string filename in openFileDialog.FileNames)
                 {
-                    rs.UploadItem(filename, tvReportServer.SelectedNode.ToolTipText, overwrite);
+                    rs.UploadReport(filename, tvReportServer.SelectedNode.ToolTipText, overwrite);
                 }
 
                 rs.PopulateItems(tvReportServer.SelectedNode.ToolTipText);
@@ -364,7 +370,7 @@ namespace RSS_Report_Retrievers
                         break;
                     }
                 }
-
+                
                 bool preserveFolders = askToPreserveFolders ? MessageBox.Show("Preserve folders?", "Download items", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes : false;
                 
                 if (!Directory.Exists(folderSelector.Foldername))
@@ -485,6 +491,29 @@ namespace RSS_Report_Retrievers
                 catch (Exception ex)
                 {
                     MessageBox.Show(String.Format("An error has occured: {0}", ex.Message));
+                }
+            }
+        }
+
+        private void replaceModelToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.openFileDialog.FileName = "";
+            this.openFileDialog.Filter = MODEL_FILTER_STRING;
+            this.openFileDialog.ShowDialog();
+
+            string fileName = this.openFileDialog.FileName;
+
+            if (fileName != String.Empty)
+            {
+                string existingModelPath = lvItems.SelectedItems[0].ToolTipText;
+                string newModelSMDL = System.IO.File.ReadAllText(fileName);
+                Forms.FormDependantItems form = new RSS_Report_Retrievers.Forms.FormDependantItems();
+
+                form.CheckModelForCompatibility(this.rs, existingModelPath, newModelSMDL);
+                
+                if (form.DialogResult == DialogResult.Yes)
+                {
+                    rs.ReplaceModel(fileName, existingModelPath);
                 }
             }
         }

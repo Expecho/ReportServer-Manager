@@ -26,10 +26,28 @@ namespace RSS_Report_Retrievers.Classes
             rs.CreateFolder(Folder, text, null);
         }
 
-        public void CreateReport(string filename, string destination, bool overwrite, byte[] definition, string Properties, out ReportWarning[] warnings)
+        private static ReportWarning ConvertSPWarningToReportWarning(Warning w)
         {
-            warnings = null;
-            rs.CreateReport(System.IO.Path.GetFileNameWithoutExtension(filename), destination, overwrite, definition, null);
+            ReportWarning returnWarning;
+            returnWarning.Code = w.Code;
+            returnWarning.Message = w.Message;
+            returnWarning.ObjectName = w.ObjectName;
+            returnWarning.ObjectType = w.ObjectType;
+            returnWarning.Severity = w.Severity;
+
+            return returnWarning;
+        }
+
+        public ReportWarning[] CreateReport(string filename, string destination, bool overwrite, byte[] definition, string Properties)
+        {
+            RSS.Warning[] w = rs.CreateReport(System.IO.Path.GetFileNameWithoutExtension(filename), destination, overwrite, definition, null);
+            return System.Array.ConvertAll<Warning, ReportWarning>(w, ConvertSPWarningToReportWarning);
+                
+        }
+
+        public ReportWarning[] CreateModel(string filename, string destination, byte[] definition, string Properties)
+        {
+            return null;
         }
 
         public System.Net.ICredentials Credentials
@@ -266,5 +284,15 @@ namespace RSS_Report_Retrievers.Classes
 
             return ds;
         }
+
+        #region IRSFacade Members
+
+
+        public List<ReportItemDTO> ListDependantItems(string reportModelpath)
+        {
+            throw new Exception("The method or operation is not implemented.");
+        }
+
+        #endregion
     }
 }
