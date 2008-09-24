@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using RSS_Report_Retrievers.RSS_2005;
+using RSS_Report_Retrievers.Classes;
+
 namespace RSS_Report_Retrievers.Classes
 {
-    public class RS2005Facade : RSS_Report_Retrievers.Classes.IRSFacade
+    public class RS2005Facade : IRSFacade
     {
         private ReportingService2005 rs = new ReportingService2005();
 
@@ -15,80 +17,33 @@ namespace RSS_Report_Retrievers.Classes
             get { return baseUrl; }
             set { baseUrl = value; }
         }
-	
+
+        #region IRSFacade Members
+        public void CreateFolder(string Folder, string Parent, string properties)
+        {
+            rs.CreateFolder(Folder, Parent, null);
+        }
+
+        public ReportWarning[] CreateReport(string filename, string destination, bool overwrite, Byte[] definition, string Properties)
+        {
+            Warning[] err = rs.CreateReport(System.IO.Path.GetFileNameWithoutExtension(filename), destination, overwrite, definition, null);
+            return System.Array.ConvertAll<Warning,ReportWarning>(err,ConvertSPWarningToReportWarning);
+        }
+
+        public ReportWarning[] CreateModel(string visibleName, string parentFolder, Byte[] definition, string Properties)
+        {
+            return System.Array.ConvertAll<Warning, ReportWarning>(rs.CreateModel(visibleName, parentFolder, definition, null), ConvertSPWarningToReportWarning);
+        }
+
         public System.Net.ICredentials Credentials
         {
             get { return rs.Credentials; }
             set { rs.Credentials = value; }
         }
 
-        public ReportItemDTO[] ListChildren(string item, bool recursive)
-        {
-            CatalogItem[] catItems = rs.ListChildren(item, recursive);
-
-            return Array.ConvertAll<CatalogItem, ReportItemDTO>(catItems, ConvertCatalogItemToReportItemDTO);
-        }
-
         public void DeleteItem(string path)
         {
             rs.DeleteItem(path);
-        }
-
-        public void CreateFolder(string Folder, string Parent, string properties)
-        {
-            rs.CreateFolder(Folder, Parent, null);
-        }
-
-        private static ReportItemDTO ConvertCatalogItemToReportItemDTO(CatalogItem item)
-        {
-            ReportItemDTO returnItem;
-
-            returnItem.Hidden = item.Hidden;
-            returnItem.Name = item.Name;
-            returnItem.Path = item.Path;
-            returnItem.Type = GetReportItemTypeFromSSRSItemTyp(item.Type);
-
-            return returnItem;
-        }
-
-        public void CreateReport(string filename, string destination, bool overwrite, Byte[] definition, string Properties, out ReportWarning[] warnings)
-        {
-            warnings = null;
-            rs.CreateReport(System.IO.Path.GetFileNameWithoutExtension(filename), destination, overwrite, definition, null);            
-        }
-
-        public void SetItemDataSources(string item, string dataSourceName)
-        {
-            DataSource[] reportDataSources = rs.GetItemDataSources(item);
-
-            foreach (DataSource existingDataSource in reportDataSources)
-            {
-                DataSourceReference dsr = new DataSourceReference();
-                dsr.Reference = dataSourceName;
-
-                existingDataSource.Item = dsr;
-            }
-
-            rs.SetItemDataSources(item, reportDataSources);
-        }
-
-        public List<List<String>> GetReportParameters(string path)
-        {
-            List<List<String>> parameters = new List<List<string>>();
-
-            foreach (RSS_2005.ReportParameter parameter in rs.GetReportParameters(path, null, false, null, null))
-            {
-                List<String> parameterinfo = new List<String>();
-                parameterinfo.Add(parameter.Name);
-                parameterinfo.Add(parameter.Type.ToString());
-                parameterinfo.Add(parameter.AllowBlank.ToString());
-                parameterinfo.Add(parameter.Nullable.ToString());
-                parameterinfo.Add(parameter.MultiValue.ToString());
-                parameterinfo.Add(parameter.Prompt);
-                parameters.Add(parameterinfo);
-            }
-
-            return parameters;
         }
 
         public List<List<String>> GetItemProperties(string path)
@@ -127,11 +82,6 @@ namespace RSS_Report_Retrievers.Classes
             return permissions;
         }
 
-        public byte[] GetReportDefinition(string path)
-        {
-            return rs.GetReportDefinition(path);
-        }
-
         public byte[] GetModelDefinition(string path)
         {
             return rs.GetModelDefinition(path);
@@ -142,10 +92,44 @@ namespace RSS_Report_Retrievers.Classes
             List<String> datasources = new List<string>();
             foreach (DataSource ds in rs.GetItemDataSources(path))
             {
-                datasources.Add(ds.Name);
+                RSS_Report_Retrievers.RSS_2005.DataSourceReference theRef = ds.Item as RSS_Report_Retrievers.RSS_2005.DataSourceReference;
+
+                if(theRef != null)            
+                    datasources.Add(theRef.Reference);
             }
 
             return datasources;
+        }
+
+        public byte[] GetReportDefinition(string path)
+        {
+            return rs.GetReportDefinition(path);
+        }
+
+        public List<List<String>> GetReportParameters(string path)
+        {
+            List<List<String>> parameters = new List<List<string>>();
+
+            foreach (RSS_2005.ReportParameter parameter in rs.GetReportParameters(path, null, false, null, null))
+            {
+                List<String> parameterinfo = new List<String>();
+                parameterinfo.Add(parameter.Name);
+                parameterinfo.Add(parameter.Type.ToString());
+                parameterinfo.Add(parameter.AllowBlank.ToString());
+                parameterinfo.Add(parameter.Nullable.ToString());
+                parameterinfo.Add(parameter.MultiValue.ToString());
+                parameterinfo.Add(parameter.Prompt);
+                parameters.Add(parameterinfo);
+            }
+
+            return parameters;
+        }
+
+        public ReportItemDTO[] ListChildren(string item, bool recursive)
+        {
+            CatalogItem[] catItems = rs.ListChildren(item, recursive);
+
+            return Array.ConvertAll<CatalogItem, ReportItemDTO>(catItems, ConvertCatalogItemToReportItemDTO);
         }
 
         public void MoveItem(string source, string destination, ReportItemTypes type)
@@ -153,6 +137,94 @@ namespace RSS_Report_Retrievers.Classes
             rs.MoveItem(source, destination.StartsWith("/") ? destination : "/" + destination);
         }
 
+        public void SetItemDataSources(string item, string dataSourceName)
+        {
+            DataSource[] reportDataSources = rs.GetItemDataSources(item);
+
+            foreach (DataSource existingDataSource in reportDataSources)
+            {
+                DataSourceReference dsr = new DataSourceReference();
+                dsr.Reference = dataSourceName;
+
+                existingDataSource.Item = dsr;
+            }
+
+            rs.SetItemDataSources(item, reportDataSources);
+        }
+
+        public void CreateDataSource(Datasource datasource, string parent)
+        {
+            DataSourceDefinition def = new DataSourceDefinition();
+            def.ConnectString = datasource.ConnectionString;
+            def.Enabled = datasource.Enabled;
+            def.Extension = datasource.Extension;
+            def.Password = datasource.Password;
+            def.Prompt = datasource.Prompt;
+            def.UserName = datasource.Username;
+            def.ImpersonateUser = datasource.SetExecutionContext;
+            def.WindowsCredentials = datasource.UsePromptedCredentialsAsWindowsCredentials || datasource.UseStoredCredentialsAsWindowsCredentials;
+            def.CredentialRetrieval = GetSSRSCredentialRetrievalTypeFromEnum(datasource.CredentialRetrievalType);
+
+            rs.CreateDataSource(datasource.Name, parent, true, def, null);
+        }
+
+        public List<DatasourceExtension> GetDataExtensions()
+        {
+            List<DatasourceExtension> extensions = new List<DatasourceExtension>();
+
+            foreach (Extension extension in rs.ListExtensions(ExtensionTypeEnum.Data))
+            {
+                extensions.Add(new DatasourceExtension(extension.Name, extension.LocalizedName));
+            }
+
+            return extensions;
+        }
+
+        public Datasource GetDatasource(string path)
+        {
+            DataSourceDefinition def = rs.GetDataSourceContents(path);
+            Datasource ds = new Datasource();
+            ds.ConnectionString = def.ConnectString;
+            ds.CredentialRetrievalType = GetCredentialRetrievalTypeFromSSRSType(def.CredentialRetrieval);
+            ds.Enabled = def.Enabled;
+            ds.Extension = def.Extension;
+            ds.Username = def.UserName;
+            ds.Password = def.Password;
+            ds.Prompt = def.Prompt;
+            ds.SetExecutionContext = def.ImpersonateUser;
+            ds.UseStoredCredentialsAsWindowsCredentials = def.WindowsCredentials;
+            ds.UsePromptedCredentialsAsWindowsCredentials = def.WindowsCredentials;
+
+            return ds;
+        }
+
+        public List<ReportItemDTO> ListDependantItems(string reportModelpath)
+        {
+            List<ReportItemDTO> items = new List<ReportItemDTO>();
+
+            CatalogItem[] response = rs.ListDependentItems(reportModelpath);
+
+            foreach (CatalogItem item in response)
+            {
+                ReportItemDTO dto = new ReportItemDTO();
+
+                dto.Name = item.Name;
+                dto.Path = item.Path;
+
+                items.Add(dto);
+            }
+
+            return items;
+        }
+
+        public List<ReportItemDTO> LoadDependantItems(string reportModelpath)
+        {
+            throw new Exception("The method or operation is not implemented.");
+        }
+
+
+
+        #endregion
         private static ReportItemTypes GetReportItemTypeFromSSRSItemTyp(ItemTypeEnum ssrsType)
         {
             ReportItemTypes convertedType = ReportItemTypes.Unknown;
@@ -183,34 +255,6 @@ namespace RSS_Report_Retrievers.Classes
             return convertedType;
         }
 
-        public void CreateDataSource(Datasource datasource, string parent)
-        {
-            DataSourceDefinition def = new DataSourceDefinition();
-            def.ConnectString = datasource.ConnectionString;
-            def.Enabled = datasource.Enabled;
-            def.Extension = datasource.Extension;
-            def.Password = datasource.Password;
-            def.Prompt = datasource.Prompt;
-            def.UserName = datasource.Username;
-            def.ImpersonateUser = datasource.SetExecutionContext; 
-            def.WindowsCredentials = datasource.UsePromptedCredentialsAsWindowsCredentials || datasource.UseStoredCredentialsAsWindowsCredentials;
-            def.CredentialRetrieval = GetSSRSCredentialRetrievalTypeFromEnum(datasource.CredentialRetrievalType);  
-
-            rs.CreateDataSource(datasource.Name, parent, true, def, null);    
-        }
-
-        public List<DatasourceExtension> GetDataExtensions()
-        {
-            List<DatasourceExtension> extensions = new List<DatasourceExtension>();
-
-            foreach (Extension extension in rs.ListExtensions(ExtensionTypeEnum.Data))
-            {
-                extensions.Add(new DatasourceExtension(extension.Name, extension.LocalizedName));
-            }
-
-            return extensions;
-        }
-
         private static CredentialRetrievalTypes GetCredentialRetrievalTypeFromSSRSType(CredentialRetrievalEnum type)
         {
             CredentialRetrievalTypes convertedType = CredentialRetrievalTypes.None;
@@ -226,22 +270,34 @@ namespace RSS_Report_Retrievers.Classes
             return convertedType;
         }
 
-        public Datasource GetDatasource(string path)
+        private static ReportItemDTO ConvertCatalogItemToReportItemDTO(CatalogItem item)
         {
-            DataSourceDefinition def = rs.GetDataSourceContents(path);
-            Datasource ds = new Datasource();
-            ds.ConnectionString = def.ConnectString;
-            ds.CredentialRetrievalType = GetCredentialRetrievalTypeFromSSRSType(def.CredentialRetrieval);
-            ds.Enabled = def.Enabled;
-            ds.Extension = def.Extension;
-            ds.Username = def.UserName;
-            ds.Password = def.Password;
-            ds.Prompt = def.Prompt;
-            ds.SetExecutionContext = def.ImpersonateUser;
-            ds.UseStoredCredentialsAsWindowsCredentials = def.WindowsCredentials;
-            ds.UsePromptedCredentialsAsWindowsCredentials = def.WindowsCredentials;
+            ReportItemDTO returnItem;
 
-            return ds;
+            returnItem.Hidden = item.Hidden;
+            returnItem.Name = item.Name;
+            returnItem.Path = item.Path;
+            returnItem.Type = GetReportItemTypeFromSSRSItemTyp(item.Type);
+
+            return returnItem;
         }
+
+        private static ReportWarning ConvertSPWarningToReportWarning(Warning w)
+        {
+
+            ReportWarning returnWarning=new ReportWarning();
+
+            if (w != null)
+            {
+                returnWarning.Code = w.Code;
+                returnWarning.Message = w.Message;
+                returnWarning.ObjectName = w.ObjectName;
+                returnWarning.ObjectType = w.ObjectType;
+                returnWarning.Severity = w.Severity;
+            }
+            return returnWarning;
+        }
+
+    
     }
 }

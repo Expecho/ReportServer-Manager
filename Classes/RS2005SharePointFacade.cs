@@ -10,8 +10,6 @@ namespace RSS_Report_Retrievers.Classes
     {
         private ReportingService2006 rs = new ReportingService2006();
 
-        #region IRSFacade Members
-
         private string baseUrl;
 
         public string BaseUrl
@@ -25,24 +23,22 @@ namespace RSS_Report_Retrievers.Classes
             rs.CreateFolder(Folder, text);
         }
 
-        public void CreateReport(string filename, string destination, bool overwrite, byte[] definition, string Properties, out ReportWarning[] warnings)
+        public ReportWarning[] CreateReport(string filename, string destination, bool overwrite, byte[] definition, string Properties)
+        {
+            Warning[] SPWarnings;
+            rs.CreateReport(System.IO.Path.GetFileName(filename), destination, overwrite, definition, null, out SPWarnings);
+
+            return Array.ConvertAll<Warning, ReportWarning>(SPWarnings, ConvertSPWarningToReportWarning);
+        }
+
+        public ReportWarning[] CreateModel(string filename, string destination,byte[] definition, string Properties)
         {
             Warning[] SpWarnings;
-            rs.CreateReport(System.IO.Path.GetFileName(filename), destination, overwrite, definition, null, out SpWarnings);
+            rs.CreateModel(System.IO.Path.GetFileName(filename), destination, definition, null, out SpWarnings);
 
-            warnings = Array.ConvertAll<Warning, ReportWarning>(SpWarnings, ConvertSPWarningToReportWarning);
+            return Array.ConvertAll<Warning, ReportWarning>(SpWarnings, ConvertSPWarningToReportWarning);
         }
-        private static ReportWarning ConvertSPWarningToReportWarning(Warning w)
-        {
-            ReportWarning returnWarning;
-            returnWarning.Code = w.Code;
-            returnWarning.Message = w.Message;
-            returnWarning.ObjectName = w.ObjectName;
-            returnWarning.ObjectType = w.ObjectType;
-            returnWarning.Severity = w.Severity;
 
-            return returnWarning;
-        }
         public System.Net.ICredentials Credentials
         {
             get
@@ -180,8 +176,97 @@ namespace RSS_Report_Retrievers.Classes
             rs.SetItemDataSources(item, reportDataSources);
         }
 
+        public void CreateDataSource(Datasource datasource, string parent)
+        {
+            DataSourceDefinition def = new DataSourceDefinition();
+            def.CredentialRetrieval = GetSSRSCredentialRetrievalTypeFromEnum(datasource.CredentialRetrievalType);
+            def.ConnectString = datasource.ConnectionString;
+            def.Enabled = datasource.Enabled;
+            def.Extension = datasource.Extension;
+            def.Prompt = datasource.Prompt;
 
-        #endregion
+            if (def.CredentialRetrieval == CredentialRetrievalEnum.Store)
+            {
+                def.UserName = datasource.Username;
+                def.Password = datasource.Password;
+            }
+
+            def.ImpersonateUser = datasource.SetExecutionContext;
+            def.WindowsCredentials = datasource.UsePromptedCredentialsAsWindowsCredentials || datasource.UseStoredCredentialsAsWindowsCredentials;
+            
+
+            if (!datasource.Name.EndsWith(".rsds"))
+            {
+                datasource.Name += ".rsds"; 
+            }
+
+            rs.CreateDataSource(datasource.Name, parent, true, def, null);
+        }
+
+        public List<DatasourceExtension> GetDataExtensions()
+        {
+            List<DatasourceExtension> extensions = new List<DatasourceExtension>();
+
+            foreach (Extension extension in rs.ListExtensions(ExtensionTypeEnum.Data))
+            {
+                extensions.Add(new DatasourceExtension(extension.Name, extension.LocalizedName));
+            }
+
+            return extensions;
+        }
+
+        public Datasource GetDatasource(string path)
+        {
+            DataSourceDefinition def = rs.GetDataSourceContents(path);
+            Datasource ds = new Datasource();
+            ds.ConnectionString = def.ConnectString;
+            ds.CredentialRetrievalType = GetCredentialRetrievalTypeFromSSRSType(def.CredentialRetrieval);
+            ds.Enabled = def.Enabled;
+            ds.Extension = def.Extension;
+            ds.Username = def.UserName;
+            ds.Password = def.Password;
+            ds.Prompt = def.Prompt;
+            ds.SetExecutionContext = def.ImpersonateUser;
+            ds.UseStoredCredentialsAsWindowsCredentials = def.WindowsCredentials;
+            ds.UsePromptedCredentialsAsWindowsCredentials = def.WindowsCredentials;
+
+            return ds;
+        }
+
+        public List<ReportItemDTO> ListDependantItems(string reportModel)
+        {
+            List<ReportItemDTO> items = new List<ReportItemDTO>();
+
+            CatalogItem[] response = rs.ListDependentItems(reportModel);
+
+            foreach (CatalogItem item in response)
+            {
+                ReportItemDTO dto = new ReportItemDTO();
+
+                dto.Name = item.Name;
+                dto.Path = item.Path;
+
+                items.Add(dto);
+            }
+
+            return items;
+        }
+
+        private static CredentialRetrievalTypes GetCredentialRetrievalTypeFromSSRSType(CredentialRetrievalEnum type)
+        {
+            CredentialRetrievalTypes convertedType = CredentialRetrievalTypes.None;
+
+            switch (type)
+            {
+                case CredentialRetrievalEnum.Integrated: convertedType = CredentialRetrievalTypes.Integrated; break;
+                case CredentialRetrievalEnum.None: convertedType = CredentialRetrievalTypes.None; break;
+                case CredentialRetrievalEnum.Prompt: convertedType = CredentialRetrievalTypes.Prompt; break;
+                case CredentialRetrievalEnum.Store: convertedType = CredentialRetrievalTypes.Store; break;
+            }
+
+            return convertedType;
+        }
+
         private static ReportItemTypes GetReportItemTypeFromSSRSItemTyp(ItemTypeEnum ssrsType)
         {
             ReportItemTypes convertedType = ReportItemTypes.Unknown;
@@ -224,76 +309,16 @@ namespace RSS_Report_Retrievers.Classes
             return convertedType;
         }
 
-        public void CreateDataSource(Datasource datasource, string parent)
+        private static ReportWarning ConvertSPWarningToReportWarning(Warning w)
         {
-            DataSourceDefinition def = new DataSourceDefinition();
-            def.CredentialRetrieval = GetSSRSCredentialRetrievalTypeFromEnum(datasource.CredentialRetrievalType);
-            def.ConnectString = datasource.ConnectionString;
-            def.Enabled = datasource.Enabled;
-            def.Extension = datasource.Extension;
-            def.Prompt = datasource.Prompt;
+            ReportWarning returnWarning;
+            returnWarning.Code = w.Code;
+            returnWarning.Message = w.Message;
+            returnWarning.ObjectName = w.ObjectName;
+            returnWarning.ObjectType = w.ObjectType;
+            returnWarning.Severity = w.Severity;
 
-            if (def.CredentialRetrieval == CredentialRetrievalEnum.Store)
-            {
-                def.UserName = datasource.Username;
-                def.Password = datasource.Password;
-            }
-
-            def.ImpersonateUser = datasource.SetExecutionContext;
-            def.WindowsCredentials = datasource.UsePromptedCredentialsAsWindowsCredentials || datasource.UseStoredCredentialsAsWindowsCredentials;
-            
-
-            if (!datasource.Name.EndsWith(".rsds"))
-            {
-                datasource.Name += ".rsds"; 
-            }
-
-            rs.CreateDataSource(datasource.Name, parent, true, def, null);
-        }
-
-        public List<DatasourceExtension> GetDataExtensions()
-        {
-            List<DatasourceExtension> extensions = new List<DatasourceExtension>();
-
-            foreach (Extension extension in rs.ListExtensions(ExtensionTypeEnum.Data))
-            {
-                extensions.Add(new DatasourceExtension(extension.Name, extension.LocalizedName));
-            }
-
-            return extensions;
-        }
-
-        private static CredentialRetrievalTypes GetCredentialRetrievalTypeFromSSRSType(CredentialRetrievalEnum type)
-        {
-            CredentialRetrievalTypes convertedType = CredentialRetrievalTypes.None;
-
-            switch (type)
-            {
-                case CredentialRetrievalEnum.Integrated: convertedType = CredentialRetrievalTypes.Integrated; break;
-                case CredentialRetrievalEnum.None: convertedType = CredentialRetrievalTypes.None; break;
-                case CredentialRetrievalEnum.Prompt: convertedType = CredentialRetrievalTypes.Prompt; break;
-                case CredentialRetrievalEnum.Store: convertedType = CredentialRetrievalTypes.Store; break;
-            }
-
-            return convertedType;
-        }
-
-        public Datasource GetDatasource(string path)
-        {
-            DataSourceDefinition def = rs.GetDataSourceContents(path);
-            Datasource ds = new Datasource();
-            ds.ConnectionString = def.ConnectString;
-            ds.CredentialRetrievalType = GetCredentialRetrievalTypeFromSSRSType(def.CredentialRetrieval);  
-            ds.Enabled = def.Enabled;
-            ds.Extension = def.Extension;
-            ds.Username = def.UserName;
-            ds.Password = def.Password;
-            ds.Prompt = def.Prompt;
-            ds.SetExecutionContext = def.ImpersonateUser;
-            ds.UseStoredCredentialsAsWindowsCredentials = def.WindowsCredentials;
-            ds.UsePromptedCredentialsAsWindowsCredentials = def.WindowsCredentials;
-            
-            return ds;
+            return returnWarning;
         }
     }
 }

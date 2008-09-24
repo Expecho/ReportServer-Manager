@@ -66,6 +66,9 @@
     <Compile Include="Classes\CryptoHelper.cs" />
     <Compile Include="Classes\IRSFacade.cs" />
     <Compile Include="Classes\ReportItemEnums.cs" />
+    <Compile Include="Classes\ReportModel\ModelParser.cs" />
+    <Compile Include="Classes\ReportModel\ReportModelValidator.cs" />
+    <Compile Include="Classes\ReportModel\SematicQueryParser.cs" />
     <Compile Include="Classes\RS2000Facade.cs" />
     <Compile Include="Classes\RS2005Facade.cs" />
     <Compile Include="Classes\RS2005SharePointFacade.cs" />
@@ -83,6 +86,12 @@
     </Compile>
     <Compile Include="Forms\FormDatasource.Designer.cs">
       <DependentUpon>FormDatasource.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormDependantItems.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormDependantItems.Designer.cs">
+      <DependentUpon>FormDependantItems.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormProperties.cs">
       <SubType>Form</SubType>
@@ -135,6 +144,10 @@
     <EmbeddedResource Include="Forms\FormDatasource.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FormDatasource.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormDependantItems.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>FormDependantItems.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormProperties.resx">
       <SubType>Designer</SubType>

@@ -199,7 +199,7 @@ namespace RSS_Report_Retrievers
         }
         #endregion
 
-        #region New folder
+        #region New/Create
         /// <summary>
         /// Create a new folder on the reportserver
         /// </summary>
@@ -239,6 +239,21 @@ namespace RSS_Report_Retrievers
 
             return folder;
         }
+        public void CreateDataSource(Datasource datasource, string path)
+        {
+            try
+            {
+                RsFacade.CreateDataSource(datasource, path);
+
+                toolStripStatusLabel.Text = String.Format("Updated / Created new datasource '{0}'", datasource.Name);
+                Application.DoEvents();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(String.Format("An error occured: {0}", ex.Message));
+            }
+
+        }
         #endregion
 
         #region Upload
@@ -253,7 +268,7 @@ namespace RSS_Report_Retrievers
         {
             foreach (string filename in Directory.GetFiles(path, "*.rdl", SearchOption.TopDirectoryOnly))
             {
-                UploadItem(filename, destination, overwrite);
+                UploadReport(filename, destination, overwrite);
             }
 
             foreach (string foldername in Directory.GetDirectories(path))
@@ -263,31 +278,76 @@ namespace RSS_Report_Retrievers
             }
         }
 
+        public void ReplaceModel(string filename, string itemToReplace)
+        {
+            Byte[] definition = GetBytesFromFile(filename);
+            ReportWarning[] warnings;
+
+            string visibleName = Path.GetFileName(itemToReplace);
+
+            List<string> datasource = RsFacade.GetReportDatasources(itemToReplace);
+
+            List<ReportItemDTO> dependantItems = RsFacade.ListDependantItems(itemToReplace);
+
+            RsFacade.DeleteItem(itemToReplace);
+
+            string destinationFolder = Path.GetDirectoryName(itemToReplace)
+                                            .Replace('\\','/');
+
+
+            warnings = RsFacade.CreateModel(visibleName, destinationFolder, definition, null);
+
+            if (datasource != null && datasource.Count > 0)
+                RsFacade.SetItemDataSources(itemToReplace, datasource[0]);
+
+            UpdateDatasourceForDependantItems(dependantItems,itemToReplace);
+
+            toolStripStatusLabel.Text = String.Format("Uploaded item {0}", Path.GetFileName(filename));
+            Application.DoEvents();
+        }
+
+        private void UpdateDatasourceForDependantItems(List<ReportItemDTO> dependantItems,string itemToReplace)
+        {
+            List<string> datasource = RsFacade.GetReportDatasources(itemToReplace);
+
+            foreach (ReportItemDTO report in dependantItems)
+            {
+                RsFacade.SetItemDataSources(report.Path, itemToReplace);
+            }
+        }
         /// <summary>
         /// Create report on the server
         /// </summary>
         /// <param name="filename">file to upload</param>
         /// <param name="destination">folder on the report server to upload</param>
         /// <param name="overwrite">overwrite existing items</param>
-        public void UploadItem(string filename, string destination, bool overwrite)
+        public void UploadReport(string filename, string destinationFolder, bool overwrite)
         {
             try
             {
-                FileStream stream = File.OpenRead(filename);
-                Byte[] definition = new Byte[stream.Length];
-                stream.Read(definition, 0, (int)stream.Length);
-                stream.Close();
-
+                Byte[] definition = GetBytesFromFile(filename);
                 ReportWarning[] warnings;
-                RsFacade.CreateReport(Path.GetFileNameWithoutExtension(filename), destination, overwrite, definition, null,out warnings);
 
-                toolStripStatusLabel.Text = String.Format("Uploaded report {0}", Path.GetFileName(filename));
+                string visibleName = Path.GetFileNameWithoutExtension(filename);
+
+                warnings = RsFacade.CreateReport(visibleName, destinationFolder, overwrite, definition, null);
+
+                toolStripStatusLabel.Text = String.Format("Uploaded item {0}", Path.GetFileName(filename));
                 Application.DoEvents();
             }
             catch (Exception ex)
             {
                 throw new Exception(String.Format("An error has occured: {0}", ex.Message));
             }
+        }
+
+        private static Byte[] GetBytesFromFile(string filename)
+        {
+            FileStream stream = File.OpenRead(filename);
+            Byte[] definition = new Byte[stream.Length];
+            stream.Read(definition, 0, (int)stream.Length);
+            stream.Close();
+            return definition;
         }
         #endregion
 
@@ -468,32 +528,29 @@ namespace RSS_Report_Retrievers
             definition.Save(String.Format(@"{0}\{1}", destination, filename));
 
         }
-        #endregion
 
-        public void CreateDataSource(Datasource datasource, string path)
+        public List<ReportItemDTO> ListDependantItems(string modelPath)
         {
-            try
-            {
-                RsFacade.CreateDataSource(datasource, path);
+            return RsFacade.ListDependantItems(modelPath);
+        }
 
-                toolStripStatusLabel.Text = String.Format("Updated / Created new datasource '{0}'", datasource.Name);
-                Application.DoEvents();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(String.Format("An error occured: {0}", ex.Message));
-            }
-            
+        public byte[] GetReport(string path)
+        {
+            return RsFacade.GetReportDefinition(path);
         }
 
         public List<DatasourceExtension> GetDataExtensions()
         {
-            return RsFacade.GetDataExtensions(); 
+            return RsFacade.GetDataExtensions();
         }
 
         public Datasource GetDatasource(string path)
         {
-            return RsFacade.GetDatasource(path);  
+            return RsFacade.GetDatasource(path);
         }
+        #endregion
+
+
+
     }
 }

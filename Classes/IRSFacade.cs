@@ -6,7 +6,8 @@ namespace RSS_Report_Retrievers.Classes
     interface IRSFacade
     { 
         void CreateFolder(string Folder, string Parent, string properties);
-        void CreateReport(string filename, string destination, bool overwrite, byte[] definition, string Properties,out ReportWarning[] warnings);
+        ReportWarning[] CreateReport(string filename, string destination, bool overwrite, byte[] definition, string Properties);
+        ReportWarning[] CreateModel(string filename, string folder, byte[] definition, string Properties);
         System.Net.ICredentials Credentials { get; set; }
         string BaseUrl { get; set; }
         void DeleteItem(string path);
@@ -22,5 +23,6 @@ namespace RSS_Report_Retrievers.Classes
         void CreateDataSource(Datasource datasource, string parent);
         List<DatasourceExtension> GetDataExtensions();
         Datasource GetDatasource(string path);
+        List<ReportItemDTO> ListDependantItems(string reportModelpath);
     }
 }
