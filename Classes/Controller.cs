@@ -328,7 +328,7 @@ namespace RSS_Report_Retrievers
                 Byte[] definition = GetBytesFromFile(filename);
                 ReportWarning[] warnings;
 
-                string visibleName = Path.GetFileNameWithoutExtension(filename);
+                string visibleName = Path.GetFileName(filename);
 
                 warnings = RsFacade.CreateReport(visibleName, destinationFolder, overwrite, definition, null);
 
