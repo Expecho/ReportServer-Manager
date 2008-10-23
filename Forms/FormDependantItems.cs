@@ -87,14 +87,15 @@ namespace RSS_Report_Retrievers.Forms
 
             if (isCompatible == false)
             {
-                this.DialogResult = MessageBox.Show("This model seem to have some compatibility issues with existing reports, would you like to replace it anyway?", "Compatibility warning", MessageBoxButtons.YesNo);
+                this.DialogResult = MessageBox.Show("This model seem to have some compatibility issues with existing reports, would you like to replace it anyway? (Otherwise, choose \"No\" to inspect the results.)", "Compatibility warning", MessageBoxButtons.YesNo);
             }
             else
             {
-                this.DialogResult = MessageBox.Show("The new model seems to be compatible with existing reports. Do you want to replace the old model?", "", MessageBoxButtons.YesNo);
+                this.DialogResult = MessageBox.Show("The new model seems to be compatible with existing reports. Do you want to replace the old model? (Otherwise, choose \"No\" to inspect the results.)", "", MessageBoxButtons.YesNo);
             }
 
-            this.Close();
+            if(this.DialogResult == DialogResult.Yes)
+                this.Close();
         }
 
         private string GetModelDefinition(IRSFacade rsInstance, string path)
@@ -149,6 +150,20 @@ namespace RSS_Report_Retrievers.Forms
             list.Add(res2);
 
             TestResults = list;
+        }
+
+        private void FormDependantItems_Resize(object sender, EventArgs e)
+        {
+            this.dgvResults.Width = this.Width - 50;
+            this.dgvResults.Height = this.Height - 130;
+
+            this.btnClose.Top = this.Height + 199 - 277;
+            this.btnClose.Left = this.Width + 393 - 498;
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
 
     }
