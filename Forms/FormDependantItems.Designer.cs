@@ -47,15 +47,19 @@ namespace RSS_Report_Retrievers.Forms
             // 
             // dgvResults
             // 
+            this.dgvResults.AllowUserToAddRows = false;
+            this.dgvResults.AllowUserToDeleteRows = false;
             this.dgvResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvResults.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ReportName,
             this.isCompatible});
+            this.dgvResults.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dgvResults.Location = new System.Drawing.Point(15, 40);
+            this.dgvResults.MultiSelect = false;
             this.dgvResults.Name = "dgvResults";
             this.dgvResults.ReadOnly = true;
             this.dgvResults.RowTemplate.Height = 24;
-            this.dgvResults.Size = new System.Drawing.Size(297, 150);
+            this.dgvResults.Size = new System.Drawing.Size(445, 150);
             this.dgvResults.TabIndex = 2;
             // 
             // ReportName
@@ -63,6 +67,7 @@ namespace RSS_Report_Retrievers.Forms
             this.ReportName.HeaderText = "Report name";
             this.ReportName.Name = "ReportName";
             this.ReportName.ReadOnly = true;
+            this.ReportName.Width = 300;
             // 
             // isCompatible
             // 
@@ -74,7 +79,7 @@ namespace RSS_Report_Retrievers.Forms
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(514, 315);
+            this.ClientSize = new System.Drawing.Size(480, 234);
             this.Controls.Add(this.dgvResults);
             this.Controls.Add(this.lblDependantItems);
             this.Name = "FormDependantItems";
