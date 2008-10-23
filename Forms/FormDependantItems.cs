@@ -87,7 +87,11 @@ namespace RSS_Report_Retrievers.Forms
 
             if (isCompatible == false)
             {
-                this.DialogResult = MessageBox.Show("This model seem to have some compatibility issues, would you like to replace it anyway?", "Compatibility warning", MessageBoxButtons.YesNo);
+                this.DialogResult = MessageBox.Show("This model seem to have some compatibility issues with existing reports, would you like to replace it anyway?", "Compatibility warning", MessageBoxButtons.YesNo);
+            }
+            else
+            {
+                this.DialogResult = MessageBox.Show("The new model seems to be compatible with existing reports. Do you want to replace the old model?", "", MessageBoxButtons.YesNo);
             }
 
             this.Close();
