@@ -71,7 +71,7 @@ namespace RSS_Report_Retrievers.Forms
 
                 // Check it against the model:
                 ReportTestResult result = new ReportTestResult();
-                result.ReportName = reportItem.Name;
+                result.ReportName = reportItem.Path + "/" + reportItem.Name;
 
                 result.PassedTest = validator.ValidateModelForReport(reportRDL);
 

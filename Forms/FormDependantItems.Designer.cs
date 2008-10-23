@@ -30,9 +30,9 @@ namespace RSS_Report_Retrievers.Forms
         {
             this.lblDependantItems = new System.Windows.Forms.Label();
             this.dgvResults = new System.Windows.Forms.DataGridView();
-            this.btnClose = new System.Windows.Forms.Button();
             this.ReportName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.isCompatible = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.btnClose = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvResults)).BeginInit();
             this.SuspendLayout();
             // 
@@ -61,18 +61,8 @@ namespace RSS_Report_Retrievers.Forms
             this.dgvResults.Name = "dgvResults";
             this.dgvResults.ReadOnly = true;
             this.dgvResults.RowTemplate.Height = 24;
-            this.dgvResults.Size = new System.Drawing.Size(453, 150);
+            this.dgvResults.Size = new System.Drawing.Size(715, 150);
             this.dgvResults.TabIndex = 2;
-            // 
-            // btnClose
-            // 
-            this.btnClose.Location = new System.Drawing.Point(393, 199);
-            this.btnClose.Name = "btnClose";
-            this.btnClose.Size = new System.Drawing.Size(75, 23);
-            this.btnClose.TabIndex = 3;
-            this.btnClose.Text = "Close";
-            this.btnClose.UseVisualStyleBackColor = true;
-            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
             // ReportName
             // 
@@ -90,11 +80,21 @@ namespace RSS_Report_Retrievers.Forms
             this.isCompatible.ReadOnly = true;
             this.isCompatible.Width = 84;
             // 
+            // btnClose
+            // 
+            this.btnClose.Location = new System.Drawing.Point(655, 199);
+            this.btnClose.Name = "btnClose";
+            this.btnClose.Size = new System.Drawing.Size(75, 23);
+            this.btnClose.TabIndex = 3;
+            this.btnClose.Text = "Close";
+            this.btnClose.UseVisualStyleBackColor = true;
+            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
+            // 
             // FormDependantItems
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(480, 234);
+            this.ClientSize = new System.Drawing.Size(742, 234);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.dgvResults);
             this.Controls.Add(this.lblDependantItems);
