@@ -12,7 +12,7 @@ namespace RSS_Report_Retrievers
     public partial class FormSSRSSItemSelector : Form
     {
         private ViewItems viewItem = ViewItems.Folders;
-        private IController rs;
+        private Controller rs;
         
         #region Properties
         public string SelectedItemPath

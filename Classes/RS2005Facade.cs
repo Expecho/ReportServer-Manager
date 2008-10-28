@@ -60,23 +60,14 @@ namespace RSS_Report_Retrievers.Classes
             return properties;
         }
 
-        public List<List<String>> GetItemSecurity(string path)
+        public Dictionary<string,string[]> GetItemSecurity(string path, out bool inheritsParentSecurity)
         {
-            bool inheritParent;
+            Dictionary<string, string[]> permissions = new Dictionary<string, string[]>(StringComparer.CurrentCultureIgnoreCase);
 
-            List<List<String>> permissions = new List<List<string>>();
-            foreach (Policy permission in rs.GetPolicies(path, out inheritParent))
+            foreach (Policy permission in rs.GetPolicies(path, out inheritsParentSecurity))
             {
-                List<String> permissioninfo = new List<String>();
-                string roles = "";
-                permissioninfo.Add(permission.GroupUserName);
-                foreach (Role role in permission.Roles)
-                {
-                    roles += role.Name + ",";
-                }
-                permissioninfo.Add(inheritParent.ToString());
-                permissioninfo.Add(roles.TrimEnd(','));
-                permissions.Add(permissioninfo);
+                string[] roles = Array.ConvertAll<Role, string>(permission.Roles, delegate(Role r) { return r.Name; });
+                permissions.Add(permission.GroupUserName, roles);
             }
 
             return permissions;
@@ -151,6 +142,24 @@ namespace RSS_Report_Retrievers.Classes
 
             rs.SetItemDataSources(item, reportDataSources);
         }
+        public void SetItemSecurity(string itemPath, Dictionary<string,string[]> policies)
+        {
+            List<Policy> policyList = new List<Policy>();
+
+            foreach (string userName in policies.Keys)
+            {
+                Policy newPolicy = new Policy();
+                newPolicy.GroupUserName = userName;
+
+                newPolicy.Roles = Array.ConvertAll<string, Role>(policies[userName], delegate(string roleName) { Role r = new Role(); r.Name = roleName; return r; });
+                
+                if((!String.IsNullOrEmpty(newPolicy.GroupUserName)) &&
+                    newPolicy.Roles.Length > 0)
+                    policyList.Add(newPolicy);
+            }
+
+            rs.SetPolicies(itemPath, policyList.ToArray());
+        }
 
         public void CreateDataSource(Datasource datasource, string parent)
         {
@@ -215,6 +224,13 @@ namespace RSS_Report_Retrievers.Classes
             }
 
             return items;
+        }
+
+        public IEnumerable<string> ListRoles()
+        {
+            foreach (Role r in rs.ListRoles(SecurityScopeEnum.Catalog))
+                yield return r.Name;
+            
         }
 
         public List<ReportItemDTO> LoadDependantItems(string reportModelpath)

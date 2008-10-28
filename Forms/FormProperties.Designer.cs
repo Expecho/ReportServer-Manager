@@ -43,19 +43,20 @@ namespace RSS_Report_Retrievers
             this.columnHeader9 = new System.Windows.Forms.ColumnHeader();
             this.lvPermissions = new System.Windows.Forms.ListView();
             this.columnHeader10 = new System.Windows.Forms.ColumnHeader();
-            this.columnHeader11 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader12 = new System.Windows.Forms.ColumnHeader();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.lblInheritsPermissions = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // btnOK
             // 
-            this.btnOK.Location = new System.Drawing.Point(543, 609);
+            this.btnOK.Location = new System.Drawing.Point(724, 750);
+            this.btnOK.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(75, 23);
+            this.btnOK.Size = new System.Drawing.Size(100, 28);
             this.btnOK.TabIndex = 0;
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
@@ -70,10 +71,11 @@ namespace RSS_Report_Retrievers
             this.columnHeader4,
             this.columnHeader5,
             this.columnHeader6});
-            this.lvParameters.Location = new System.Drawing.Point(5, 28);
+            this.lvParameters.Location = new System.Drawing.Point(7, 34);
+            this.lvParameters.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.lvParameters.MultiSelect = false;
             this.lvParameters.Name = "lvParameters";
-            this.lvParameters.Size = new System.Drawing.Size(612, 136);
+            this.lvParameters.Size = new System.Drawing.Size(815, 166);
             this.lvParameters.TabIndex = 9;
             this.lvParameters.UseCompatibleStateImageBehavior = false;
             this.lvParameters.View = System.Windows.Forms.View.Details;
@@ -110,10 +112,11 @@ namespace RSS_Report_Retrievers
             this.lvProperties.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader7,
             this.columnHeader8});
-            this.lvProperties.Location = new System.Drawing.Point(5, 183);
+            this.lvProperties.Location = new System.Drawing.Point(7, 225);
+            this.lvProperties.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.lvProperties.MultiSelect = false;
             this.lvProperties.Name = "lvProperties";
-            this.lvProperties.Size = new System.Drawing.Size(612, 140);
+            this.lvProperties.Size = new System.Drawing.Size(815, 171);
             this.lvProperties.TabIndex = 10;
             this.lvProperties.UseCompatibleStateImageBehavior = false;
             this.lvProperties.View = System.Windows.Forms.View.Details;
@@ -132,10 +135,11 @@ namespace RSS_Report_Retrievers
             // 
             this.lvDataSources.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader9});
-            this.lvDataSources.Location = new System.Drawing.Point(5, 342);
+            this.lvDataSources.Location = new System.Drawing.Point(7, 421);
+            this.lvDataSources.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.lvDataSources.MultiSelect = false;
             this.lvDataSources.Name = "lvDataSources";
-            this.lvDataSources.Size = new System.Drawing.Size(612, 96);
+            this.lvDataSources.Size = new System.Drawing.Size(815, 117);
             this.lvDataSources.TabIndex = 11;
             this.lvDataSources.UseCompatibleStateImageBehavior = false;
             this.lvDataSources.View = System.Windows.Forms.View.Details;
@@ -149,12 +153,12 @@ namespace RSS_Report_Retrievers
             // 
             this.lvPermissions.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader10,
-            this.columnHeader11,
             this.columnHeader12});
-            this.lvPermissions.Location = new System.Drawing.Point(5, 457);
+            this.lvPermissions.Location = new System.Drawing.Point(7, 562);
+            this.lvPermissions.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.lvPermissions.MultiSelect = false;
             this.lvPermissions.Name = "lvPermissions";
-            this.lvPermissions.Size = new System.Drawing.Size(612, 146);
+            this.lvPermissions.Size = new System.Drawing.Size(815, 179);
             this.lvPermissions.TabIndex = 12;
             this.lvPermissions.UseCompatibleStateImageBehavior = false;
             this.lvPermissions.View = System.Windows.Forms.View.Details;
@@ -164,10 +168,6 @@ namespace RSS_Report_Retrievers
             this.columnHeader10.Text = "Item";
             this.columnHeader10.Width = 160;
             // 
-            // columnHeader11
-            // 
-            this.columnHeader11.Text = "Inherited";
-            // 
             // columnHeader12
             // 
             this.columnHeader12.Text = "Roles";
@@ -176,44 +176,57 @@ namespace RSS_Report_Retrievers
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(2, 12);
+            this.label1.Location = new System.Drawing.Point(3, 15);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(60, 13);
+            this.label1.Size = new System.Drawing.Size(81, 17);
             this.label1.TabIndex = 13;
             this.label1.Text = "Parameters";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(2, 326);
+            this.label2.Location = new System.Drawing.Point(3, 401);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(67, 13);
+            this.label2.Size = new System.Drawing.Size(88, 17);
             this.label2.TabIndex = 14;
             this.label2.Text = "Datasources";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(2, 441);
+            this.label3.Location = new System.Drawing.Point(3, 543);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(62, 13);
+            this.label3.Size = new System.Drawing.Size(84, 17);
             this.label3.TabIndex = 15;
             this.label3.Text = "Permissions";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(2, 167);
+            this.label4.Location = new System.Drawing.Point(3, 206);
+            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(54, 13);
+            this.label4.Size = new System.Drawing.Size(73, 17);
             this.label4.TabIndex = 16;
             this.label4.Text = "Properties";
             // 
+            // lblInheritsPermissions
+            // 
+            this.lblInheritsPermissions.AutoSize = true;
+            this.lblInheritsPermissions.Location = new System.Drawing.Point(94, 543);
+            this.lblInheritsPermissions.Name = "lblInheritsPermissions";
+            this.lblInheritsPermissions.Size = new System.Drawing.Size(0, 17);
+            this.lblInheritsPermissions.TabIndex = 17;
+            // 
             // FormProperties
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(630, 635);
+            this.ClientSize = new System.Drawing.Size(840, 782);
+            this.Controls.Add(this.lblInheritsPermissions);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
@@ -224,6 +237,7 @@ namespace RSS_Report_Retrievers
             this.Controls.Add(this.lvParameters);
             this.Controls.Add(this.btnOK);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.MaximizeBox = false;
             this.Name = "FormProperties";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
@@ -255,7 +269,7 @@ namespace RSS_Report_Retrievers
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.ColumnHeader columnHeader11;
         private System.Windows.Forms.ColumnHeader columnHeader12;
+        private System.Windows.Forms.Label lblInheritsPermissions;
     }
 }

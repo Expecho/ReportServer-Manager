@@ -20,7 +20,7 @@ namespace RSS_Report_Retrievers
         private const string REPORT_FILTER_STRING = "Reports|*.rdl";
         private const string MODEL_FILTER_STRING = "Models|*.smdl";
 
-        private IController rs;
+        private Controller rs;
 
         public static ServerSettingsConfigElement SelectedServer = null;
         ServerSettingsConfigElementCollection serverCollection = null;
@@ -70,6 +70,7 @@ namespace RSS_Report_Retrievers
                 toolStripMenuItemSep1.Visible = toolStripMenuItemSep1.Visible && lvItems.SelectedItems.Count > 0 && (ReportItemTypes)lvItems.SelectedItems[0].Tag != ReportItemTypes.Datasource;
 
                 replaceModelToolStripMenuItem.Visible = lvItems.SelectedItems.Count > 0 && (ReportItemTypes)lvItems.SelectedItems[0].Tag == ReportItemTypes.model;
+                setItemSecurityToolStripMenuItem.Visible = lvItems.SelectedItems.Count > 0 && (ReportItemTypes)lvItems.SelectedItems[0].Tag == ReportItemTypes.Folder;
             }
         }
 
@@ -413,6 +414,9 @@ namespace RSS_Report_Retrievers
         {
             SelectedServer = this.serverCollection.Get(((ToolStripMenuItem)sender).Text);
             Connect();
+
+            FormSetPolicy frm = new FormSetPolicy();
+
         }
 
         private void Connect()
@@ -507,15 +511,27 @@ namespace RSS_Report_Retrievers
             {
                 string existingModelPath = lvItems.SelectedItems[0].ToolTipText;
                 string newModelSMDL = System.IO.File.ReadAllText(fileName);
+                
                 Forms.FormDependantItems form = new RSS_Report_Retrievers.Forms.FormDependantItems();
 
-                form.CheckModelForCompatibility(this.rs, existingModelPath, newModelSMDL);
+                form.DialogResult = DialogResult.Yes;
+
+                if(MessageBox.Show("Do you want to perform a compatibility check?") == DialogResult.Yes)
+                    form.CheckModelForCompatibility(this.rs, existingModelPath, newModelSMDL);
                 
                 if (form.DialogResult == DialogResult.Yes)
                 {
                     rs.ReplaceModel(fileName, existingModelPath);
+
+                    MessageBox.Show("Model replaced!");
                 }
             }
         }
+
+        private void addPermissionsForUserToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            rs.AddPolicyForMyReports(lvItems.SelectedItems[0].ToolTipText, lvItems.SelectedItems[0].Text, new FormSetPolicy());
+        }
+
     }
 }
