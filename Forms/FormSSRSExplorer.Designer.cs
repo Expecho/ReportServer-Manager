@@ -39,12 +39,15 @@ namespace RSS_Report_Retrievers
             this.setDatasourceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createDatasourceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.setItemSecurityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addPermissionsForUserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemSep1 = new System.Windows.Forms.ToolStripSeparator();
             this.uploadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.filesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.folderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.downloadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.replaceModelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemSep2 = new System.Windows.Forms.ToolStripSeparator();
             this.propertiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btnOK = new System.Windows.Forms.Button();
@@ -62,7 +65,6 @@ namespace RSS_Report_Retrievers
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripContainer = new System.Windows.Forms.ToolStripContainer();
-            this.replaceModelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip.SuspendLayout();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -83,7 +85,7 @@ namespace RSS_Report_Retrievers
             this.tvReportServer.ImageIndex = 2;
             this.tvReportServer.ImageList = this.imageList;
             this.tvReportServer.Location = new System.Drawing.Point(4, 4);
-            this.tvReportServer.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tvReportServer.Margin = new System.Windows.Forms.Padding(4);
             this.tvReportServer.Name = "tvReportServer";
             this.tvReportServer.SelectedImageIndex = 3;
             this.tvReportServer.Size = new System.Drawing.Size(335, 507);
@@ -111,16 +113,17 @@ namespace RSS_Report_Retrievers
             this.setDatasourceToolStripMenuItem,
             this.editToolStripMenuItem,
             this.createDatasourceToolStripMenuItem,
+            this.setItemSecurityToolStripMenuItem,
             this.newFolderToolStripMenuItem,
-            this.replaceModelToolStripMenuItem,
             this.toolStripMenuItemSep1,
             this.uploadToolStripMenuItem,
             this.downloadToolStripMenuItem,
+            this.replaceModelToolStripMenuItem,
             this.toolStripMenuItemSep2,
             this.propertiesToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip";
             this.contextMenuStrip.ShowImageMargin = false;
-            this.contextMenuStrip.Size = new System.Drawing.Size(176, 302);
+            this.contextMenuStrip.Size = new System.Drawing.Size(176, 326);
             this.contextMenuStrip.Text = "With selected items:";
             this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Opening);
             // 
@@ -166,6 +169,21 @@ namespace RSS_Report_Retrievers
             this.createDatasourceToolStripMenuItem.Text = "&Create Datasource";
             this.createDatasourceToolStripMenuItem.Click += new System.EventHandler(this.createDatasourceToolStripMenuItem_Click);
             // 
+            // setItemSecurityToolStripMenuItem
+            // 
+            this.setItemSecurityToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addPermissionsForUserToolStripMenuItem});
+            this.setItemSecurityToolStripMenuItem.Name = "setItemSecurityToolStripMenuItem";
+            this.setItemSecurityToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
+            this.setItemSecurityToolStripMenuItem.Text = "Security";
+            // 
+            // addPermissionsForUserToolStripMenuItem
+            // 
+            this.addPermissionsForUserToolStripMenuItem.Name = "addPermissionsForUserToolStripMenuItem";
+            this.addPermissionsForUserToolStripMenuItem.Size = new System.Drawing.Size(354, 24);
+            this.addPermissionsForUserToolStripMenuItem.Text = "Add permissions for \"My Reports\"-folders";
+            this.addPermissionsForUserToolStripMenuItem.Click += new System.EventHandler(this.addPermissionsForUserToolStripMenuItem_Click);
+            // 
             // newFolderToolStripMenuItem
             // 
             this.newFolderToolStripMenuItem.Name = "newFolderToolStripMenuItem";
@@ -208,6 +226,13 @@ namespace RSS_Report_Retrievers
             this.downloadToolStripMenuItem.Text = "Do&wnload";
             this.downloadToolStripMenuItem.Click += new System.EventHandler(this.downloadToolStripMenuItem_Click);
             // 
+            // replaceModelToolStripMenuItem
+            // 
+            this.replaceModelToolStripMenuItem.Name = "replaceModelToolStripMenuItem";
+            this.replaceModelToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
+            this.replaceModelToolStripMenuItem.Text = "Replace model";
+            this.replaceModelToolStripMenuItem.Click += new System.EventHandler(this.replaceModelToolStripMenuItem_Click);
+            // 
             // toolStripMenuItemSep2
             // 
             this.toolStripMenuItemSep2.Name = "toolStripMenuItemSep2";
@@ -224,7 +249,7 @@ namespace RSS_Report_Retrievers
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOK.Location = new System.Drawing.Point(925, 527);
-            this.btnOK.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnOK.Margin = new System.Windows.Forms.Padding(4);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(100, 28);
             this.btnOK.TabIndex = 1;
@@ -239,7 +264,7 @@ namespace RSS_Report_Retrievers
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.lvItems.ContextMenuStrip = this.contextMenuStrip;
             this.lvItems.Location = new System.Drawing.Point(4, 4);
-            this.lvItems.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.lvItems.Margin = new System.Windows.Forms.Padding(4);
             this.lvItems.Name = "lvItems";
             this.lvItems.ShowItemToolTips = true;
             this.lvItems.Size = new System.Drawing.Size(684, 507);
@@ -253,7 +278,7 @@ namespace RSS_Report_Retrievers
             // 
             this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.splitContainer.Margin = new System.Windows.Forms.Padding(4);
             this.splitContainer.Name = "splitContainer";
             // 
             // splitContainer.Panel1
@@ -321,25 +346,25 @@ namespace RSS_Report_Retrievers
             // connectToolStripMenuItem
             // 
             this.connectToolStripMenuItem.Name = "connectToolStripMenuItem";
-            this.connectToolStripMenuItem.Size = new System.Drawing.Size(134, 24);
+            this.connectToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
             this.connectToolStripMenuItem.Text = "&Connect";
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(134, 24);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
             this.settingsToolStripMenuItem.Text = "&Servers...";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
             // toolStripMenuItem6
             // 
             this.toolStripMenuItem6.Name = "toolStripMenuItem6";
-            this.toolStripMenuItem6.Size = new System.Drawing.Size(131, 6);
+            this.toolStripMenuItem6.Size = new System.Drawing.Size(149, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(134, 24);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
             this.exitToolStripMenuItem.Text = "&Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -368,11 +393,11 @@ namespace RSS_Report_Retrievers
             // toolStripContainer.ContentPanel
             // 
             this.toolStripContainer.ContentPanel.Controls.Add(this.splitContainer);
-            this.toolStripContainer.ContentPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.toolStripContainer.ContentPanel.Margin = new System.Windows.Forms.Padding(4);
             this.toolStripContainer.ContentPanel.Size = new System.Drawing.Size(1041, 514);
             this.toolStripContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStripContainer.Location = new System.Drawing.Point(0, 0);
-            this.toolStripContainer.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.toolStripContainer.Margin = new System.Windows.Forms.Padding(4);
             this.toolStripContainer.Name = "toolStripContainer";
             this.toolStripContainer.Size = new System.Drawing.Size(1041, 567);
             this.toolStripContainer.TabIndex = 4;
@@ -382,13 +407,6 @@ namespace RSS_Report_Retrievers
             // 
             this.toolStripContainer.TopToolStripPanel.Controls.Add(this.menuStripMain);
             // 
-            // replaceModelToolStripMenuItem
-            // 
-            this.replaceModelToolStripMenuItem.Name = "replaceModelToolStripMenuItem";
-            this.replaceModelToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
-            this.replaceModelToolStripMenuItem.Text = "Replace model";
-            this.replaceModelToolStripMenuItem.Click += new System.EventHandler(this.replaceModelToolStripMenuItem_Click);
-            // 
             // FormSSRSExplorer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -397,7 +415,7 @@ namespace RSS_Report_Retrievers
             this.Controls.Add(this.toolStripContainer);
             this.Controls.Add(this.btnOK);
             this.MainMenuStrip = this.menuStripMain;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormSSRSExplorer";
             this.Text = "SSRS Explorer ";
             this.Shown += new System.EventHandler(this.frmReportSelector_Shown);
@@ -455,5 +473,7 @@ namespace RSS_Report_Retrievers
         private System.Windows.Forms.ToolStripMenuItem createDatasourceToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem replaceModelToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem setItemSecurityToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem addPermissionsForUserToolStripMenuItem;
     }
 }

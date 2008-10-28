@@ -13,7 +13,7 @@ namespace RSS_Report_Retrievers
     {
         private string path;
         private ReportItemTypes itemType;
-        private IController rs; 
+        private Controller rs; 
 
         /// <summary>
         /// Constructor
@@ -61,24 +61,25 @@ namespace RSS_Report_Retrievers
                     lvProperties.Items.Add(lvi);   
                 }
 
-                Application.DoEvents();  
+                Application.DoEvents();
 
-                foreach (List<string> permissions in rs.GetItemSecurity(path))
+                bool inheritsParent;
+                Dictionary<string,string[]> itemSecurity = rs.GetItemSecurity(path, out inheritsParent);
+                foreach (string userName in itemSecurity.Keys )
                 {
-                    ListViewItem lvi = new ListViewItem();
-                    foreach (string permission in permissions)
-                    {
-                        if (permissions.IndexOf(permission) == 0)
-                        {
-                            lvi.Text = permission;
-                        }
-                        else
-                        {
-                            lvi.SubItems.Add(permission);
-                        }
-                    }
-                    lvPermissions.Items.Add(lvi);
+                    ListViewItem visibleUsername = new ListViewItem();
+
+
+                    visibleUsername.Text = userName;
+                    visibleUsername.SubItems.Add(String.Join(",", itemSecurity[userName]));
+
+                    lvPermissions.Items.Add(visibleUsername);
                 }
+
+                if (inheritsParent)
+                    lblInheritsPermissions.Text = "Inherited from parent object";
+                else
+                    lblInheritsPermissions.Text = "";
 
                 Application.DoEvents();
 

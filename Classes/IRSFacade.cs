@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace RSS_Report_Retrievers.Classes
 {
-    interface IRSFacade
+    public interface IRSFacade
     { 
         void CreateFolder(string Folder, string Parent, string properties);
         ReportWarning[] CreateReport(string filename, string destination, bool overwrite, byte[] definition, string Properties);
@@ -12,7 +12,7 @@ namespace RSS_Report_Retrievers.Classes
         string BaseUrl { get; set; }
         void DeleteItem(string path);
         List<List<string>> GetItemProperties(string path);
-        List<List<string>> GetItemSecurity(string path);
+        Dictionary<string,string[]> GetItemSecurity(string path, out bool inheritsParentSecurity);
         byte[] GetModelDefinition(string path);
         List<string> GetReportDatasources(string path);
         byte[] GetReportDefinition(string path);
@@ -20,9 +20,11 @@ namespace RSS_Report_Retrievers.Classes
         ReportItemDTO[] ListChildren(string item, bool recursive);
         void MoveItem(string source, string destination, ReportItemTypes type);
         void SetItemDataSources(string item, string dataSourceName);
+        void SetItemSecurity(string itemPath, Dictionary<string,string[]> policies);
         void CreateDataSource(Datasource datasource, string parent);
         List<DatasourceExtension> GetDataExtensions();
         Datasource GetDatasource(string path);
         List<ReportItemDTO> ListDependantItems(string reportModelpath);
+        IEnumerable<string> ListRoles();
     }
 }

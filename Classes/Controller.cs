@@ -12,7 +12,7 @@ using RSS_Report_Retrievers.Classes;
 
 namespace RSS_Report_Retrievers
 {
-    class Controller : IController
+    public class Controller 
     {
         public IRSFacade RsFacade;
         private TreeView tvReportServer = null;
@@ -254,7 +254,67 @@ namespace RSS_Report_Retrievers
             }
 
         }
-        #endregion
+
+        public void AddPolicyForMyReports(string userName, IEnumerable<string> roles)
+        {
+            ReportItemDTO currentItem;
+            currentItem.Path = "";
+
+            try
+            {
+                currentItem.Path = "/Users Folders";
+                ReportItemDTO[] usersFolders = RsFacade.ListChildren("/Users Folders", false);
+
+                foreach (ReportItemDTO item in usersFolders)
+                {
+                    currentItem = item;
+
+                    if (item.Type == ReportItemTypes.Folder)
+                    {
+                        string itemPath = item.Path + "/My reports";
+                        bool inheritsDummy;
+                        Dictionary<string, string[]> existingPolicies = RsFacade.GetItemSecurity(itemPath, out inheritsDummy);
+
+                        RemoveExistingUser(existingPolicies, userName);
+
+                        List<string> roleList = new List<string>();
+
+                        foreach (string role in roles)
+                            roleList.Add(role);
+
+                        existingPolicies.Add(userName, roleList.ToArray());
+
+                        this.RsFacade.SetItemSecurity(itemPath, existingPolicies);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Current Item:" + currentItem.Path + "\r\n" + ex.ToString());
+            }
+        }
+
+        private void RemoveExistingUser(Dictionary<string, string[]> existingPolicies, string userName)
+        {
+            if (existingPolicies.ContainsKey(userName))
+            {
+                existingPolicies.Remove(userName);
+            }
+        }
+
+
+        public void AddPolicyForMyReports(string itemPath, string visibleName, IFormSetPolicy policyDialog)
+        {
+            policyDialog.Init(RsFacade.ListRoles(), visibleName);
+            
+            if (policyDialog.ShowDialog() == DialogResult.OK)
+            {
+                AddPolicyForMyReports(policyDialog.UserName, policyDialog.SelectedRoles);
+
+                MessageBox.Show("MyReports-folders updated!");
+            }
+        }
+#endregion
 
         #region Upload
         /// <summary>
@@ -434,12 +494,16 @@ namespace RSS_Report_Retrievers
         /// </summary>
         /// <param name="path">path of the item to query</param>
         /// <returns>A list of item permissions and their roles</returns>
-        public List<List<String>> GetItemSecurity(string path)
+        public Dictionary<string,string[]> GetItemSecurity(string path, out bool inheritsParent)
         {
-            return RsFacade.GetItemSecurity(path);
+            return RsFacade.GetItemSecurity(path, out inheritsParent);
         }
         #endregion
 
+        public IEnumerable<string> ListRoles()
+        {
+            return RsFacade.ListRoles();
+        }
         #region Download
         /// <summary>
         /// Download an item from the reportserver

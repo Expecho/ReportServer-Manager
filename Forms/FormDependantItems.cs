@@ -45,7 +45,7 @@ namespace RSS_Report_Retrievers.Forms
         {
         }
 
-        public void CheckModelForCompatibility(IController rs, string existingModelPath, string newModelSMDL)
+        public void CheckModelForCompatibility(Controller rs, string existingModelPath, string newModelSMDL)
         {
             this.Show();
 
