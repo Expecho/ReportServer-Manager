@@ -72,7 +72,7 @@ namespace RSS_Report_Retrievers
 
             try
             {
-                ExpandNodeContent(root);
+                ExpandNodeContent(root,true);
                 root.Expand();
                 tvReportServer.SelectedNode = root;
             }
@@ -93,7 +93,7 @@ namespace RSS_Report_Retrievers
         /// Traverse through item collection of the report server
         /// </summary>
         /// <param name="parent">TreeNode to which child nodes are appended</param>
-        private void ExpandNodeContent(TreeNode parent)
+        public void ExpandNodeContent(TreeNode parent, bool recurseSubfolders)
         {
             foreach (ReportItemDTO item in RsFacade.ListChildren(parent.ToolTipText, false))
             {
@@ -105,7 +105,9 @@ namespace RSS_Report_Retrievers
                     folder.Tag = ReportItemTypes.Folder;
                     folder.ToolTipText = item.Path;
                     parent.Nodes.Add(folder);
-                    ExpandNodeContent(folder); //Explore subfolders on the report server
+
+                    if(recurseSubfolders)
+                        ExpandNodeContent(folder,false); //Explore ONE level of subfolders on the report server 
                 }
                 else if (item.Type == ReportItemTypes.Datasource && (viewItem == ViewItems.Datasources || viewItem == ViewItems.All))
                 {
@@ -129,7 +131,7 @@ namespace RSS_Report_Retrievers
                 {
                     TreeNode model = new TreeNode(item.Name);
                     model.Name = item.Name;
-                    model.ImageIndex = 0;
+                    model.ImageIndex = 4;
                     model.Tag = ReportItemTypes.model;
                     model.ToolTipText = item.Path;
                     parent.Nodes.Add(model);
@@ -159,6 +161,7 @@ namespace RSS_Report_Retrievers
                     case ReportItemTypes.Folder:
                         lvi.ImageIndex = item.Hidden ? 4 : 2; ;
                         lvi.Tag = ReportItemTypes.Folder;
+
                         break;
                     case ReportItemTypes.Report:
                         lvi.ImageIndex = item.Hidden ? 5 : 1;
@@ -375,6 +378,15 @@ namespace RSS_Report_Retrievers
                 RsFacade.SetItemDataSources(report.Path, itemToReplace);
             }
         }
+
+        public void CreateModel(string filename, string destinationFolder, bool overwrite)
+        {
+            Byte[] def = GetBytesFromFile(filename);
+            string visibleName = Path.GetFileNameWithoutExtension(filename);
+
+            RsFacade.CreateModel(visibleName, destinationFolder, def, null);
+        }
+
         /// <summary>
         /// Create report on the server
         /// </summary>

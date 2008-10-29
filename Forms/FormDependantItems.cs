@@ -12,6 +12,9 @@ namespace RSS_Report_Retrievers.Forms
 {
     public partial class FormDependantItems : Form
     {
+        private Controller controller;
+        private string existingModelPath;
+        private string newModelSMDL;
 
         private IList<ReportTestResult> testResults;
 
@@ -36,16 +39,21 @@ namespace RSS_Report_Retrievers.Forms
             }
         }
 
-        public FormDependantItems()
+        public FormDependantItems(Controller rs, string existingModelPath, string newModelSMDL)
         {
+            this.controller = rs;
+            this.existingModelPath = existingModelPath;
+            this.newModelSMDL = newModelSMDL;
+
             InitializeComponent();
         }
 
         private void FormDependantItems_Load(object sender, EventArgs e)
         {
+            CheckModelForCompatibility(this.controller, this.existingModelPath, this.newModelSMDL);
         }
 
-        public void CheckModelForCompatibility(Controller rs, string existingModelPath, string newModelSMDL)
+        private void CheckModelForCompatibility(Controller rs, string existingModelPath, string newModelSMDL)
         {
             this.Show();
 
@@ -87,15 +95,12 @@ namespace RSS_Report_Retrievers.Forms
 
             if (isCompatible == false)
             {
-                this.DialogResult = MessageBox.Show("This model seem to have some compatibility issues with existing reports, would you like to replace it anyway? (Otherwise, choose \"No\" to inspect the results.)", "Compatibility warning", MessageBoxButtons.YesNo);
+                MessageBox.Show("This model seem to have some compatibility issues with existing reports.", "Compatibility warning", MessageBoxButtons.OK);
             }
             else
             {
-                this.DialogResult = MessageBox.Show("The new model seems to be compatible with existing reports. Do you want to replace the old model? (Otherwise, choose \"No\" to inspect the results.)", "", MessageBoxButtons.YesNo);
+                MessageBox.Show("The new model seems to be compatible with existing reports. ", "", MessageBoxButtons.OK);
             }
-
-            if(this.DialogResult == DialogResult.Yes)
-                this.Close();
         }
 
         private string GetModelDefinition(IRSFacade rsInstance, string path)

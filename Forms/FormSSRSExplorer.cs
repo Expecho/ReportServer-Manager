@@ -19,7 +19,7 @@ namespace RSS_Report_Retrievers
     {
         private const string REPORT_FILTER_STRING = "Reports|*.rdl";
         private const string MODEL_FILTER_STRING = "Models|*.smdl";
-
+        private const string MODEL_FILEEXTENSION = ".smdl";
         private Controller rs;
 
         public static ServerSettingsConfigElement SelectedServer = null;
@@ -102,6 +102,8 @@ namespace RSS_Report_Retrievers
                         if (node.ToolTipText == lvi.ToolTipText)
                         {
                             tvReportServer.SelectedNode = node;
+                            node.Nodes.Clear();
+                            rs.ExpandNodeContent(node, true);
                             node.Expand();
                         }
                     }
@@ -144,7 +146,7 @@ namespace RSS_Report_Retrievers
         /// </summary>
         private void filesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            openFileDialog.Filter = REPORT_FILTER_STRING;
+            openFileDialog.Filter = REPORT_FILTER_STRING + "|" + MODEL_FILTER_STRING;
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 bool overwrite = MessageBox.Show("Overwrite existing items?", "Upload", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
@@ -153,7 +155,16 @@ namespace RSS_Report_Retrievers
 
                 foreach (string filename in openFileDialog.FileNames)
                 {
-                    rs.UploadReport(filename, tvReportServer.SelectedNode.ToolTipText, overwrite);
+                    string destinationFolder = tvReportServer.SelectedNode.ToolTipText;
+
+                    if (Path.GetExtension(filename) == MODEL_FILEEXTENSION)
+                    {
+                        rs.CreateModel(filename, destinationFolder, overwrite);
+                    }
+                    else
+                    {
+                        rs.UploadReport(filename, destinationFolder, overwrite);
+                    }
                 }
 
                 rs.PopulateItems(tvReportServer.SelectedNode.ToolTipText);
@@ -511,20 +522,16 @@ namespace RSS_Report_Retrievers
             {
                 string existingModelPath = lvItems.SelectedItems[0].ToolTipText;
                 string newModelSMDL = System.IO.File.ReadAllText(fileName);
-                
-                Forms.FormDependantItems form = new RSS_Report_Retrievers.Forms.FormDependantItems();
 
-                form.DialogResult = DialogResult.Yes;
-
-                if(MessageBox.Show("Do you want to perform a compatibility check?") == DialogResult.Yes)
-                    form.CheckModelForCompatibility(this.rs, existingModelPath, newModelSMDL);
-                
-                if (form.DialogResult == DialogResult.Yes)
+                if (MessageBox.Show("Do you want to perform a compatibility check before replacing?", "Perform compatibility check?", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    rs.ReplaceModel(fileName, existingModelPath);
+                    Forms.FormDependantItems form = new RSS_Report_Retrievers.Forms.FormDependantItems(this.rs, existingModelPath, newModelSMDL);
 
-                    MessageBox.Show("Model replaced!");
+                    form.ShowDialog();
                 }
+
+                if(MessageBox.Show("Do you want to replace the existing model?", "Replace model", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    rs.ReplaceModel(fileName, existingModelPath);
             }
         }
 
