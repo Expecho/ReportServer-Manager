@@ -43,10 +43,11 @@ namespace RSS_Report_Retrievers
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.tvReportServer.ImageIndex = 2;
             this.tvReportServer.ImageList = this.imageList;
-            this.tvReportServer.Location = new System.Drawing.Point(3, 1);
+            this.tvReportServer.Location = new System.Drawing.Point(4, 1);
+            this.tvReportServer.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tvReportServer.Name = "tvReportServer";
             this.tvReportServer.SelectedImageIndex = 3;
-            this.tvReportServer.Size = new System.Drawing.Size(275, 239);
+            this.tvReportServer.Size = new System.Drawing.Size(365, 293);
             this.tvReportServer.TabIndex = 0;
             this.tvReportServer.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.tvReportServer_MouseDoubleClick);
             // 
@@ -58,14 +59,16 @@ namespace RSS_Report_Retrievers
             this.imageList.Images.SetKeyName(1, "16doc.gif");
             this.imageList.Images.SetKeyName(2, "16fold.gif");
             this.imageList.Images.SetKeyName(3, "folderopen.gif");
+            this.imageList.Images.SetKeyName(4, "model.png");
             // 
             // btnCancel
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(204, 246);
+            this.btnCancel.Location = new System.Drawing.Point(272, 303);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnCancel.Size = new System.Drawing.Size(100, 28);
             this.btnCancel.TabIndex = 1;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
@@ -74,9 +77,10 @@ namespace RSS_Report_Retrievers
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOK.Location = new System.Drawing.Point(123, 246);
+            this.btnOK.Location = new System.Drawing.Point(164, 303);
+            this.btnOK.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(75, 23);
+            this.btnOK.Size = new System.Drawing.Size(100, 28);
             this.btnOK.TabIndex = 2;
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
@@ -84,18 +88,19 @@ namespace RSS_Report_Retrievers
             // 
             // FormSSRSSItemSelector
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(280, 286);
+            this.ClientSize = new System.Drawing.Size(373, 352);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.tvReportServer);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "FormSSRSSItemSelector";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "ReportServer Item Picker";
+            this.Load += new System.EventHandler(this.frmSSRSSExplorer_Load);
             this.Shown += new System.EventHandler(this.frmSSRSSExplorer_Shown);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmSSRSSExplorer_FormClosing);
-            this.Load += new System.EventHandler(this.frmSSRSSExplorer_Load);
             this.ResumeLayout(false);
 
         }
