@@ -77,7 +77,14 @@ namespace RSS_Report_Retrievers
         {
             if (rs != null)
             {
-                rs.PopulateItems(e.Node.ToolTipText);
+                try
+                {
+                    rs.PopulateItems(e.Node.ToolTipText);
+                }
+                catch (Exception ex)
+                {
+                    LogHandler.WriteLogEntry(ex);  
+                }
             }
         }
 
@@ -97,10 +104,17 @@ namespace RSS_Report_Retrievers
                     {
                         if (node.ToolTipText == lvi.ToolTipText)
                         {
-                            tvReportServer.SelectedNode = node;
-                            node.Nodes.Clear();
-                            rs.ExpandNodeContent(node, true);
-                            node.Expand();
+                            try
+                            {
+                                tvReportServer.SelectedNode = node;
+                                node.Nodes.Clear();
+                                rs.ExpandNodeContent(node, true);
+                                node.Expand();
+                            }
+                            catch (Exception ex)
+                            {
+                                LogHandler.WriteLogEntry(ex);
+                            }
                         }
                     }
                 }
@@ -130,10 +144,18 @@ namespace RSS_Report_Retrievers
                     catch (Exception ex)
                     {
                         MessageBox.Show(String.Format("An error occured: {0}", ex.Message));
+                        LogHandler.WriteLogEntry(ex);  
                     }
                 }
 
-                rs.PopulateItems(tvReportServer.SelectedNode.ToolTipText);
+                try
+                {
+                    rs.PopulateItems(tvReportServer.SelectedNode.ToolTipText);
+                }
+                catch (Exception ex)
+                {
+                    LogHandler.WriteLogEntry(ex);
+                }
             }
         }
 
@@ -153,17 +175,31 @@ namespace RSS_Report_Retrievers
                 {
                     string destinationFolder = tvReportServer.SelectedNode.ToolTipText;
 
-                    if (Path.GetExtension(filename) == MODEL_FILEEXTENSION)
+                    try
                     {
-                        rs.CreateModel(filename, destinationFolder, overwrite);
+                        if (Path.GetExtension(filename) == MODEL_FILEEXTENSION)
+                        {
+                            rs.CreateModel(filename, destinationFolder, overwrite);
+                        }
+                        else
+                        {
+                            rs.UploadReport(filename, destinationFolder, overwrite);
+                        }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        rs.UploadReport(filename, destinationFolder, overwrite);
+                        LogHandler.WriteLogEntry(ex);
                     }
                 }
 
-                rs.PopulateItems(tvReportServer.SelectedNode.ToolTipText);
+                try
+                {
+                    rs.PopulateItems(tvReportServer.SelectedNode.ToolTipText);
+                }
+                catch (Exception ex)
+                {
+                    LogHandler.WriteLogEntry(ex);
+                }
 
                 this.Cursor = Cursors.Default;
             }
@@ -182,8 +218,15 @@ namespace RSS_Report_Retrievers
 
                 this.Cursor = Cursors.WaitCursor;
 
-                rs.UploadFolder(folderSelector.Foldername, tvReportServer.SelectedNode.ToolTipText, overwrite, tvReportServer.SelectedNode);
-                rs.PopulateItems(tvReportServer.SelectedNode.ToolTipText);
+                try
+                {
+                    rs.UploadFolder(folderSelector.Foldername, tvReportServer.SelectedNode.ToolTipText, overwrite, tvReportServer.SelectedNode);
+                    rs.PopulateItems(tvReportServer.SelectedNode.ToolTipText);
+                }
+                catch (Exception ex)
+                {
+                    LogHandler.WriteLogEntry(ex);
+                }
 
                 this.Cursor = Cursors.Default;
             }
@@ -200,7 +243,14 @@ namespace RSS_Report_Retrievers
 
                 foreach (ListViewItem item in lvItems.SelectedItems)
                 {
-                    rs.DeleteItem(item.ToolTipText);
+                    try
+                    {
+                        rs.DeleteItem(item.ToolTipText);
+                    }
+                    catch (Exception ex)
+                    {
+                        LogHandler.WriteLogEntry(ex);
+                    }
 
                     if ((ReportItemTypes)item.Tag == ReportItemTypes.Folder)
                     {
@@ -300,6 +350,7 @@ namespace RSS_Report_Retrievers
                 catch (Exception ex)
                 {
                     MessageBox.Show(String.Format("An error has occured: {0}", ex.Message));
+                    LogHandler.WriteLogEntry(ex);  
                 }
             }
         }
@@ -325,7 +376,14 @@ namespace RSS_Report_Retrievers
             {
                 foreach (ListViewItem item in lvItems.SelectedItems)
                 {
-                    rs.SetDatasource(item.ToolTipText, ssrsExplorer.SelectedItemPath, (ReportItemTypes)item.Tag);
+                    try
+                    {
+                        rs.SetDatasource(item.ToolTipText, ssrsExplorer.SelectedItemPath, (ReportItemTypes)item.Tag);
+                    }
+                    catch (Exception ex)
+                    {
+                        LogHandler.WriteLogEntry(ex);
+                    }
                 }
             }
         }
@@ -351,11 +409,19 @@ namespace RSS_Report_Retrievers
                     catch (Exception ex)
                     {
                         MessageBox.Show(String.Format("An error has occured: {0}", ex.Message));
+                        LogHandler.WriteLogEntry(ex);  
                     }
                 }
 
-                rs.PopulateTreeView();
-                rs.PopulateItems(tvReportServer.SelectedNode.ToolTipText);
+                try
+                {
+                    rs.PopulateTreeView();
+                    rs.PopulateItems(tvReportServer.SelectedNode.ToolTipText);
+                }
+                catch (Exception ex)
+                {
+                    LogHandler.WriteLogEntry(ex);
+                }
 
                 this.Cursor = Cursors.Default;
             }
@@ -390,7 +456,14 @@ namespace RSS_Report_Retrievers
 
                 foreach (ListViewItem item in lvItems.SelectedItems)
                 {
-                    rs.DownloadItem(item.ToolTipText, folderSelector.Foldername, (ReportItemTypes)item.Tag, preserveFolders);
+                    try
+                    {
+                        rs.DownloadItem(item.ToolTipText, folderSelector.Foldername, (ReportItemTypes)item.Tag, preserveFolders);
+                    }
+                    catch (Exception ex)
+                    {
+                        LogHandler.WriteLogEntry(ex);
+                    }
                 }
 
                 this.Cursor = Cursors.Default;
@@ -436,7 +509,14 @@ namespace RSS_Report_Retrievers
                 }
                 else
                 {
-                    rs = ReportingServicesFactory.CreateFromSettings(SelectedServer,tvReportServer, toolStripStatusLabel, lvItems);
+                    try
+                    {
+                        rs = ReportingServicesFactory.CreateFromSettings(SelectedServer, tvReportServer, toolStripStatusLabel, lvItems);
+                    }
+                    catch (Exception ex)
+                    {
+                        LogHandler.WriteLogEntry(ex);
+                    }
                 }
 
                 try
@@ -446,7 +526,7 @@ namespace RSS_Report_Retrievers
 
                     this.Text = "SSRS Explorer - connected to " + SelectedServer.Alias;
                 }
-                catch
+                catch(Exception ex)
                 {
                     this.Text = "SSRS Explorer - not connected";
 
@@ -455,6 +535,9 @@ namespace RSS_Report_Retrievers
                     MessageBox.Show("Cannot connect. Check server settings.", "Initialisation failed.", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     
                     rs = null;
+
+                    LogHandler.WriteLogEntry(String.Format("Error connecting to {0}:", SelectedServer.Url));   
+                    LogHandler.WriteLogEntry(ex);  
                 }
             }
             else
@@ -479,6 +562,7 @@ namespace RSS_Report_Retrievers
                 catch (Exception ex)
                 {
                     MessageBox.Show(String.Format("An error has occured: {0}", ex.Message));
+                    LogHandler.WriteLogEntry(ex);  
                 }
             }
         }
@@ -502,6 +586,7 @@ namespace RSS_Report_Retrievers
                 catch (Exception ex)
                 {
                     MessageBox.Show(String.Format("An error has occured: {0}", ex.Message));
+                    LogHandler.WriteLogEntry(ex);  
                 }
             }
         }
@@ -526,14 +611,30 @@ namespace RSS_Report_Retrievers
                     form.ShowDialog();
                 }
 
-                if(MessageBox.Show("Do you want to replace the existing model?", "Replace model", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                    rs.ReplaceModel(fileName, existingModelPath);
+                if (MessageBox.Show("Do you want to replace the existing model?", "Replace model", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    try
+                    {
+                        rs.ReplaceModel(fileName, existingModelPath);
+                    }
+                    catch (Exception ex)
+                    {
+                        LogHandler.WriteLogEntry(ex);
+                    }
+                }
             }
         }
 
         private void addPermissionsForUserToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            rs.AddPolicyForMyReports(lvItems.SelectedItems[0].ToolTipText, lvItems.SelectedItems[0].Text, new FormSetPolicy());
+            try
+            {
+                rs.AddPolicyForMyReports(lvItems.SelectedItems[0].ToolTipText, lvItems.SelectedItems[0].Text, new FormSetPolicy());
+            }
+            catch (Exception ex)
+            {
+                LogHandler.WriteLogEntry(ex);
+            }
         }
 
     }

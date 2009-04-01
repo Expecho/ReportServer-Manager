@@ -65,6 +65,7 @@
     <Compile Include="Classes\ConfigurationStorageClasses.cs" />
     <Compile Include="Classes\CryptoHelper.cs" />
     <Compile Include="Classes\IRSFacade.cs" />
+    <Compile Include="Classes\LogHandler.cs" />
     <Compile Include="Classes\ReportItemEnums.cs" />
     <Compile Include="Classes\ReportModel\ModelParser.cs" />
     <Compile Include="Classes\ReportModel\ReportModelValidator.cs" />

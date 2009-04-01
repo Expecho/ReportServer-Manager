@@ -29,14 +29,28 @@ namespace RSS_Report_Retrievers
             InitializeComponent();
             viewItem = viewItems;
 
-            rs = ReportingServicesFactory.CreateFromSettings(FormSSRSExplorer.SelectedServer,tvReportServer,null,null);
+            try
+            {
+                rs = ReportingServicesFactory.CreateFromSettings(FormSSRSExplorer.SelectedServer, tvReportServer, null, null);
+            }
+            catch (Exception ex)
+            {
+                LogHandler.WriteLogEntry(ex);
+            }
             
             rs.ViewItem = viewItem; 
         }
 
         private void frmSSRSSExplorer_Shown(object sender, EventArgs e)
         {
-            rs.PopulateTreeView();
+            try
+            {
+                rs.PopulateTreeView();
+            }
+            catch (Exception ex)
+            {
+                LogHandler.WriteLogEntry(ex);
+            }
         }
         
         /// <summary>
