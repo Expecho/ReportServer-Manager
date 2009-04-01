@@ -18,6 +18,14 @@ namespace RSS_Report_Retrievers.Classes
             set { baseUrl = value; }
         }
 
+        private bool pathIncludesExtension;
+
+        public bool PathIncludesExtension
+        {
+            get { return pathIncludesExtension; }
+            set { pathIncludesExtension = value; }
+        }
+
         #region IRSFacade Members
         public void CreateFolder(string Folder, string Parent, string properties)
         {

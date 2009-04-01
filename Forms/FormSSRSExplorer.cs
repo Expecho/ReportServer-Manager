@@ -1,7 +1,3 @@
-// ****************************************************************************************************
-// Created by Peter Bons. Feel free to modify as needed.
-// my website: http://www.2000miles.nl
-// ****************************************************************************************************
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

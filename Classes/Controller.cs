@@ -580,7 +580,10 @@ namespace RSS_Report_Retrievers
 
         private void SaveItem(string filename, ReportItemTypes type, string destination, bool preserveFolders, XmlDocument definition)
         {
-            filename = AppendFileSuffix(filename, type);
+            if (!RsFacade.PathIncludesExtension)
+            {
+                filename = AppendFileSuffix(filename, type);
+            }
 
             if (preserveFolders)
             {
