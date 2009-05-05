@@ -35,7 +35,16 @@ namespace RSS_Report_Retrievers.Classes
         public ReportWarning[] CreateReport(string filename, string destination, bool overwrite, Byte[] definition, string Properties)
         {
             Warning[] err = rs.CreateReport(System.IO.Path.GetFileNameWithoutExtension(filename), destination, overwrite, definition, null);
-            return System.Array.ConvertAll<Warning,ReportWarning>(err,ConvertSPWarningToReportWarning);
+            if (err != null)
+            {
+
+                return System.Array.ConvertAll<Warning, ReportWarning>(err, ConvertSPWarningToReportWarning);
+            }
+            else
+            {
+                return null;
+            }
+
         }
 
         public ReportWarning[] CreateModel(string visibleName, string parentFolder, Byte[] definition, string Properties)
