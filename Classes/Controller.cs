@@ -54,11 +54,12 @@ namespace RSS_Report_Retrievers
         /// <summary>
         /// Populate treeview on startup
         /// </summary>
-        public void PopulateTreeView()
+        /// <param name="serverAlias">The alias of the connected server</param>
+        public void PopulateTreeView(string serverAlias)
         {
             tvReportServer.Nodes.Clear();
 
-            TreeNode root = new TreeNode("Root");
+            TreeNode root = new TreeNode(serverAlias);
             root.Name = "/";
             root.ToolTipText = RsFacade.BaseUrl; 
             root.Tag = ReportItemTypes.Folder;
