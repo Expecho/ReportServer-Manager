@@ -45,7 +45,7 @@ namespace RSS_Report_Retrievers
         {
             try
             {
-                rs.PopulateTreeView();
+                rs.PopulateTreeView(FormSSRSExplorer.SelectedServer.Alias);
             }
             catch (Exception ex)
             {

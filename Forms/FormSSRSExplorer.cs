@@ -342,7 +342,7 @@ namespace RSS_Report_Retrievers
 
                     if ((ReportItemTypes)lvItems.SelectedItems[0].Tag == ReportItemTypes.Folder)
                     {
-                        rs.PopulateTreeView();
+                        rs.PopulateTreeView(SelectedServer.Alias);
                     }
 
                     rs.PopulateItems(tvReportServer.SelectedNode.ToolTipText);
@@ -415,7 +415,7 @@ namespace RSS_Report_Retrievers
 
                 try
                 {
-                    rs.PopulateTreeView();
+                    rs.PopulateTreeView(SelectedServer.Alias);
                     rs.PopulateItems(tvReportServer.SelectedNode.ToolTipText);
                 }
                 catch (Exception ex)
@@ -521,7 +521,7 @@ namespace RSS_Report_Retrievers
 
                 try
                 {
-                    rs.PopulateTreeView();
+                    rs.PopulateTreeView(SelectedServer.Alias);
                     toolStripStatusLabel.Text = String.Format("Connected to {0}", FormSSRSExplorer.SelectedServer.Url);
 
                     this.Text = "SSRS Explorer - connected to " + SelectedServer.Alias;
@@ -636,6 +636,5 @@ namespace RSS_Report_Retrievers
                 LogHandler.WriteLogEntry(ex);
             }
         }
-
     }
 }
