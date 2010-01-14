@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using RSS_Report_Retrievers.RSS_SP;
+using RSS_Report_Retrievers.RSS_2005_SHAREPOINT;
 using RSS_Report_Retrievers.Classes;
 
 namespace RSS_Report_Retrievers.Classes

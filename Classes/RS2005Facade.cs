@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using RSS_Report_Retrievers.RSS_2005;
+using RSS_Report_Retrievers.RSS_2005_NATIVE;
 using RSS_Report_Retrievers.Classes;
 
 namespace RSS_Report_Retrievers.Classes
@@ -74,6 +74,8 @@ namespace RSS_Report_Retrievers.Classes
                 properties.Add(propertieinfo);
             }
 
+            
+
             return properties;
         }
 
@@ -100,7 +102,7 @@ namespace RSS_Report_Retrievers.Classes
             List<String> datasources = new List<string>();
             foreach (DataSource ds in rs.GetItemDataSources(path))
             {
-                RSS_Report_Retrievers.RSS_2005.DataSourceReference theRef = ds.Item as RSS_Report_Retrievers.RSS_2005.DataSourceReference;
+                RSS_Report_Retrievers.RSS_2005_NATIVE.DataSourceReference theRef = ds.Item as RSS_Report_Retrievers.RSS_2005_NATIVE.DataSourceReference;
 
                 if(theRef != null)            
                     datasources.Add(theRef.Reference);
@@ -118,7 +120,7 @@ namespace RSS_Report_Retrievers.Classes
         {
             List<List<String>> parameters = new List<List<string>>();
 
-            foreach (RSS_2005.ReportParameter parameter in rs.GetReportParameters(path, null, false, null, null))
+            foreach (RSS_2005_NATIVE.ReportParameter parameter in rs.GetReportParameters(path, null, false, null, null))
             {
                 List<String> parameterinfo = new List<String>();
                 parameterinfo.Add(parameter.Name);
