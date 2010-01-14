@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections;
 using System.Text;
-using RSS_Report_Retrievers.RSS;
+using RSS_Report_Retrievers.RSS_2000;
 using RSS_Report_Retrievers.Classes;
 
 namespace RSS_Report_Retrievers.Classes
@@ -48,7 +48,7 @@ namespace RSS_Report_Retrievers.Classes
 
         public ReportWarning[] CreateReport(string filename, string destination, bool overwrite, byte[] definition, string Properties)
         {
-            RSS.Warning[] w = rs.CreateReport(System.IO.Path.GetFileNameWithoutExtension(filename), destination, overwrite, definition, null);
+            RSS_2000.Warning[] w = rs.CreateReport(System.IO.Path.GetFileNameWithoutExtension(filename), destination, overwrite, definition, null);
 
             if (w != null)
             {
@@ -134,7 +134,7 @@ namespace RSS_Report_Retrievers.Classes
         {
             List<List<String>> parameters = new List<List<string>>();
 
-            foreach (RSS.ReportParameter parameter in rs.GetReportParameters(path, null, false, null, null))
+            foreach (RSS_2000.ReportParameter parameter in rs.GetReportParameters(path, null, false, null, null))
             {
                 List<String> parameterinfo = new List<String>();
                 parameterinfo.Add(parameter.Name);
