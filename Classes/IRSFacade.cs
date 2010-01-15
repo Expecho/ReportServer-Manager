@@ -10,6 +10,7 @@ namespace RSS_Report_Retrievers.Classes
         ReportWarning[] CreateModel(string filename, string folder, byte[] definition, string Properties);
         System.Net.ICredentials Credentials { get; set; }
         string BaseUrl { get; set; }
+        string WebServiceUrl { get; set; }
         bool PathIncludesExtension { get; set; }
         void DeleteItem(string path);
         List<List<string>> GetItemProperties(string path);

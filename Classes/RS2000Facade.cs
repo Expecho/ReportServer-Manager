@@ -26,6 +26,12 @@ namespace RSS_Report_Retrievers.Classes
             get { return pathIncludesExtension; }
             set { pathIncludesExtension = value; }
         }
+
+        public string WebServiceUrl
+        {
+            get { return rs.Url; }
+            set { rs.Url = value; }
+        }
 	
 	    #region IRSFacade Members
 
