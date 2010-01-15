@@ -26,6 +26,12 @@ namespace RSS_Report_Retrievers.Classes
             set { pathIncludesExtension = value; }
         }
 
+        public string WebServiceUrl
+        {
+            get { return rs.Url; }
+            set { rs.Url = value; }
+        }
+
         #region IRSFacade Members
         public void CreateFolder(string Folder, string Parent, string properties)
         {

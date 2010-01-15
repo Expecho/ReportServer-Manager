@@ -38,6 +38,8 @@ namespace RSS_Report_Retrievers
                 facade.PathIncludesExtension = false;
             }
 
+            facade.WebServiceUrl = config.Url; 
+
             // use windows authentication when indicated
             if (config.UseWindowsAuth)
             {

@@ -18,6 +18,12 @@ namespace RSS_Report_Retrievers.Classes
             set { baseUrl = value; }
         }
 
+        public string WebServiceUrl
+        {
+            get { return rs.Url; }
+            set { rs.Url = value; }
+        }
+
         private bool pathIncludesExtension;
 
         public bool PathIncludesExtension
