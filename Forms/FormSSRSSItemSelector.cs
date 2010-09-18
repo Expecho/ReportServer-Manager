@@ -15,6 +15,9 @@ namespace RSS_Report_Retrievers
         private Controller rs;
         
         #region Properties
+        /// <summary>
+        /// Gets the path on the report server of the selected item
+        /// </summary>
         public string SelectedItemPath
         {
             get
@@ -24,6 +27,10 @@ namespace RSS_Report_Retrievers
         }
         #endregion
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="viewItems"></param>
         public FormSSRSSItemSelector(ViewItems viewItems)
         {
             InitializeComponent();
