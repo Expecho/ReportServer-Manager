@@ -108,7 +108,7 @@ namespace RSS_Report_Retrievers
                     parent.Nodes.Add(folder);
 
                     if(recurseSubfolders)
-                        ExpandNodeContent(folder,false); //Explore ONE level of subfolders on the report server 
+                        ExpandNodeContent(folder, true); 
                 }
                 else if (item.Type == ReportItemTypes.Datasource && (viewItem == ViewItems.Datasources || viewItem == ViewItems.All))
                 {
