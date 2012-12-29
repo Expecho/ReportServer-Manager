@@ -1,12 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
-namespace RSS_Report_Retrievers
+namespace ReportingServerManager.Forms
 {
     public partial class FormGetName : Form
     {
@@ -14,7 +8,7 @@ namespace RSS_Report_Retrievers
         {
             InitializeComponent();
 
-            this.Text = caption; 
+            Text = caption; 
         }
 
         new public string Name

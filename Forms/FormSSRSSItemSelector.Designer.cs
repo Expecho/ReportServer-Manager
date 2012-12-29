@@ -1,4 +1,4 @@
-namespace RSS_Report_Retrievers
+namespace ReportingServerManager.Forms
 {
     partial class FormSSRSSItemSelector
     {
@@ -38,18 +38,17 @@ namespace RSS_Report_Retrievers
             // 
             // tvReportServer
             // 
-            this.tvReportServer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.tvReportServer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tvReportServer.ImageIndex = 2;
             this.tvReportServer.ImageList = this.imageList;
-            this.tvReportServer.Location = new System.Drawing.Point(4, 1);
-            this.tvReportServer.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tvReportServer.Location = new System.Drawing.Point(3, 1);
             this.tvReportServer.Name = "tvReportServer";
             this.tvReportServer.SelectedImageIndex = 3;
-            this.tvReportServer.Size = new System.Drawing.Size(365, 293);
+            this.tvReportServer.Size = new System.Drawing.Size(310, 269);
             this.tvReportServer.TabIndex = 0;
-            this.tvReportServer.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.tvReportServer_MouseDoubleClick);
+            this.tvReportServer.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.TvReportServerMouseDoubleClick);
             // 
             // imageList
             // 
@@ -65,10 +64,9 @@ namespace RSS_Report_Retrievers
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(272, 303);
-            this.btnCancel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnCancel.Location = new System.Drawing.Point(239, 281);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(100, 28);
+            this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 1;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
@@ -77,30 +75,27 @@ namespace RSS_Report_Retrievers
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOK.Location = new System.Drawing.Point(164, 303);
-            this.btnOK.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnOK.Location = new System.Drawing.Point(158, 281);
             this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(100, 28);
+            this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 2;
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
-            this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
             // FormSSRSSItemSelector
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(373, 352);
+            this.ClientSize = new System.Drawing.Size(315, 316);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.tvReportServer);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "FormSSRSSItemSelector";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "ReportServer Item Picker";
-            this.Load += new System.EventHandler(this.frmSSRSSExplorer_Load);
-            this.Shown += new System.EventHandler(this.frmSSRSSExplorer_Shown);
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmSSRSSExplorer_FormClosing);
+            this.Text = "Item Picker";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmSSRSSExplorerFormClosing);
+            this.Load += new System.EventHandler(this.FrmSSRSSExplorerLoad);
+            this.Shown += new System.EventHandler(this.FrmSSRSSExplorerShown);
             this.ResumeLayout(false);
 
         }

@@ -1,13 +1,9 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
-using RSS_Report_Retrievers.Classes;
+using RSS_Report_Retrievers;
+using ReportingServerManager.Logic.Configuration;
 
-namespace RSS_Report_Retrievers
+namespace ReportingServerManager.Forms
 {
     public partial class FormServers : Form
     {
@@ -18,83 +14,74 @@ namespace RSS_Report_Retrievers
             InitializeComponent();
         }
 
-        private void FormServers_Load(object sender, EventArgs e)
+        private void FormServersLoad(object sender, EventArgs e)
         {
             ReloadServerlist();
         }
         
         private void ReloadServerlist()
         {
-            this.bsRegistredServers.DataSource = RSS_Report_Retrievers.Classes.ServerRegistry.GetServerSettings();
+            bsRegistredServers.DataSource = ServerRegistry.GetServerSettings();
         }
 
-        private void btnClose_Click(object sender, EventArgs e)
+        private void BtnCloseClick(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
 
-        private void btnAdd_Click(object sender, EventArgs e)
+        private void BtnAddClick(object sender, EventArgs e)
         {
-            ServerSettingsConfigElement newEl = new ServerSettingsConfigElement();
-
-            ShowSettingsForm(newEl);
+           ShowSettingsForm(new ServerSettingsConfigElement());
         }
 
-        private void ShowSettingsForm(Classes.ServerSettingsConfigElement setting)
+        private void ShowSettingsForm(ServerSettingsConfigElement setting)
         {
-            FormSettings f = new FormSettings(setting.Alias != string.Empty);
-
-            f.CurrentSetting = setting;
-
-            f.ShowDialog();
-
-            if (f.DialogResult == DialogResult.OK)
+            using (var form = new FormSettings(setting.Alias != string.Empty))
             {
-                ServerRegistry.AddElement(setting);
+                form.CurrentSetting = setting;
 
-                ServerRegistry.StoreSettings();
+                if (form.ShowDialog() == DialogResult.OK)
+                {
+                    ServerRegistry.AddElement(setting);
+
+                    ServerRegistry.StoreSettings();
+                }
             }
 
             ReloadServerlist();
         }
 
-        private void btnEdit_Click(object sender, EventArgs e)
+        private void BtnEditClick(object sender, EventArgs e)
         {
-            if (this.dataGridView1.SelectedRows.Count > 0)
+            if (dataGridView1.SelectedRows.Count > 0)
             {
-                int selIndex = this.dataGridView1.SelectedRows[0].Index;
-                ServerSettingsConfigElement setting = (ServerSettingsConfigElement) bsRegistredServers[selIndex];
+                var selIndex = dataGridView1.SelectedRows[0].Index;
+                var setting = bsRegistredServers[selIndex] as ServerSettingsConfigElement;
 
-                ShowSettingsForm(setting.Clone());
+                if (setting != null)
+                {
+                    ShowSettingsForm(setting.Clone());
+                }
             }
         }
 
-        private void dataGridView1_SelectionChanged(object sender, EventArgs e)
+        private void DataGridView1SelectionChanged(object sender, EventArgs e)
         {
             btnEdit.Enabled = true;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void BtnRemoveClick(object sender, EventArgs e)
         {
-            if (this.dataGridView1.SelectedRows.Count > 0)
+            if (dataGridView1.SelectedRows.Count > 0)
             {
-                int selIndex = this.dataGridView1.SelectedRows[0].Index;
-                ServerSettingsConfigElement setting = (ServerSettingsConfigElement)bsRegistredServers[selIndex];
+                var selIndex = dataGridView1.SelectedRows[0].Index;
+                var setting = bsRegistredServers[selIndex] as ServerSettingsConfigElement;
 
-                ShowSettingsForm(setting);
-            }
-        }
-
-        private void btnRemove_Click(object sender, EventArgs e)
-        {
-            if (this.dataGridView1.SelectedRows.Count > 0)
-            {
-                int selIndex = this.dataGridView1.SelectedRows[0].Index;
-                ServerSettingsConfigElement setting = (ServerSettingsConfigElement)bsRegistredServers[selIndex];
-
-                ServerRegistry.RemoveElement(setting);
-
-                ServerRegistry.StoreSettings();
+                if (setting != null)
+                {
+                    ServerRegistry.RemoveElement(setting);
+                    ServerRegistry.StoreSettings();
+                }
             }
 
             ReloadServerlist();

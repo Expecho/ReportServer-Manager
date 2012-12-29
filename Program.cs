@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using ReportingServerManager.Forms;
 
 namespace RSS_Report_Retrievers
 {

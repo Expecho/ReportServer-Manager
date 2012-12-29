@@ -1,4 +1,4 @@
-namespace RSS_Report_Retrievers
+namespace ReportingServerManager.Forms
 {
     partial class FormSSRSExplorer
     {
@@ -66,6 +66,7 @@ namespace RSS_Report_Retrievers
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripContainer = new System.Windows.Forms.ToolStripContainer();
             this.contextMenuStrip.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
             this.splitContainer.SuspendLayout();
@@ -79,17 +80,17 @@ namespace RSS_Report_Retrievers
             // 
             // tvReportServer
             // 
-            this.tvReportServer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.tvReportServer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tvReportServer.ImageIndex = 2;
             this.tvReportServer.ImageList = this.imageList;
             this.tvReportServer.Location = new System.Drawing.Point(3, 3);
             this.tvReportServer.Name = "tvReportServer";
             this.tvReportServer.SelectedImageIndex = 3;
-            this.tvReportServer.Size = new System.Drawing.Size(252, 405);
+            this.tvReportServer.Size = new System.Drawing.Size(252, 410);
             this.tvReportServer.TabIndex = 0;
-            this.tvReportServer.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvReportServer_AfterSelect);
+            this.tvReportServer.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TvReportServerAfterSelect);
             // 
             // imageList
             // 
@@ -122,78 +123,78 @@ namespace RSS_Report_Retrievers
             this.propertiesToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip";
             this.contextMenuStrip.ShowImageMargin = false;
-            this.contextMenuStrip.Size = new System.Drawing.Size(167, 304);
+            this.contextMenuStrip.Size = new System.Drawing.Size(146, 280);
             this.contextMenuStrip.Text = "With selected items:";
-            this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Opening);
+            this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.ContextMenuStripOpening);
             // 
             // deleteToolStripMenuItem
             // 
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(166, 24);
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.deleteToolStripMenuItem.Text = "&Delete";
-            this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
+            this.deleteToolStripMenuItem.Click += new System.EventHandler(this.DeleteToolStripMenuItemClick);
             // 
             // moveToolStripMenuItem
             // 
             this.moveToolStripMenuItem.Name = "moveToolStripMenuItem";
-            this.moveToolStripMenuItem.Size = new System.Drawing.Size(166, 24);
+            this.moveToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.moveToolStripMenuItem.Text = "&Move";
-            this.moveToolStripMenuItem.Click += new System.EventHandler(this.moveToolStripMenuItem_Click);
+            this.moveToolStripMenuItem.Click += new System.EventHandler(this.MoveToolStripMenuItemClick);
             // 
             // renameToolStripMenuItem
             // 
             this.renameToolStripMenuItem.Name = "renameToolStripMenuItem";
-            this.renameToolStripMenuItem.Size = new System.Drawing.Size(166, 24);
+            this.renameToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.renameToolStripMenuItem.Text = "&Rename";
-            this.renameToolStripMenuItem.Click += new System.EventHandler(this.renameToolStripMenuItem_Click);
+            this.renameToolStripMenuItem.Click += new System.EventHandler(this.RenameToolStripMenuItemClick);
             // 
             // setDatasourceToolStripMenuItem
             // 
             this.setDatasourceToolStripMenuItem.Name = "setDatasourceToolStripMenuItem";
-            this.setDatasourceToolStripMenuItem.Size = new System.Drawing.Size(166, 24);
+            this.setDatasourceToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.setDatasourceToolStripMenuItem.Text = "S&et Datasource";
-            this.setDatasourceToolStripMenuItem.Click += new System.EventHandler(this.setDatasourceToolStripMenuItem_Click);
+            this.setDatasourceToolStripMenuItem.Click += new System.EventHandler(this.SetDatasourceToolStripMenuItemClick);
             // 
             // editToolStripMenuItem
             // 
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(166, 24);
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.editToolStripMenuItem.Text = "&Edit Datasource";
-            this.editToolStripMenuItem.Click += new System.EventHandler(this.editToolStripMenuItem_Click);
+            this.editToolStripMenuItem.Click += new System.EventHandler(this.EditToolStripMenuItemClick);
             // 
             // createDatasourceToolStripMenuItem
             // 
             this.createDatasourceToolStripMenuItem.Name = "createDatasourceToolStripMenuItem";
-            this.createDatasourceToolStripMenuItem.Size = new System.Drawing.Size(166, 24);
+            this.createDatasourceToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.createDatasourceToolStripMenuItem.Text = "&Create Datasource";
-            this.createDatasourceToolStripMenuItem.Click += new System.EventHandler(this.createDatasourceToolStripMenuItem_Click);
+            this.createDatasourceToolStripMenuItem.Click += new System.EventHandler(this.CreateDatasourceToolStripMenuItemClick);
             // 
             // setItemSecurityToolStripMenuItem
             // 
             this.setItemSecurityToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addPermissionsForUserToolStripMenuItem});
             this.setItemSecurityToolStripMenuItem.Name = "setItemSecurityToolStripMenuItem";
-            this.setItemSecurityToolStripMenuItem.Size = new System.Drawing.Size(166, 24);
+            this.setItemSecurityToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.setItemSecurityToolStripMenuItem.Text = "Security";
             // 
             // addPermissionsForUserToolStripMenuItem
             // 
             this.addPermissionsForUserToolStripMenuItem.Name = "addPermissionsForUserToolStripMenuItem";
-            this.addPermissionsForUserToolStripMenuItem.Size = new System.Drawing.Size(332, 24);
+            this.addPermissionsForUserToolStripMenuItem.Size = new System.Drawing.Size(294, 22);
             this.addPermissionsForUserToolStripMenuItem.Text = "Add permissions for \"My Reports\"-folders";
-            this.addPermissionsForUserToolStripMenuItem.Click += new System.EventHandler(this.addPermissionsForUserToolStripMenuItem_Click);
+            this.addPermissionsForUserToolStripMenuItem.Click += new System.EventHandler(this.AddPermissionsForUserToolStripMenuItemClick);
             // 
             // newFolderToolStripMenuItem
             // 
             this.newFolderToolStripMenuItem.Name = "newFolderToolStripMenuItem";
-            this.newFolderToolStripMenuItem.Size = new System.Drawing.Size(166, 24);
+            this.newFolderToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.newFolderToolStripMenuItem.Text = "&New Folder";
-            this.newFolderToolStripMenuItem.Click += new System.EventHandler(this.newFolderToolStripMenuItem_Click);
+            this.newFolderToolStripMenuItem.Click += new System.EventHandler(this.NewFolderToolStripMenuItemClick);
             // 
             // toolStripMenuItemSep1
             // 
             this.toolStripMenuItemSep1.Name = "toolStripMenuItemSep1";
-            this.toolStripMenuItemSep1.Size = new System.Drawing.Size(163, 6);
+            this.toolStripMenuItemSep1.Size = new System.Drawing.Size(142, 6);
             // 
             // uploadToolStripMenuItem
             // 
@@ -201,48 +202,48 @@ namespace RSS_Report_Retrievers
             this.filesToolStripMenuItem,
             this.folderToolStripMenuItem});
             this.uploadToolStripMenuItem.Name = "uploadToolStripMenuItem";
-            this.uploadToolStripMenuItem.Size = new System.Drawing.Size(166, 24);
+            this.uploadToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.uploadToolStripMenuItem.Text = "&Upload";
             // 
             // filesToolStripMenuItem
             // 
             this.filesToolStripMenuItem.Name = "filesToolStripMenuItem";
-            this.filesToolStripMenuItem.Size = new System.Drawing.Size(116, 24);
+            this.filesToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.filesToolStripMenuItem.Text = "File(s)";
-            this.filesToolStripMenuItem.Click += new System.EventHandler(this.filesToolStripMenuItem_Click);
+            this.filesToolStripMenuItem.Click += new System.EventHandler(this.FilesToolStripMenuItemClick);
             // 
             // folderToolStripMenuItem
             // 
             this.folderToolStripMenuItem.Name = "folderToolStripMenuItem";
-            this.folderToolStripMenuItem.Size = new System.Drawing.Size(116, 24);
+            this.folderToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.folderToolStripMenuItem.Text = "Folder";
-            this.folderToolStripMenuItem.Click += new System.EventHandler(this.folderToolStripMenuItem_Click);
+            this.folderToolStripMenuItem.Click += new System.EventHandler(this.FolderToolStripMenuItemClick);
             // 
             // downloadToolStripMenuItem
             // 
             this.downloadToolStripMenuItem.Name = "downloadToolStripMenuItem";
-            this.downloadToolStripMenuItem.Size = new System.Drawing.Size(166, 24);
+            this.downloadToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.downloadToolStripMenuItem.Text = "Do&wnload";
-            this.downloadToolStripMenuItem.Click += new System.EventHandler(this.downloadToolStripMenuItem_Click);
+            this.downloadToolStripMenuItem.Click += new System.EventHandler(this.DownloadToolStripMenuItemClick);
             // 
             // replaceModelToolStripMenuItem
             // 
             this.replaceModelToolStripMenuItem.Name = "replaceModelToolStripMenuItem";
-            this.replaceModelToolStripMenuItem.Size = new System.Drawing.Size(166, 24);
+            this.replaceModelToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.replaceModelToolStripMenuItem.Text = "Replace model";
-            this.replaceModelToolStripMenuItem.Click += new System.EventHandler(this.replaceModelToolStripMenuItem_Click);
+            this.replaceModelToolStripMenuItem.Click += new System.EventHandler(this.ReplaceModelToolStripMenuItemClick);
             // 
             // toolStripMenuItemSep2
             // 
             this.toolStripMenuItemSep2.Name = "toolStripMenuItemSep2";
-            this.toolStripMenuItemSep2.Size = new System.Drawing.Size(163, 6);
+            this.toolStripMenuItemSep2.Size = new System.Drawing.Size(142, 6);
             // 
             // propertiesToolStripMenuItem
             // 
             this.propertiesToolStripMenuItem.Name = "propertiesToolStripMenuItem";
-            this.propertiesToolStripMenuItem.Size = new System.Drawing.Size(166, 24);
+            this.propertiesToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.propertiesToolStripMenuItem.Text = "&Properties";
-            this.propertiesToolStripMenuItem.Click += new System.EventHandler(this.propertiesToolStripMenuItem_Click);
+            this.propertiesToolStripMenuItem.Click += new System.EventHandler(this.PropertiesToolStripMenuItemClick);
             // 
             // btnOK
             // 
@@ -253,23 +254,23 @@ namespace RSS_Report_Retrievers
             this.btnOK.TabIndex = 1;
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
-            this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
+            this.btnOK.Click += new System.EventHandler(this.BtnOkClick);
             // 
             // lvItems
             // 
-            this.lvItems.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lvItems.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lvItems.ContextMenuStrip = this.contextMenuStrip;
             this.lvItems.Location = new System.Drawing.Point(3, 3);
             this.lvItems.Name = "lvItems";
             this.lvItems.ShowItemToolTips = true;
-            this.lvItems.Size = new System.Drawing.Size(514, 405);
+            this.lvItems.Size = new System.Drawing.Size(514, 410);
             this.lvItems.SmallImageList = this.imageList;
             this.lvItems.TabIndex = 2;
             this.lvItems.UseCompatibleStateImageBehavior = false;
             this.lvItems.View = System.Windows.Forms.View.List;
-            this.lvItems.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lvItems_MouseDoubleClick);
+            this.lvItems.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.LvItemsMouseDoubleClick);
             // 
             // splitContainer
             // 
@@ -284,7 +285,7 @@ namespace RSS_Report_Retrievers
             // splitContainer.Panel2
             // 
             this.splitContainer.Panel2.Controls.Add(this.lvItems);
-            this.splitContainer.Size = new System.Drawing.Size(781, 410);
+            this.splitContainer.Size = new System.Drawing.Size(781, 415);
             this.splitContainer.SplitterDistance = 257;
             this.splitContainer.TabIndex = 3;
             // 
@@ -295,7 +296,7 @@ namespace RSS_Report_Retrievers
             this.toolStripStatusLabel});
             this.statusStrip.Location = new System.Drawing.Point(0, 0);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(781, 24);
+            this.statusStrip.Size = new System.Drawing.Size(781, 22);
             this.statusStrip.TabIndex = 3;
             this.statusStrip.Text = "statusStrip1";
             // 
@@ -303,7 +304,7 @@ namespace RSS_Report_Retrievers
             // 
             this.toolStripStatusLabel.AutoToolTip = true;
             this.toolStripStatusLabel.Name = "toolStripStatusLabel";
-            this.toolStripStatusLabel.Size = new System.Drawing.Size(99, 19);
+            this.toolStripStatusLabel.Size = new System.Drawing.Size(86, 17);
             this.toolStripStatusLabel.Text = "Not connected";
             // 
             // openFileDialog
@@ -322,7 +323,7 @@ namespace RSS_Report_Retrievers
             this.helpToolStripMenuItem});
             this.menuStripMain.Location = new System.Drawing.Point(0, 0);
             this.menuStripMain.Name = "menuStripMain";
-            this.menuStripMain.Size = new System.Drawing.Size(781, 27);
+            this.menuStripMain.Size = new System.Drawing.Size(781, 24);
             this.menuStripMain.TabIndex = 4;
             this.menuStripMain.Text = "menuStrip1";
             // 
@@ -335,48 +336,48 @@ namespace RSS_Report_Retrievers
             this.toolStripMenuItem6,
             this.exitToolStripMenuItem});
             this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-            this.toolStripMenuItem5.Size = new System.Drawing.Size(89, 23);
+            this.toolStripMenuItem5.Size = new System.Drawing.Size(80, 20);
             this.toolStripMenuItem5.Text = "&Application";
             // 
             // connectToolStripMenuItem
             // 
             this.connectToolStripMenuItem.Name = "connectToolStripMenuItem";
-            this.connectToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
+            this.connectToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
             this.connectToolStripMenuItem.Text = "&Connect";
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
             this.settingsToolStripMenuItem.Text = "&Servers...";
-            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
+            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.SettingsToolStripMenuItemClick);
             // 
             // toolStripMenuItem6
             // 
             this.toolStripMenuItem6.Name = "toolStripMenuItem6";
-            this.toolStripMenuItem6.Size = new System.Drawing.Size(149, 6);
+            this.toolStripMenuItem6.Size = new System.Drawing.Size(117, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
             this.exitToolStripMenuItem.Text = "&Exit";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItemClick);
             // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.aboutToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(49, 23);
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "&Help";
             // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(116, 24);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.aboutToolStripMenuItem.Text = "&About";
-            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.AboutToolStripMenuItemClick);
             // 
             // toolStripContainer
             // 
@@ -388,7 +389,7 @@ namespace RSS_Report_Retrievers
             // toolStripContainer.ContentPanel
             // 
             this.toolStripContainer.ContentPanel.Controls.Add(this.splitContainer);
-            this.toolStripContainer.ContentPanel.Size = new System.Drawing.Size(781, 410);
+            this.toolStripContainer.ContentPanel.Size = new System.Drawing.Size(781, 415);
             this.toolStripContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStripContainer.Location = new System.Drawing.Point(0, 0);
             this.toolStripContainer.Name = "toolStripContainer";
@@ -409,11 +410,13 @@ namespace RSS_Report_Retrievers
             this.Controls.Add(this.btnOK);
             this.MainMenuStrip = this.menuStripMain;
             this.Name = "FormSSRSExplorer";
-            this.Text = "SSRS Explorer ";
-            this.Shown += new System.EventHandler(this.frmReportSelector_Shown);
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Reporting Server Manager";
+            this.Shown += new System.EventHandler(this.FrmReportSelectorShown);
             this.contextMenuStrip.ResumeLayout(false);
             this.splitContainer.Panel1.ResumeLayout(false);
             this.splitContainer.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
             this.splitContainer.ResumeLayout(false);
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();

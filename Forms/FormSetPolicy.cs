@@ -1,26 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
+using System.Security.Principal;
 using System.Windows.Forms;
 
-namespace RSS_Report_Retrievers
+namespace ReportingServerManager.Forms
 {
-    public interface IFormSetPolicy
-    {
-        void Init(System.Collections.Generic.IEnumerable<string> availableRoles, string itemName);
-        string UserName { get; }
-        DialogResult ShowDialog();
-        List<string> SelectedRoles { get;}
-    }
-
     public partial class FormSetPolicy : Form, IFormSetPolicy
     {
-        public Dictionary<string, string[]> policyList = null;
-        public List<string> selectedRoles = new List<string>();
+        private readonly List<string> selectedRoles = new List<string>();
 
+        public Dictionary<string, string[]> PolicyList { get; set; }
 
         public string UserName
         {
@@ -29,7 +18,7 @@ namespace RSS_Report_Retrievers
 
         public List<string> SelectedRoles
         {
-            get { return this.selectedRoles; }
+            get { return selectedRoles; }
         }
 
         public FormSetPolicy()
@@ -39,60 +28,60 @@ namespace RSS_Report_Retrievers
 
         public void Init(IEnumerable<string> availableRoles, string itemName)
         {
-            this.groupBox.Text = "Adding user to " + itemName;
+            groupBox.Text = "Adding user to " + itemName;
 
-            this.txtUsername.Text = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+            txtUsername.Text = WindowsIdentity.GetCurrent().Name;
 
             listAvailableRoles.Items.Clear();
 
-            foreach (string role in availableRoles)
+            foreach (var role in availableRoles)
             {
                 listAvailableRoles.Items.Add(role);
             }
 
         }
 
-        private void btnAddToSelectedRoles_Click(object sender, EventArgs e)
+        private void BtnAddToSelectedRolesClick(object sender, EventArgs e)
         {
-            List<object> selectedItems = new List<object>();
-            foreach (object o in listAvailableRoles.SelectedItems)
+            var selectedItems = new List<object>();
+            foreach (var selectedItem in listAvailableRoles.SelectedItems)
             {
-                this.listSelectedRoles.Items.Add(o);
+                listSelectedRoles.Items.Add(selectedItem);
 
-                selectedItems.Add(o);
+                selectedItems.Add(selectedItem);
             }
 
-            foreach(object o in selectedItems)
-                this.listAvailableRoles.Items.Remove(o);
+            foreach (var selectedItem in selectedItems)
+                listAvailableRoles.Items.Remove(selectedItem);
         }
 
-        private void btnRemoveFromSelectedRoles_Click(object sender, EventArgs e)
+        private void BtnRemoveFromSelectedRolesClick(object sender, EventArgs e)
         {
-            List<object> selectedItems = new List<object>();
-            foreach (object o in this.listSelectedRoles.SelectedItems)
+           var selectedItems = new List<object>();
+           foreach (var selectedItem in listSelectedRoles.SelectedItems)
             {
-                this.listAvailableRoles.Items.Add(o);
-                selectedItems.Add(o);
+                listAvailableRoles.Items.Add(selectedItem);
+                selectedItems.Add(selectedItem);
             }
-        
-            foreach (object o in selectedItems)
-                this.listSelectedRoles.Items.Remove(o);
+
+           foreach (var selectedItem in selectedItems)
+               listSelectedRoles.Items.Remove(selectedItem);
         }
 
-        private void btnApply_Click(object sender, EventArgs e)
+        private void BtnApplyClick(object sender, EventArgs e)
         {
-            foreach (object o in this.listSelectedRoles.Items)
-                SelectedRoles.Add(o.ToString());
+            foreach (var selectedItem in listSelectedRoles.Items)
+                SelectedRoles.Add(selectedItem.ToString());
 
-            this.DialogResult = DialogResult.OK;
+            DialogResult = DialogResult.OK;
 
-            this.Close();
+            Close();
         }
 
-        private void btnCancel_Click(object sender, EventArgs e)
+        private void BtnCancelClick(object sender, EventArgs e)
         {
-            this.DialogResult = DialogResult.Cancel;
-            this.Close();
+            DialogResult = DialogResult.Cancel;
+            Close();
         }
     }
 }

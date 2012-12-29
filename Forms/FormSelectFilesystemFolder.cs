@@ -1,12 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
-namespace RSS_Report_Retrievers
+namespace ReportingServerManager.Forms
 {
     public partial class FormSelectFilesystemFolder : Form
     {
@@ -31,7 +26,7 @@ namespace RSS_Report_Retrievers
             }
         }
 
-        private void btnSelectFolder_Click(object sender, EventArgs e)
+        private void BtnSelectFolderClick(object sender, EventArgs e)
         {
             folderBrowserDialog.SelectedPath = txtFoldername.Text == "" ? @"C:\" : txtFoldername.Text;   
             if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
@@ -40,7 +35,7 @@ namespace RSS_Report_Retrievers
             }
         }
 
-        private void frmSelectFilesystemFolder_Load(object sender, EventArgs e)
+        private void FrmSelectFilesystemFolderLoad(object sender, EventArgs e)
         {
             txtFoldername.Text = @"C:\"; 
         }

@@ -1,4 +1,4 @@
-namespace RSS_Report_Retrievers
+namespace ReportingServerManager.Forms
 {
     partial class FormSelectFilesystemFolder
     {
@@ -38,7 +38,7 @@ namespace RSS_Report_Retrievers
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(134, 48);
+            this.btnCancel.Location = new System.Drawing.Point(215, 48);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 2;
@@ -55,7 +55,7 @@ namespace RSS_Report_Retrievers
             // btnOK
             // 
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOK.Location = new System.Drawing.Point(215, 48);
+            this.btnOK.Location = new System.Drawing.Point(134, 48);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 3;
@@ -74,9 +74,9 @@ namespace RSS_Report_Retrievers
             this.btnSelectFolder.TabIndex = 1;
             this.btnSelectFolder.Text = "...";
             this.btnSelectFolder.UseVisualStyleBackColor = true;
-            this.btnSelectFolder.Click += new System.EventHandler(this.btnSelectFolder_Click);
+            this.btnSelectFolder.Click += new System.EventHandler(this.BtnSelectFolderClick);
             // 
-            // frmSelectFilesystemFolder
+            // FormSelectFilesystemFolder
             // 
             this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -88,10 +88,12 @@ namespace RSS_Report_Retrievers
             this.Controls.Add(this.txtFoldername);
             this.Controls.Add(this.btnOK);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Name = "frmSelectFilesystemFolder";
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "FormSelectFilesystemFolder";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Select folder";
-            this.Load += new System.EventHandler(this.frmSelectFilesystemFolder_Load);
+            this.Load += new System.EventHandler(this.FrmSelectFilesystemFolderLoad);
             this.ResumeLayout(false);
             this.PerformLayout();
 

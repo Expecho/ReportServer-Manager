@@ -1,10 +1,13 @@
-﻿using System;
-namespace RSS_Report_Retrievers.Forms
+using System.Collections.Generic;
+using System.Windows.Forms;
+
+namespace ReportingServerManager.Forms
 {
-    interface IFormSetPolicy
+    public interface IFormSetPolicy
     {
-        void Init(System.Collections.Generic.IEnumerable<string> availableRoles, string itemName, System.Collections.Generic.Dictionary<string, string> existingPolicies);
-        bool Recursive { get; }
+        void Init(IEnumerable<string> availableRoles, string itemName);
         string UserName { get; }
+        DialogResult ShowDialog();
+        List<string> SelectedRoles { get;}
     }
 }

@@ -1,13 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
-using RSS_Report_Retrievers.Classes; 
+using ReportingServerManager.Logic.Shared;
 
-namespace RSS_Report_Retrievers
+namespace ReportingServerManager.Forms
 {
     public partial class FormDatasource : Form
     {
@@ -17,26 +13,31 @@ namespace RSS_Report_Retrievers
         }
 
         #region Properties
-        private Datasource datasource = new Datasource();
+        private Datasource datasource;
 
-        public Datasource  Datasource
+        public Datasource Datasource
         {
-            get 
+            get
             {
                 datasource.ConnectionString = txtConnStr.Text;
                 datasource.Prompt = txtCredentialsPrompt.Text;
                 datasource.Name = txtName.Text;
-                datasource.Username = txtUsername.Text;   
-                datasource.Password = txtPassword.Text;
+                datasource.Username = radStored.Checked ? txtUsername.Text : null;
+                datasource.Password = radStored.Checked ? txtPassword.Text : null;
                 datasource.Enabled = chkEnabled.Checked;
                 datasource.SetExecutionContext = chkExecutionContext.Checked;
                 datasource.UsePromptedCredentialsAsWindowsCredentials = chkUsePromptedCredentialsAsWindowsCredentials.Checked;
                 datasource.UseStoredCredentialsAsWindowsCredentials = chkUsePromptedCredentialsAsWindowsCredentials.Checked;
                 datasource.Extension = "";
 
+                if (radNone.Checked) datasource.CredentialRetrievalType = CredentialRetrievalTypes.None;
+                if (radStored.Checked) datasource.CredentialRetrievalType = CredentialRetrievalTypes.Store;
+                if (radPrompt.Checked) datasource.CredentialRetrievalType = CredentialRetrievalTypes.Prompt;
+                if (radWindowsAuthentication.Checked) datasource.CredentialRetrievalType = CredentialRetrievalTypes.Integrated;
+
                 if (cmbExtensions.SelectedIndex != -1)
                 {
-                    foreach (DatasourceExtension extension in extensions)
+                    foreach (var extension in extensions)
                     {
                         if (extension.FriendlyName == cmbExtensions.SelectedItem.ToString())
                         {
@@ -46,54 +47,63 @@ namespace RSS_Report_Retrievers
                     }
                 }
 
-                return datasource; 
+                return datasource;
             }
-            set 
+            set
             {
+                if (value.CredentialRetrievalType == CredentialRetrievalTypes.Integrated)
+                    radWindowsAuthentication.Checked = true;
+                if (value.CredentialRetrievalType == CredentialRetrievalTypes.None)
+                    radNone.Checked = true;
+                if (value.CredentialRetrievalType == CredentialRetrievalTypes.Store)
+                    radStored.Checked = true;
+                if (value.CredentialRetrievalType == CredentialRetrievalTypes.Prompt)
+                    radPrompt.Checked = true;
+
                 txtConnStr.Text = value.ConnectionString;
                 txtCredentialsPrompt.Text = value.Prompt;
                 txtName.Text = value.Name;
-                txtUsername.Text = value.Username; 
-                txtPassword.Text = value.Password;
+                txtUsername.Text = value.CredentialRetrievalType == CredentialRetrievalTypes.Store ? value.Username : String.Empty;
+                txtPassword.Text = value.CredentialRetrievalType == CredentialRetrievalTypes.Store ? value.Password : String.Empty;
                 chkEnabled.Checked = value.Enabled;
                 chkExecutionContext.Checked = value.SetExecutionContext;
                 chkUsePromptedCredentialsAsWindowsCredentials.Checked = value.UsePromptedCredentialsAsWindowsCredentials;
                 chkUseStoredCredentialsAsWindowsCredentials.Checked = value.UseStoredCredentialsAsWindowsCredentials;
-
-                foreach (DatasourceExtension extension in extensions)
+             
+                foreach (var extension in extensions)
                 {
                     if (value.Extension == extension.Name && cmbExtensions.Items.IndexOf(extension.FriendlyName) != -1)
                     {
-                        cmbExtensions.SelectedItem = extension.FriendlyName;   
+                        cmbExtensions.SelectedItem = extension.FriendlyName;
                     }
                 }
             }
         }
 
-        private List<DatasourceExtension> extensions; 
+        private List<DatasourceExtension> extensions;
 
         public List<DatasourceExtension> Extensions
         {
-            set 
+            set
             {
                 extensions = value;
 
-                foreach (DatasourceExtension extension in extensions)
+                foreach (var extension in extensions)
                 {
                     cmbExtensions.Items.Add(extension.FriendlyName);
                 }
 
-                cmbExtensions.SelectedIndex = 0; 
+                cmbExtensions.SelectedIndex = 0;
             }
         }
-	
-	    #endregion
 
-        private void btnOK_Click(object sender, EventArgs e)
+        #endregion
+
+        private void BtnOkClick(object sender, EventArgs e)
         {
             if (txtName.Text == "")
             {
-                MessageBox.Show("Please fill in a name for the datasource");  
+                MessageBox.Show("Please fill in a name for the datasource");
             }
             else
             {
@@ -101,48 +111,45 @@ namespace RSS_Report_Retrievers
             }
         }
 
-        private void btnCancel_Click(object sender, EventArgs e)
+        private void BtnCancelClick(object sender, EventArgs e)
         {
             Close();
         }
 
-        private void radAuthentication_CheckedChanged(object sender, EventArgs e)
+        private void RadAuthenticationCheckedChanged(object sender, EventArgs e)
         {
             switch (((RadioButton)sender).Name)
             {
                 case "radPrompt":
                     datasource.CredentialRetrievalType = CredentialRetrievalTypes.Prompt;
-                    txtUsername.Text = "";
-                    txtPassword.Text = "";
+                    txtUsername.Text = null;
+                    txtPassword.Text = null;
                     chkUseStoredCredentialsAsWindowsCredentials.Checked = false;
                     chkExecutionContext.Checked = false;
                     break;
                 case "radStored":
                     datasource.CredentialRetrievalType = CredentialRetrievalTypes.Store;
                     chkUsePromptedCredentialsAsWindowsCredentials.Checked = false;
-                    txtCredentialsPrompt.Text = ""; 
+                    txtCredentialsPrompt.Text = "";
                     break;
                 case "radNone":
                     datasource.CredentialRetrievalType = CredentialRetrievalTypes.None;
-                    txtUsername.Text = "";
-                    txtPassword.Text = "";
+                    txtUsername.Text = null;
+                    txtPassword.Text = null;
                     chkUseStoredCredentialsAsWindowsCredentials.Checked = false;
                     chkExecutionContext.Checked = false;
-                    txtUsername.Text = "";
-                    txtPassword.Text = "";
-                    chkUseStoredCredentialsAsWindowsCredentials.Checked = false;
                     chkExecutionContext.Checked = false;
                     chkUsePromptedCredentialsAsWindowsCredentials.Checked = false;
-                    txtCredentialsPrompt.Text = ""; 
+                    txtCredentialsPrompt.Text = null;
                     break;
                 case "radWindowsAuthentication":
                     datasource.CredentialRetrievalType = CredentialRetrievalTypes.Integrated;
-                    txtUsername.Text = "";
-                    txtPassword.Text = "";
+                    txtUsername.Text = null;
+                    txtPassword.Text = null;
                     chkUseStoredCredentialsAsWindowsCredentials.Checked = false;
                     chkExecutionContext.Checked = false;
                     chkUsePromptedCredentialsAsWindowsCredentials.Checked = false;
-                    txtCredentialsPrompt.Text = ""; 
+                    txtCredentialsPrompt.Text = null;
                     break;
             }
 
@@ -151,7 +158,7 @@ namespace RSS_Report_Retrievers
             txtUsername.Enabled = datasource.CredentialRetrievalType == CredentialRetrievalTypes.Store;
             txtPassword.Enabled = datasource.CredentialRetrievalType == CredentialRetrievalTypes.Store;
             chkUseStoredCredentialsAsWindowsCredentials.Enabled = datasource.CredentialRetrievalType == CredentialRetrievalTypes.Store;
-            chkExecutionContext.Enabled = datasource.CredentialRetrievalType == CredentialRetrievalTypes.Store;   
+            chkExecutionContext.Enabled = datasource.CredentialRetrievalType == CredentialRetrievalTypes.Store;
         }
     }
 }
