@@ -1,31 +1,16 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
-using RSS_Report_Retrievers.Classes;
+using ReportingServerManager.Logic.Configuration;
 
-namespace RSS_Report_Retrievers
+namespace ReportingServerManager.Forms
 {
     public partial class FormSettings : Form
     {
-        private const string WS2000_SUFFIX = "ReportService.asmx";
-        private const string WS2005or2008_SUFFIX = "ReportService2005.asmx";
-        private const string WS2005_SHAREPOINT_SUFFIX = "ReportService2006.asmx";
-        private const string WS2005_SHAREPOINT_DOCLIB_URL = "http://server/SiteDirectory/Rapportage/Rapporten";
-
-        private ServerSettingsConfigElement currentSetting = null;
-
-        public ServerSettingsConfigElement CurrentSetting
-        {
-            get { return currentSetting; }
-            set { currentSetting = value; }
-        }
+        public ServerSettingsConfigElement CurrentSetting { get; set; }
 
         public FormSettings()
         {
+            CurrentSetting = null;
             InitializeComponent();
         }
 
@@ -35,20 +20,20 @@ namespace RSS_Report_Retrievers
             txtAlias.Enabled = !lockAliasTextfield;
         }
 
-        private void btnSave_Click(object sender, EventArgs e)
+        private void BtnSaveClick(object sender, EventArgs e)
         {
-            this.DialogResult = DialogResult.OK;
-            this.Close();
+            DialogResult = DialogResult.OK;
+            Close();
         }
 
-        private void chkWindowsAuthentication_CheckedChanged(object sender, EventArgs e)
+        private void ChkWindowsAuthenticationCheckedChanged(object sender, EventArgs e)
         {
             SetControlState();
         }
 
         private void SetControlState()
         {
-            this.bsServerSettings.DataSource = this.CurrentSetting;
+            bsServerSettings.DataSource = CurrentSetting;
 
             txtDomain.Enabled = !chkWindowsAuthentication.Checked;
             txtUsername.Enabled = !chkWindowsAuthentication.Checked;
@@ -56,61 +41,62 @@ namespace RSS_Report_Retrievers
 
         }
 
-        private void frmSettings_Load(object sender, EventArgs e)
+        private void FrmSettingsLoad(object sender, EventArgs e)
         {
             SetControlState();
-            txtReportLibrary.Enabled = chkSharePointMode.Checked;   
+            txtReportLibrary.Enabled = chkSharePointMode.Checked;
         }
 
-        private void chkSharePointMode_CheckedChanged(object sender, EventArgs e)
+        private void ChkSharePointModeCheckedChanged(object sender, EventArgs e)
         {
             txtReportLibrary.Enabled = chkSharePointMode.Checked;
+            txtReportLibrary.Text = chkSharePointMode.Checked ? "http://<servername>/sites/<sitename>/<library>" : String.Empty;
 
-            if (chkSharePointMode.Checked)
-                ChangeWSSuffix(WS2005_SHAREPOINT_SUFFIX);
-            else
-                ChangeWSSuffix(WS2005or2008_SUFFIX);
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            this.DialogResult = DialogResult.Cancel;
-            this.Close(); 
-        }
-
-        private void ChangeWSSuffix(string newURLEnding)
-        {
-            int ix = txtURL.Text.LastIndexOf('/');
-
-            if (ix > 0)
+            switch (cmbServerVersion.SelectedItem.ToString())
             {
-                string urlStart = txtURL.Text.Substring(0, ix);
-
-                txtURL.Text = urlStart + "/" + newURLEnding;
+                case "2005":
+                case "2008":
+                    txtURL.Text = chkSharePointMode.Checked ? "http://<servername>/reportserver/reportservice2006.asmx" :  "http://<servername>/reportserver/reportservice2005.asmx";
+                    break;
+                case "2008R2":
+                case "2012":
+                    ShowSharePointDocLibDetails(true);
+                    txtURL.Text = chkSharePointMode.Checked ? "http://<servername>/reportserver/reportservice2010.asmx" : "http://<servername>/reportserver/reportservice2010.asmx";
+                    break;
             }
+        }
+
+        private void BtnCancelClick(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+            Close();
         }
 
         private void ShowSharePointDocLibDetails(bool isVisible)
         {
             chkSharePointMode.Enabled = isVisible;
-            txtReportLibrary.Enabled = isVisible;
+            txtReportLibrary.Enabled = isVisible && chkSharePointMode.Checked;
         }
 
-        private void chkSharePointMode_Click(object sender, EventArgs e)
+        private void CmbServerVersionSelectedIndexChanged(object sender, EventArgs e)
         {
-            ChangeWSSuffix(WS2005_SHAREPOINT_DOCLIB_URL);
-        }
-
-        private void rbSQL2000_Click(object sender, EventArgs e)
-        {
-            ShowSharePointDocLibDetails(false);
-            ChangeWSSuffix(WS2000_SUFFIX);
-        }
-
-        private void rbSQL2005or2008_Click(object sender, EventArgs e)
-        {
-            ShowSharePointDocLibDetails(true);
-            ChangeWSSuffix(WS2005or2008_SUFFIX);
+            switch (cmbServerVersion.SelectedItem.ToString())
+            {
+                case "2000":
+                    ShowSharePointDocLibDetails(false);
+                    txtURL.Text = "http://<servername>/reportserver/reportservice.asmx";
+                    break;
+                case "2005":
+                case "2008":
+                    ShowSharePointDocLibDetails(true);
+                    txtURL.Text = "http://<servername>/reportserver/reportservice2005.asmx";
+                    break;
+                case "2008R2":
+                case "2012":
+                    ShowSharePointDocLibDetails(true);
+                    txtURL.Text = "http://<servername>/reportserver/reportservice2010.asmx";
+                    break;
+            }
         }
     }
 }

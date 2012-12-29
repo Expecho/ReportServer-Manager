@@ -1,4 +1,4 @@
-namespace RSS_Report_Retrievers
+namespace ReportingServerManager.Forms
 {
     partial class FormDatasource
     {
@@ -83,6 +83,7 @@ namespace RSS_Report_Retrievers
             this.txtConnStr.Name = "txtConnStr";
             this.txtConnStr.Size = new System.Drawing.Size(344, 82);
             this.txtConnStr.TabIndex = 3;
+            this.txtConnStr.Text = "Initial Catalog=<Database>;Data Source=<Server\\Instance>";
             // 
             // cmbExtensions
             // 
@@ -117,13 +118,13 @@ namespace RSS_Report_Retrievers
             // btnOK
             // 
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOK.Location = new System.Drawing.Point(188, 508);
+            this.btnOK.Location = new System.Drawing.Point(200, 507);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 7;
-            this.btnOK.Text = "OK";
+            this.btnOK.Text = "Save";
             this.btnOK.UseVisualStyleBackColor = true;
-            this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
+            this.btnOK.Click += new System.EventHandler(this.BtnOkClick);
             // 
             // btnCancel
             // 
@@ -134,7 +135,7 @@ namespace RSS_Report_Retrievers
             this.btnCancel.TabIndex = 8;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
-            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            this.btnCancel.Click += new System.EventHandler(this.BtnCancelClick);
             // 
             // radWindowsAuthentication
             // 
@@ -147,7 +148,7 @@ namespace RSS_Report_Retrievers
             this.radWindowsAuthentication.TabStop = true;
             this.radWindowsAuthentication.Text = "Windows authentication";
             this.radWindowsAuthentication.UseVisualStyleBackColor = true;
-            this.radWindowsAuthentication.CheckedChanged += new System.EventHandler(this.radAuthentication_CheckedChanged);
+            this.radWindowsAuthentication.CheckedChanged += new System.EventHandler(this.RadAuthenticationCheckedChanged);
             // 
             // radPrompt
             // 
@@ -158,7 +159,7 @@ namespace RSS_Report_Retrievers
             this.radPrompt.TabIndex = 11;
             this.radPrompt.Text = "Prompt for credentials";
             this.radPrompt.UseVisualStyleBackColor = true;
-            this.radPrompt.CheckedChanged += new System.EventHandler(this.radAuthentication_CheckedChanged);
+            this.radPrompt.CheckedChanged += new System.EventHandler(this.RadAuthenticationCheckedChanged);
             // 
             // radStored
             // 
@@ -169,7 +170,7 @@ namespace RSS_Report_Retrievers
             this.radStored.TabIndex = 12;
             this.radStored.Text = "Stored credentials";
             this.radStored.UseVisualStyleBackColor = true;
-            this.radStored.CheckedChanged += new System.EventHandler(this.radAuthentication_CheckedChanged);
+            this.radStored.CheckedChanged += new System.EventHandler(this.RadAuthenticationCheckedChanged);
             // 
             // radNone
             // 
@@ -180,7 +181,7 @@ namespace RSS_Report_Retrievers
             this.radNone.TabIndex = 13;
             this.radNone.Text = "No credentials";
             this.radNone.UseVisualStyleBackColor = true;
-            this.radNone.CheckedChanged += new System.EventHandler(this.radAuthentication_CheckedChanged);
+            this.radNone.CheckedChanged += new System.EventHandler(this.RadAuthenticationCheckedChanged);
             // 
             // chkUsePromptedCredentialsAsWindowsCredentials
             // 
@@ -284,6 +285,8 @@ namespace RSS_Report_Retrievers
             this.Controls.Add(this.txtName);
             this.Controls.Add(this.lblName);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "FormDatasource";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Create / Edit Datasource";

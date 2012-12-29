@@ -1,4 +1,4 @@
-namespace RSS_Report_Retrievers
+namespace ReportingServerManager.Forms
 {
     partial class About
     {
@@ -29,7 +29,6 @@ namespace RSS_Report_Retrievers
         private void InitializeComponent()
         {
             this.btnClose = new System.Windows.Forms.Button();
-            this.lnkWebsite = new System.Windows.Forms.LinkLabel();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
@@ -43,47 +42,36 @@ namespace RSS_Report_Retrievers
             this.btnClose.TabIndex = 0;
             this.btnClose.Text = "Close";
             this.btnClose.UseVisualStyleBackColor = true;
-            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
-            // 
-            // lnkWebsite
-            // 
-            this.lnkWebsite.AutoSize = true;
-            this.lnkWebsite.Location = new System.Drawing.Point(191, 13);
-            this.lnkWebsite.Name = "lnkWebsite";
-            this.lnkWebsite.Size = new System.Drawing.Size(123, 13);
-            this.lnkWebsite.TabIndex = 1;
-            this.lnkWebsite.TabStop = true;
-            this.lnkWebsite.Text = "http://www.2000miles.nl";
-            this.lnkWebsite.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkWebsite_LinkClicked);
+            this.btnClose.Click += new System.EventHandler(this.BtnCloseClick);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(13, 13);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(174, 13);
+            this.label1.Size = new System.Drawing.Size(42, 13);
             this.label1.TabIndex = 2;
-            this.label1.Text = "For more information visit my blog at";
+            this.label1.Text = "Version";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(13, 31);
+            this.label2.Location = new System.Drawing.Point(13, 36);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(158, 13);
+            this.label2.Size = new System.Drawing.Size(113, 13);
             this.label2.TabIndex = 4;
-            this.label2.Text = "Project website and how to use:";
+            this.label2.Text = "Project website/howto";
             // 
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(191, 31);
+            this.linkLabel1.Location = new System.Drawing.Point(132, 36);
             this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(196, 13);
+            this.linkLabel1.Size = new System.Drawing.Size(233, 13);
             this.linkLabel1.TabIndex = 3;
             this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "http://www.codeplex.com/RSSExplorer";
-            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            this.linkLabel1.Text = "http://www.codeplex.com/reportservermanager";
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabel1LinkClicked);
             // 
             // About
             // 
@@ -93,7 +81,6 @@ namespace RSS_Report_Retrievers
             this.Controls.Add(this.label2);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.lnkWebsite);
             this.Controls.Add(this.btnClose);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
@@ -109,7 +96,6 @@ namespace RSS_Report_Retrievers
         #endregion
 
         private System.Windows.Forms.Button btnClose;
-        private System.Windows.Forms.LinkLabel lnkWebsite;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.LinkLabel linkLabel1;

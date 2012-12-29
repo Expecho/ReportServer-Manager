@@ -1,4 +1,4 @@
-namespace RSS_Report_Retrievers
+namespace ReportingServerManager.Forms
 {
     partial class FormSetPolicy
     {
@@ -44,18 +44,20 @@ namespace RSS_Report_Retrievers
             // 
             // txtUsername
             // 
-            this.txtUsername.Location = new System.Drawing.Point(15, 72);
+            this.txtUsername.Location = new System.Drawing.Point(11, 58);
+            this.txtUsername.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtUsername.Name = "txtUsername";
-            this.txtUsername.Size = new System.Drawing.Size(143, 22);
+            this.txtUsername.Size = new System.Drawing.Size(296, 20);
             this.txtUsername.TabIndex = 0;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(12, 52);
+            this.label1.Location = new System.Drawing.Point(9, 42);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(145, 17);
+            this.label1.Size = new System.Drawing.Size(115, 13);
             this.label1.TabIndex = 1;
             this.label1.Text = "Domain\\Username:";
             // 
@@ -63,80 +65,86 @@ namespace RSS_Report_Retrievers
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(285, 120);
+            this.label2.Location = new System.Drawing.Point(214, 98);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(125, 17);
+            this.label2.Size = new System.Drawing.Size(99, 13);
             this.label2.TabIndex = 3;
             this.label2.Text = "Available Roles:";
             // 
             // listAvailableRoles
             // 
             this.listAvailableRoles.FormattingEnabled = true;
-            this.listAvailableRoles.ItemHeight = 16;
-            this.listAvailableRoles.Location = new System.Drawing.Point(288, 140);
+            this.listAvailableRoles.Location = new System.Drawing.Point(162, 113);
+            this.listAvailableRoles.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.listAvailableRoles.Name = "listAvailableRoles";
             this.listAvailableRoles.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
-            this.listAvailableRoles.Size = new System.Drawing.Size(120, 132);
+            this.listAvailableRoles.Size = new System.Drawing.Size(145, 108);
             this.listAvailableRoles.TabIndex = 4;
             // 
             // listSelectedRoles
             // 
             this.listSelectedRoles.FormattingEnabled = true;
-            this.listSelectedRoles.ItemHeight = 16;
-            this.listSelectedRoles.Location = new System.Drawing.Point(15, 140);
+            this.listSelectedRoles.Location = new System.Drawing.Point(11, 113);
+            this.listSelectedRoles.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.listSelectedRoles.Name = "listSelectedRoles";
-            this.listSelectedRoles.Size = new System.Drawing.Size(120, 132);
+            this.listSelectedRoles.Size = new System.Drawing.Size(145, 108);
             this.listSelectedRoles.TabIndex = 5;
             // 
             // btnAddToSelectedRoles
             // 
-            this.btnAddToSelectedRoles.Location = new System.Drawing.Point(288, 291);
+            this.btnAddToSelectedRoles.Location = new System.Drawing.Point(162, 225);
+            this.btnAddToSelectedRoles.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnAddToSelectedRoles.Name = "btnAddToSelectedRoles";
-            this.btnAddToSelectedRoles.Size = new System.Drawing.Size(75, 23);
+            this.btnAddToSelectedRoles.Size = new System.Drawing.Size(56, 19);
             this.btnAddToSelectedRoles.TabIndex = 6;
             this.btnAddToSelectedRoles.Text = "Select";
             this.btnAddToSelectedRoles.UseVisualStyleBackColor = true;
-            this.btnAddToSelectedRoles.Click += new System.EventHandler(this.btnAddToSelectedRoles_Click);
+            this.btnAddToSelectedRoles.Click += new System.EventHandler(this.BtnAddToSelectedRolesClick);
             // 
             // btnRemoveFromSelectedRoles
             // 
-            this.btnRemoveFromSelectedRoles.Location = new System.Drawing.Point(15, 291);
+            this.btnRemoveFromSelectedRoles.Location = new System.Drawing.Point(11, 225);
+            this.btnRemoveFromSelectedRoles.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnRemoveFromSelectedRoles.Name = "btnRemoveFromSelectedRoles";
-            this.btnRemoveFromSelectedRoles.Size = new System.Drawing.Size(75, 23);
+            this.btnRemoveFromSelectedRoles.Size = new System.Drawing.Size(56, 19);
             this.btnRemoveFromSelectedRoles.TabIndex = 7;
             this.btnRemoveFromSelectedRoles.Text = "Remove";
             this.btnRemoveFromSelectedRoles.UseVisualStyleBackColor = true;
-            this.btnRemoveFromSelectedRoles.Click += new System.EventHandler(this.btnRemoveFromSelectedRoles_Click);
+            this.btnRemoveFromSelectedRoles.Click += new System.EventHandler(this.BtnRemoveFromSelectedRolesClick);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(12, 120);
+            this.label3.Location = new System.Drawing.Point(9, 98);
+            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(122, 17);
+            this.label3.Size = new System.Drawing.Size(97, 13);
             this.label3.TabIndex = 8;
             this.label3.Text = "Selected Roles:";
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(364, 397);
+            this.btnCancel.Location = new System.Drawing.Point(273, 271);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(75, 29);
+            this.btnCancel.Size = new System.Drawing.Size(56, 24);
             this.btnCancel.TabIndex = 10;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
-            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            this.btnCancel.Click += new System.EventHandler(this.BtnCancelClick);
             // 
             // btnApply
             // 
-            this.btnApply.Location = new System.Drawing.Point(207, 397);
+            this.btnApply.Location = new System.Drawing.Point(180, 271);
+            this.btnApply.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnApply.Name = "btnApply";
-            this.btnApply.Size = new System.Drawing.Size(119, 29);
+            this.btnApply.Size = new System.Drawing.Size(89, 24);
             this.btnApply.TabIndex = 11;
-            this.btnApply.Text = "ApplyAndClose";
+            this.btnApply.Text = "Apply && Close";
             this.btnApply.UseVisualStyleBackColor = true;
-            this.btnApply.Click += new System.EventHandler(this.btnApply_Click);
+            this.btnApply.Click += new System.EventHandler(this.BtnApplyClick);
             // 
             // groupBox
             // 
@@ -148,23 +156,30 @@ namespace RSS_Report_Retrievers
             this.groupBox.Controls.Add(this.listAvailableRoles);
             this.groupBox.Controls.Add(this.btnAddToSelectedRoles);
             this.groupBox.Controls.Add(this.listSelectedRoles);
-            this.groupBox.Location = new System.Drawing.Point(12, 12);
+            this.groupBox.Location = new System.Drawing.Point(9, 10);
+            this.groupBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.groupBox.Name = "groupBox";
-            this.groupBox.Size = new System.Drawing.Size(427, 332);
+            this.groupBox.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox.Size = new System.Drawing.Size(320, 257);
             this.groupBox.TabIndex = 12;
             this.groupBox.TabStop = false;
-            this.groupBox.Text = "Setting security for ";
+            this.groupBox.Text = "Set security for ";
             // 
             // FormSetPolicy
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(458, 468);
+            this.ClientSize = new System.Drawing.Size(338, 304);
             this.Controls.Add(this.groupBox);
             this.Controls.Add(this.btnApply);
             this.Controls.Add(this.btnCancel);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "FormSetPolicy";
-            this.Text = "FormSetPolicy";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Text = "Set Security";
             this.groupBox.ResumeLayout(false);
             this.groupBox.PerformLayout();
             this.ResumeLayout(false);

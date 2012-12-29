@@ -1,22 +1,20 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Xml;
+using System.Linq;
 using System.Windows.Forms;
 using System.IO;
-using RSS_Report_Retrievers.Classes;
+using ReportingServerManager.Logic;
+using ReportingServerManager.Logic.Configuration;
+using ReportingServerManager.Logic.Shared;
 
-namespace RSS_Report_Retrievers
+namespace ReportingServerManager.Forms
 {
     public partial class FormSSRSExplorer : Form
     {
         private const string REPORT_FILTER_STRING = "Reports|*.rdl";
         private const string MODEL_FILTER_STRING = "Models|*.smdl";
         private const string MODEL_FILEEXTENSION = ".smdl";
-        private Controller rs;
+        private Controller controller;
 
         public static ServerSettingsConfigElement SelectedServer = null;
         ServerSettingsConfigElementCollection serverCollection = null;
@@ -27,7 +25,7 @@ namespace RSS_Report_Retrievers
             InitializeComponent();
         }
 
-        private void btnOK_Click(object sender, EventArgs e)
+        private void BtnOkClick(object sender, EventArgs e)
         {
             Close();
         }
@@ -35,18 +33,17 @@ namespace RSS_Report_Retrievers
         /// <summary>
         /// Populate the TreeView with reports in the report server
         /// </summary>
-        private void frmReportSelector_Shown(object sender, EventArgs e)
+        private void FrmReportSelectorShown(object sender, EventArgs e)
         {
             BuildConnectSubMenu();
-            //Connect();
         }
 
         /// <summary>
         /// Hide copy/move/delete commands when needed
         /// </summary>
-        private void contextMenuStrip_Opening(object sender, CancelEventArgs e)
+        private void ContextMenuStripOpening(object sender, CancelEventArgs e)
         {
-            if (rs == null)
+            if (controller == null)
             {
                 e.Cancel = true;
             }
@@ -65,7 +62,7 @@ namespace RSS_Report_Retrievers
                 editToolStripMenuItem.Visible = lvItems.SelectedItems.Count > 0 && (ReportItemTypes)lvItems.SelectedItems[0].Tag == ReportItemTypes.Datasource;
                 toolStripMenuItemSep1.Visible = toolStripMenuItemSep1.Visible && lvItems.SelectedItems.Count > 0 && (ReportItemTypes)lvItems.SelectedItems[0].Tag != ReportItemTypes.Datasource;
 
-                replaceModelToolStripMenuItem.Visible = lvItems.SelectedItems.Count > 0 && (ReportItemTypes)lvItems.SelectedItems[0].Tag == ReportItemTypes.model;
+                replaceModelToolStripMenuItem.Visible = lvItems.SelectedItems.Count > 0 && (ReportItemTypes)lvItems.SelectedItems[0].Tag == ReportItemTypes.Model;
                 setItemSecurityToolStripMenuItem.Visible = lvItems.SelectedItems.Count > 0 && (ReportItemTypes)lvItems.SelectedItems[0].Tag == ReportItemTypes.Folder;
             }
         }
@@ -73,13 +70,13 @@ namespace RSS_Report_Retrievers
         /// <summary>
         /// When a node is expanded, show its items in the ListView
         /// </summary>
-        private void tvReportServer_AfterSelect(object sender, TreeViewEventArgs e)
+        private void TvReportServerAfterSelect(object sender, TreeViewEventArgs e)
         {
-            if (rs != null)
+            if (controller != null)
             {
                 try
                 {
-                    rs.PopulateItems(e.Node.ToolTipText);
+                    controller.PopulateItems(e.Node.ToolTipText);
                 }
                 catch (Exception ex)
                 {
@@ -93,14 +90,14 @@ namespace RSS_Report_Retrievers
         /// The items in the folder will then be automatically displayed in the ListView because of the 
         /// tvReportServer_AfterSelect event handler
         /// </summary>
-        private void lvItems_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void LvItemsMouseDoubleClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
-                ListViewItem lvi = lvItems.GetItemAt(e.X, e.Y);
+                var lvi = lvItems.GetItemAt(e.X, e.Y);
                 if (lvi != null && (ReportItemTypes)lvi.Tag == ReportItemTypes.Folder)
                 {
-                    foreach (TreeNode node in tvReportServer.Nodes.Find(lvi.Text, true))
+                    foreach (var node in tvReportServer.Nodes.Find(lvi.Text, true))
                     {
                         if (node.ToolTipText == lvi.ToolTipText)
                         {
@@ -108,7 +105,7 @@ namespace RSS_Report_Retrievers
                             {
                                 tvReportServer.SelectedNode = node;
                                 node.Nodes.Clear();
-                                rs.ExpandNodeContent(node, true);
+                                controller.ExpandNodeContent(node, true);
                                 node.Expand();
                             }
                             catch (Exception ex)
@@ -124,22 +121,22 @@ namespace RSS_Report_Retrievers
         /// <summary>
         /// Create a new folder, add the new folder to the TreeView en ListView
         /// </summary>
-        private void newFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        private void NewFolderToolStripMenuItemClick(object sender, EventArgs e)
         {
             if (tvReportServer.SelectedNode != null)
             {
-                FormGetName GetName = new FormGetName("Create new folder");
-                if (GetName.ShowDialog() == DialogResult.OK)
+                var getName = new FormGetName("Create new folder");
+                if (getName.ShowDialog() == DialogResult.OK)
                 {
                     try
                     {
-                        if (GetName.Name.Trim() == "")
+                        if (getName.Name.Trim() == "")
                         {
                             throw new Exception("Name cannot be blank");
                         }
-                        rs.CreateFolder(GetName.Name, tvReportServer.SelectedNode);
+                        controller.CreateFolder(getName.Name, tvReportServer.SelectedNode);
 
-                        toolStripStatusLabel.Text = String.Format("Created folder '{0}'", GetName.Name);
+                        toolStripStatusLabel.Text = String.Format("Created folder '{0}'", getName.Name);
                     }
                     catch (Exception ex)
                     {
@@ -150,7 +147,7 @@ namespace RSS_Report_Retrievers
 
                 try
                 {
-                    rs.PopulateItems(tvReportServer.SelectedNode.ToolTipText);
+                    controller.PopulateItems(tvReportServer.SelectedNode.ToolTipText);
                 }
                 catch (Exception ex)
                 {
@@ -162,28 +159,28 @@ namespace RSS_Report_Retrievers
         /// <summary>
         /// Upload files
         /// </summary>
-        private void filesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void FilesToolStripMenuItemClick(object sender, EventArgs e)
         {
             openFileDialog.Filter = REPORT_FILTER_STRING + "|" + MODEL_FILTER_STRING;
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                bool overwrite = MessageBox.Show("Overwrite existing items?", "Upload", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
+                var overwrite = MessageBox.Show("Overwrite existing items?", "Upload", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
 
-                this.Cursor = Cursors.WaitCursor;
+                Cursor = Cursors.WaitCursor;
 
-                foreach (string filename in openFileDialog.FileNames)
+                foreach (var filename in openFileDialog.FileNames)
                 {
-                    string destinationFolder = tvReportServer.SelectedNode.ToolTipText;
+                    var destinationFolder = tvReportServer.SelectedNode.ToolTipText;
 
                     try
                     {
                         if (Path.GetExtension(filename) == MODEL_FILEEXTENSION)
                         {
-                            rs.CreateModel(filename, destinationFolder, overwrite);
+                            controller.CreateModel(filename, destinationFolder, overwrite);
                         }
                         else
                         {
-                            rs.UploadReport(filename, destinationFolder, overwrite);
+                            controller.UploadReport(filename, destinationFolder, overwrite);
                         }
                     }
                     catch (Exception ex)
@@ -194,58 +191,61 @@ namespace RSS_Report_Retrievers
 
                 try
                 {
-                    rs.PopulateItems(tvReportServer.SelectedNode.ToolTipText);
+                    controller.PopulateItems(tvReportServer.SelectedNode.ToolTipText);
                 }
                 catch (Exception ex)
                 {
                     LogHandler.WriteLogEntry(ex);
                 }
 
-                this.Cursor = Cursors.Default;
+                Cursor = Cursors.Default;
             }
         }
 
         /// <summary>
         /// Upload folder
         /// </summary>
-        private void folderToolStripMenuItem_Click(object sender, EventArgs e)
+        private void FolderToolStripMenuItemClick(object sender, EventArgs e)
         {
-            FormSelectFilesystemFolder folderSelector = new FormSelectFilesystemFolder();
-            folderSelector.EnableCreateNewFolder = false;
+            var folderSelector = new FormSelectFilesystemFolder
+                                     {
+                                         EnableCreateNewFolder = false
+                                     };
+
             if (folderSelector.ShowDialog() == DialogResult.OK)
             {
-                bool overwrite = MessageBox.Show("Overwrite existing items?", "Upload", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
+                var overwrite = MessageBox.Show("Overwrite existing items?", "Upload", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
 
-                this.Cursor = Cursors.WaitCursor;
+                Cursor = Cursors.WaitCursor;
 
                 try
                 {
-                    rs.UploadFolder(folderSelector.Foldername, tvReportServer.SelectedNode.ToolTipText, overwrite, tvReportServer.SelectedNode);
-                    rs.PopulateItems(tvReportServer.SelectedNode.ToolTipText);
+                    controller.UploadFolder(folderSelector.Foldername, tvReportServer.SelectedNode.ToolTipText, overwrite, tvReportServer.SelectedNode);
+                    controller.PopulateItems(tvReportServer.SelectedNode.ToolTipText);
                 }
                 catch (Exception ex)
                 {
                     LogHandler.WriteLogEntry(ex);
                 }
 
-                this.Cursor = Cursors.Default;
+                Cursor = Cursors.Default;
             }
         }
 
         /// <summary>
         /// Delete an item
         /// </summary>
-        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+        private void DeleteToolStripMenuItemClick(object sender, EventArgs e)
         {
             if (MessageBox.Show("Are you sure?", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
             {
-                this.Cursor = Cursors.WaitCursor;
+                Cursor = Cursors.WaitCursor;
 
                 foreach (ListViewItem item in lvItems.SelectedItems)
                 {
                     try
                     {
-                        rs.DeleteItem(item.ToolTipText);
+                        controller.DeleteItem(item.ToolTipText);
                     }
                     catch (Exception ex)
                     {
@@ -264,9 +264,9 @@ namespace RSS_Report_Retrievers
                     }
                 }
 
-                this.Cursor = Cursors.Default;
+                Cursor = Cursors.Default;
 
-                rs.PopulateItems(tvReportServer.SelectedNode.ToolTipText);
+                controller.PopulateItems(tvReportServer.SelectedNode.ToolTipText);
             }
         }
 
@@ -278,15 +278,10 @@ namespace RSS_Report_Retrievers
         /// <returns>name of the item</returns>
         public static string GetItemName(string path)
         {
-            string[] parts = path.Split('/');
+            var parts = path.Split('/');
             return path.Split('/')[parts.Length - 1];
         }
 
-        /// <summary>
-        /// Extracts the path withouth the name of an item on the ReportServer, like System.IO.Path.GetFileName
-        /// </summary>
-        /// <param name="path">path of the item</param>
-        /// <returns>path of the item withouth the name</returns>
         public static string GetItemPath(string path, bool forFileSystem)
         {
             path = path.Substring(0, path.LastIndexOf("/"));
@@ -300,13 +295,14 @@ namespace RSS_Report_Retrievers
         /// </summary>
         private void ShowSelectServer()
         {
-            FormServers servers = new FormServers();
-
-            servers.ShowDialog();
-
-            if (servers.DialogResult != DialogResult.Cancel)
+            using (var servers = new FormServers())
             {
-                SelectedServer = servers.SelectedServer;
+                servers.ShowDialog();
+
+                if (servers.DialogResult != DialogResult.Cancel)
+                {
+                    SelectedServer = servers.SelectedServer;
+                }
             }
 
             BuildConnectSubMenu();
@@ -316,12 +312,12 @@ namespace RSS_Report_Retrievers
         /// <summary>
         /// Exit application
         /// </summary>
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ExitToolStripMenuItemClick(object sender, EventArgs e)
         {
             Close();
         }
 
-        private void settingsToolStripMenuItem_Click(object s, EventArgs e)
+        private void SettingsToolStripMenuItemClick(object s, EventArgs e)
         {
             ShowSelectServer();
         }
@@ -329,28 +325,35 @@ namespace RSS_Report_Retrievers
         /// <summary>
         /// Rename an item
         /// </summary>
-        private void renameToolStripMenuItem_Click(object sender, EventArgs e)
+        private void RenameToolStripMenuItemClick(object sender, EventArgs e)
         {
-            FormGetName GetName = new FormGetName("Rename item");
-            GetName.Name = lvItems.SelectedItems[0].Text;
-            if (GetName.ShowDialog() == DialogResult.OK)
+            using (var getName = new FormGetName("Rename item"))
             {
-                try
+                getName.Name = lvItems.SelectedItems[0].Text;
+                if (getName.ShowDialog() == DialogResult.OK)
                 {
-                    rs.MoveItem(lvItems.SelectedItems[0].ToolTipText, GetItemPath(lvItems.SelectedItems[0].ToolTipText, false) + "/" + GetName.Name, (ReportItemTypes)lvItems.SelectedItems[0].Tag);
-                    toolStripStatusLabel.Text = String.Format("Renamed item '{0}' to '{1}'", lvItems.SelectedItems[0].Text, GetItemPath(lvItems.SelectedItems[0].ToolTipText, false) + "/" + GetName.Name);
-
-                    if ((ReportItemTypes)lvItems.SelectedItems[0].Tag == ReportItemTypes.Folder)
+                    try
                     {
-                        rs.PopulateTreeView(SelectedServer.Alias);
-                    }
+                        controller.MoveItem(lvItems.SelectedItems[0].ToolTipText,
+                                            GetItemPath(lvItems.SelectedItems[0].ToolTipText, false) + "/" +
+                                            getName.Name, (ReportItemTypes) lvItems.SelectedItems[0].Tag);
+                        toolStripStatusLabel.Text = String.Format("Renamed item '{0}' to '{1}'",
+                                                                  lvItems.SelectedItems[0].Text,
+                                                                  GetItemPath(lvItems.SelectedItems[0].ToolTipText,
+                                                                              false) + "/" + getName.Name);
 
-                    rs.PopulateItems(tvReportServer.SelectedNode.ToolTipText);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(String.Format("An error has occured: {0}", ex.Message));
-                    LogHandler.WriteLogEntry(ex);  
+                        if ((ReportItemTypes) lvItems.SelectedItems[0].Tag == ReportItemTypes.Folder)
+                        {
+                            controller.PopulateTreeView(SelectedServer.Alias);
+                        }
+
+                        controller.PopulateItems(tvReportServer.SelectedNode.ToolTipText);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(String.Format("An error has occured: {0}", ex.Message));
+                        LogHandler.WriteLogEntry(ex);
+                    }
                 }
             }
         }
@@ -358,9 +361,9 @@ namespace RSS_Report_Retrievers
         /// <summary>
         /// Display properties of selected item
         /// </summary>
-        private void propertiesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void PropertiesToolStripMenuItemClick(object sender, EventArgs e)
         {
-            FormProperties frmProperties = new FormProperties(lvItems.SelectedItems[0].ToolTipText, (ReportItemTypes)lvItems.SelectedItems[0].Tag);
+            var frmProperties = new FormProperties(lvItems.SelectedItems[0].ToolTipText, (ReportItemTypes)lvItems.SelectedItems[0].Tag);
             frmProperties.ShowDialog();
         }
 
@@ -369,20 +372,23 @@ namespace RSS_Report_Retrievers
         /// Check if any of a report datasources matches the selected datasource. If so update that datasource, otherwise 
         /// provide information about the report datasources
         /// </summary>
-        private void setDatasourceToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SetDatasourceToolStripMenuItemClick(object sender, EventArgs e)
         {
-            FormSSRSSItemSelector ssrsExplorer = new FormSSRSSItemSelector(ViewItems.Datasources);
-            if (ssrsExplorer.ShowDialog() == DialogResult.OK && ssrsExplorer.SelectedItemPath != null)
+            using (var ssrsExplorer = new FormSSRSSItemSelector(ViewItems.Datasources))
             {
-                foreach (ListViewItem item in lvItems.SelectedItems)
+                if (ssrsExplorer.ShowDialog() == DialogResult.OK && ssrsExplorer.SelectedItemPath != null)
                 {
-                    try
+                    foreach (ListViewItem item in lvItems.SelectedItems)
                     {
-                        rs.SetDatasource(item.ToolTipText, ssrsExplorer.SelectedItemPath, (ReportItemTypes)item.Tag);
-                    }
-                    catch (Exception ex)
-                    {
-                        LogHandler.WriteLogEntry(ex);
+                        try
+                        {
+                            controller.SetDatasource(item.ToolTipText, ssrsExplorer.SelectedItemPath,
+                                                     (ReportItemTypes) item.Tag);
+                        }
+                        catch (Exception ex)
+                        {
+                            LogHandler.WriteLogEntry(ex);
+                        }
                     }
                 }
             }
@@ -391,89 +397,92 @@ namespace RSS_Report_Retrievers
         /// <summary>
         /// Move reports and folders
         /// </summary>
-        private void moveToolStripMenuItem_Click(object sender, EventArgs e)
+        private void MoveToolStripMenuItemClick(object sender, EventArgs e)
         {
-            FormSSRSSItemSelector ssrsExplorer = new FormSSRSSItemSelector(ViewItems.Folders);
-            if (ssrsExplorer.ShowDialog() == DialogResult.OK && ssrsExplorer.SelectedItemPath != null)
+            using (var ssrsExplorer = new FormSSRSSItemSelector(ViewItems.Folders))
             {
-                this.Cursor = Cursors.WaitCursor;
-
-                foreach (ListViewItem item in lvItems.SelectedItems)
+                if (ssrsExplorer.ShowDialog() == DialogResult.OK && ssrsExplorer.SelectedItemPath != null)
                 {
+                    Cursor = Cursors.WaitCursor;
+
+                    foreach (ListViewItem item in lvItems.SelectedItems)
+                    {
+                        try
+                        {
+                            controller.MoveItem(item.ToolTipText,
+                                                ssrsExplorer.SelectedItemPath.Trim('/') + "/" + item.Text,
+                                                (ReportItemTypes) item.Tag);
+                            toolStripStatusLabel.Text = String.Format("Moved item '{0}' to {1}", item.Text,
+                                                                      ssrsExplorer.SelectedItemPath);
+                            Application.DoEvents();
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(String.Format("An error has occured: {0}", ex.Message));
+                            LogHandler.WriteLogEntry(ex);
+                        }
+                    }
+
                     try
                     {
-                        rs.MoveItem(item.ToolTipText, ssrsExplorer.SelectedItemPath.Trim('/') + "/" + item.Text, (ReportItemTypes)item.Tag);
-                        toolStripStatusLabel.Text = String.Format("Moved item '{0}' to {1}", item.Text, ssrsExplorer.SelectedItemPath);
-                        Application.DoEvents();
+                        controller.PopulateTreeView(SelectedServer.Alias);
+                        controller.PopulateItems(tvReportServer.SelectedNode.ToolTipText);
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(String.Format("An error has occured: {0}", ex.Message));
-                        LogHandler.WriteLogEntry(ex);  
+                        LogHandler.WriteLogEntry(ex);
                     }
-                }
 
-                try
-                {
-                    rs.PopulateTreeView(SelectedServer.Alias);
-                    rs.PopulateItems(tvReportServer.SelectedNode.ToolTipText);
+                    Cursor = Cursors.Default;
                 }
-                catch (Exception ex)
-                {
-                    LogHandler.WriteLogEntry(ex);
-                }
-
-                this.Cursor = Cursors.Default;
             }
         }
 
         /// <summary>
         /// Download reports, alo includes any subfolders
         /// </summary>
-        private void downloadToolStripMenuItem_Click(object sender, EventArgs e)
+        private void DownloadToolStripMenuItemClick(object sender, EventArgs e)
         {
-            FormSelectFilesystemFolder folderSelector = new FormSelectFilesystemFolder();
-            if (folderSelector.ShowDialog() == DialogResult.OK)
+            using(var folderSelector = new FormSelectFilesystemFolder())
             {
-                bool askToPreserveFolders = false;
-                foreach (ListViewItem item in lvItems.SelectedItems)
+                if (folderSelector.ShowDialog() == DialogResult.OK)
                 {
-                    if ((ReportItemTypes)item.Tag == ReportItemTypes.Folder)
-                    {
-                        askToPreserveFolders = true;
-                        break;
-                    }
-                }
-                
-                bool preserveFolders = askToPreserveFolders ? MessageBox.Show("Preserve folders?", "Download items", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes : false;
-                
-                if (!Directory.Exists(folderSelector.Foldername))
-                {
-                    Directory.CreateDirectory(folderSelector.Foldername);
-                }
+                    var askToPreserveFolders = lvItems.SelectedItems.Cast<ListViewItem>().Any(item => (ReportItemTypes) item.Tag == ReportItemTypes.Folder);
 
-                this.Cursor = Cursors.WaitCursor;
+                    var preserveFolders = askToPreserveFolders && 
+                        MessageBox.Show("Preserve folders?", "Download items", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
 
-                foreach (ListViewItem item in lvItems.SelectedItems)
-                {
-                    try
+                    if (!Directory.Exists(folderSelector.Foldername))
                     {
-                        rs.DownloadItem(item.ToolTipText, folderSelector.Foldername, (ReportItemTypes)item.Tag, preserveFolders);
+                        Directory.CreateDirectory(folderSelector.Foldername);
                     }
-                    catch (Exception ex)
+
+                    Cursor = Cursors.WaitCursor;
+
+                    foreach (ListViewItem item in lvItems.SelectedItems)
                     {
-                        LogHandler.WriteLogEntry(ex);
+                        try
+                        {
+                            controller.DownloadItem(item.ToolTipText, folderSelector.Foldername,
+                                                    (ReportItemTypes) item.Tag, preserveFolders);
+                        }
+                        catch (Exception ex)
+                        {
+                            LogHandler.WriteLogEntry(ex);
+                        }
                     }
+
+                    Cursor = Cursors.Default;
                 }
-
-                this.Cursor = Cursors.Default;
             }
         }
 
-        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        private void AboutToolStripMenuItemClick(object sender, EventArgs e)
         {
-            About frmAbout = new About();
-            frmAbout.ShowDialog(this);  
+            using (var frmAbout = new About())
+            {
+                frmAbout.ShowDialog(this);
+            }
         }
 
 
@@ -485,18 +494,15 @@ namespace RSS_Report_Retrievers
 
             foreach (ServerSettingsConfigElement configEl in serverCollection)
             {
-                ToolStripMenuItem newItem = new ToolStripMenuItem(configEl.Alias, null, connectToolStripMenuItem_Click);
+                var newItem = new ToolStripMenuItem(configEl.Alias, null, ConnectToolStripMenuItemClick);
                 connectToolStripMenuItem.DropDownItems.Add(newItem);
             }
         }
 
-        private void connectToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ConnectToolStripMenuItemClick(object sender, EventArgs e)
         {
-            SelectedServer = this.serverCollection.Get(((ToolStripMenuItem)sender).Text);
+            SelectedServer = serverCollection.Get(((ToolStripMenuItem)sender).Text);
             Connect();
-
-            FormSetPolicy frm = new FormSetPolicy();
-
         }
 
         private void Connect()
@@ -511,7 +517,7 @@ namespace RSS_Report_Retrievers
                 {
                     try
                     {
-                        rs = ReportingServicesFactory.CreateFromSettings(SelectedServer, tvReportServer, toolStripStatusLabel, lvItems);
+                        controller = ReportingServicesFactory.CreateFromSettings(SelectedServer, tvReportServer, toolStripStatusLabel, lvItems);
                     }
                     catch (Exception ex)
                     {
@@ -521,23 +527,22 @@ namespace RSS_Report_Retrievers
 
                 try
                 {
-                    rs.PopulateTreeView(SelectedServer.Alias);
-                    toolStripStatusLabel.Text = String.Format("Connected to {0}", FormSSRSExplorer.SelectedServer.Url);
+                    controller.PopulateTreeView(SelectedServer.Alias);
+                    toolStripStatusLabel.Text = String.Format("Connected to {0}", SelectedServer.Url);
 
-                    this.Text = "SSRS Explorer - connected to " + SelectedServer.Alias;
+                    Text = "SSRS Explorer - connected to " + SelectedServer.Alias;
                 }
                 catch(Exception ex)
                 {
-                    this.Text = "SSRS Explorer - not connected";
+                    Text = "SSRS Explorer - not connected";
 
                     toolStripStatusLabel.Text = "Not connected";
                     
                     MessageBox.Show("Cannot connect. Check server settings.", "Initialisation failed.", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     
-                    rs = null;
+                    controller = null;
 
-                    LogHandler.WriteLogEntry(String.Format("Error connecting to {0}:", SelectedServer.Url));   
-                    LogHandler.WriteLogEntry(ex);  
+                    LogHandler.WriteLogEntry(ex, String.Format("Error connecting to {0}:", SelectedServer.Url));   
                 }
             }
             else
@@ -547,66 +552,70 @@ namespace RSS_Report_Retrievers
 
         }
 
-        private void createDatasourceToolStripMenuItem_Click(object sender, EventArgs e)
+        private void CreateDatasourceToolStripMenuItemClick(object sender, EventArgs e)
         {
-            FormDatasource frmDatasource = new FormDatasource();
-            frmDatasource.Extensions = rs.GetDataExtensions(); 
-
-            if (frmDatasource.ShowDialog() == DialogResult.OK)
+            using (var frmDatasource = new FormDatasource())
             {
-                try
+                frmDatasource.Extensions = controller.GetDataExtensions();
+
+                if (frmDatasource.ShowDialog() == DialogResult.OK)
                 {
-                    rs.CreateDataSource(frmDatasource.Datasource, tvReportServer.SelectedNode.ToolTipText);
-                    rs.PopulateItems(tvReportServer.SelectedNode.ToolTipText);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(String.Format("An error has occured: {0}", ex.Message));
-                    LogHandler.WriteLogEntry(ex);  
+                    try
+                    {
+                        controller.CreateDataSource(frmDatasource.Datasource, tvReportServer.SelectedNode.ToolTipText);
+                        controller.PopulateItems(tvReportServer.SelectedNode.ToolTipText);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(String.Format("An error has occured: {0}", ex.Message));
+                        LogHandler.WriteLogEntry(ex);
+                    }
                 }
             }
         }
 
-        private void editToolStripMenuItem_Click(object sender, EventArgs e)
+        private void EditToolStripMenuItemClick(object sender, EventArgs e)
         {
-            FormDatasource frmDatasource = new FormDatasource();
-            frmDatasource.Extensions = rs.GetDataExtensions();
-
-            Datasource ds = rs.GetDatasource(lvItems.SelectedItems[0].ToolTipText);
-            ds.Name = lvItems.SelectedItems[0].Text;     
-            frmDatasource.Datasource = ds;
-            
-            if (frmDatasource.ShowDialog() == DialogResult.OK)
+            using (var frmDatasource = new FormDatasource())
             {
-                try
+                frmDatasource.Extensions = controller.GetDataExtensions();
+
+                var ds = controller.GetDatasource(lvItems.SelectedItems[0].ToolTipText);
+                ds.Name = lvItems.SelectedItems[0].Text;
+                frmDatasource.Datasource = ds;
+
+                if (frmDatasource.ShowDialog() == DialogResult.OK)
                 {
-                    rs.CreateDataSource(frmDatasource.Datasource, tvReportServer.SelectedNode.ToolTipText);
-                    rs.PopulateItems(tvReportServer.SelectedNode.ToolTipText);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(String.Format("An error has occured: {0}", ex.Message));
-                    LogHandler.WriteLogEntry(ex);  
+                    try
+                    {
+                        controller.CreateDataSource(frmDatasource.Datasource, tvReportServer.SelectedNode.ToolTipText);
+                        controller.PopulateItems(tvReportServer.SelectedNode.ToolTipText);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(String.Format("An error has occured: {0}", ex.Message));
+                        LogHandler.WriteLogEntry(ex);
+                    }
                 }
             }
         }
 
-        private void replaceModelToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ReplaceModelToolStripMenuItemClick(object sender, EventArgs e)
         {
-            this.openFileDialog.FileName = "";
-            this.openFileDialog.Filter = MODEL_FILTER_STRING;
-            this.openFileDialog.ShowDialog();
+            openFileDialog.FileName = "";
+            openFileDialog.Filter = MODEL_FILTER_STRING;
+            openFileDialog.ShowDialog();
 
-            string fileName = this.openFileDialog.FileName;
+            var fileName = openFileDialog.FileName;
 
             if (fileName != String.Empty)
             {
-                string existingModelPath = lvItems.SelectedItems[0].ToolTipText;
-                string newModelSMDL = System.IO.File.ReadAllText(fileName);
+                var existingModelPath = lvItems.SelectedItems[0].ToolTipText;
+                var newModelSMDL = File.ReadAllText(fileName);
 
                 if (MessageBox.Show("Do you want to perform a compatibility check before replacing?", "Perform compatibility check?", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    Forms.FormDependantItems form = new RSS_Report_Retrievers.Forms.FormDependantItems(this.rs, existingModelPath, newModelSMDL);
+                    var form = new FormDependantItems(controller, existingModelPath, newModelSMDL);
 
                     form.ShowDialog();
                 }
@@ -615,7 +624,7 @@ namespace RSS_Report_Retrievers
                 {
                     try
                     {
-                        rs.ReplaceModel(fileName, existingModelPath);
+                        controller.ReplaceModel(fileName, existingModelPath);
                     }
                     catch (Exception ex)
                     {
@@ -625,11 +634,11 @@ namespace RSS_Report_Retrievers
             }
         }
 
-        private void addPermissionsForUserToolStripMenuItem_Click(object sender, EventArgs e)
+        private void AddPermissionsForUserToolStripMenuItemClick(object sender, EventArgs e)
         {
             try
             {
-                rs.AddPolicyForMyReports(lvItems.SelectedItems[0].ToolTipText, lvItems.SelectedItems[0].Text, new FormSetPolicy());
+                controller.AddPolicyForMyReports(lvItems.SelectedItems[0].ToolTipText, lvItems.SelectedItems[0].Text, new FormSetPolicy());
             }
             catch (Exception ex)
             {
