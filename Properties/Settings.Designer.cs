@@ -52,5 +52,15 @@ namespace ReportingServerManager.Properties {
                 return ((string)(this["RSS_Report_Retrievers_RSS_2005_SHAREPOINT_ReportingService2006"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://dhgwk281:81/ReportServer_SQL2012/ReportService2010.asmx")]
+        public string ReportingServerManager_RSS_2008R2_ReportingService2010 {
+            get {
+                return ((string)(this["ReportingServerManager_RSS_2008R2_ReportingService2010"]));
+            }
+        }
     }
 }

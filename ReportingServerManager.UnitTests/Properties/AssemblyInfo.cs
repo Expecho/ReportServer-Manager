@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Reporting Server Manager")]
+[assembly: AssemblyTitle("ReportingServerManager.UnitTests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Reporting Server Manager")]
-[assembly: AssemblyCopyright("Copyright ©  2007")]
+[assembly: AssemblyProduct("ReportingServerManager.UnitTests")]
+[assembly: AssemblyCopyright("Copyright ©  2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,9 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("f5eb5d87-8232-4e34-bbe4-4e4dcc237623")]
-
-[assembly: InternalsVisibleTo("ReportingServerManager.UnitTests")]
+[assembly: Guid("0ef7d8ff-5c80-4e5e-86fd-cede77072e9b")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -31,5 +29,8 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("1.5.*")]
-[assembly: AssemblyFileVersion("1.5.*")]
+// You can specify all the values or you can default the Build and Revision Numbers 
+// by using the '*' as shown below:
+// [assembly: AssemblyVersion("1.0.*")]
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]

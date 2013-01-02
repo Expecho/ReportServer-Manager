@@ -28,7 +28,7 @@ namespace ReportingServerManager.Forms
                 datasource.SetExecutionContext = chkExecutionContext.Checked;
                 datasource.UsePromptedCredentialsAsWindowsCredentials = chkUsePromptedCredentialsAsWindowsCredentials.Checked;
                 datasource.UseStoredCredentialsAsWindowsCredentials = chkUsePromptedCredentialsAsWindowsCredentials.Checked;
-                datasource.Extension = "";
+                datasource.Extension = string.Empty;
 
                 if (radNone.Checked) datasource.CredentialRetrievalType = CredentialRetrievalTypes.None;
                 if (radStored.Checked) datasource.CredentialRetrievalType = CredentialRetrievalTypes.Store;

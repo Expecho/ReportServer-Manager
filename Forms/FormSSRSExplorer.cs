@@ -80,7 +80,8 @@ namespace ReportingServerManager.Forms
                 }
                 catch (Exception ex)
                 {
-                    LogHandler.WriteLogEntry(ex);  
+                    LogHandler.WriteLogEntry(ex);
+                    MessageBox.Show(String.Format("An error has occured: {0}", ex.Message));
                 }
             }
         }
@@ -111,6 +112,7 @@ namespace ReportingServerManager.Forms
                             catch (Exception ex)
                             {
                                 LogHandler.WriteLogEntry(ex);
+                                MessageBox.Show(String.Format("An error has occured: {0}", ex.Message));
                             }
                         }
                     }
@@ -132,7 +134,7 @@ namespace ReportingServerManager.Forms
                     {
                         if (getName.Name.Trim() == "")
                         {
-                            throw new Exception("Name cannot be blank");
+                            MessageBox.Show("Name cannot be blank");
                         }
                         controller.CreateFolder(getName.Name, tvReportServer.SelectedNode);
 
@@ -152,6 +154,7 @@ namespace ReportingServerManager.Forms
                 catch (Exception ex)
                 {
                     LogHandler.WriteLogEntry(ex);
+                    MessageBox.Show(String.Format("An error has occured: {0}", ex.Message));
                 }
             }
         }
@@ -186,6 +189,7 @@ namespace ReportingServerManager.Forms
                     catch (Exception ex)
                     {
                         LogHandler.WriteLogEntry(ex);
+                        MessageBox.Show(String.Format("An error has occured: {0}", ex.Message));
                     }
                 }
 
@@ -196,6 +200,7 @@ namespace ReportingServerManager.Forms
                 catch (Exception ex)
                 {
                     LogHandler.WriteLogEntry(ex);
+                    MessageBox.Show(String.Format("An error has occured: {0}", ex.Message));
                 }
 
                 Cursor = Cursors.Default;
@@ -226,6 +231,7 @@ namespace ReportingServerManager.Forms
                 catch (Exception ex)
                 {
                     LogHandler.WriteLogEntry(ex);
+                    MessageBox.Show(String.Format("An error has occured: {0}", ex.Message));
                 }
 
                 Cursor = Cursors.Default;
@@ -246,21 +252,22 @@ namespace ReportingServerManager.Forms
                     try
                     {
                         controller.DeleteItem(item.ToolTipText);
+
+                        if ((ReportItemTypes)item.Tag == ReportItemTypes.Folder)
+                        {
+                            foreach (TreeNode node in tvReportServer.SelectedNode.Nodes)
+                            {
+                                if (node.ToolTipText == item.ToolTipText)
+                                {
+                                    tvReportServer.Nodes.Remove(node);
+                                }
+                            }
+                        }
                     }
                     catch (Exception ex)
                     {
                         LogHandler.WriteLogEntry(ex);
-                    }
-
-                    if ((ReportItemTypes)item.Tag == ReportItemTypes.Folder)
-                    {
-                        foreach (TreeNode node in tvReportServer.SelectedNode.Nodes)
-                        {
-                            if (node.ToolTipText == item.ToolTipText)
-                            {
-                                tvReportServer.Nodes.Remove(node);
-                            }
-                        }
+                        MessageBox.Show(String.Format("An error has occured: {0}", ex.Message));
                     }
                 }
 
@@ -284,7 +291,8 @@ namespace ReportingServerManager.Forms
 
         public static string GetItemPath(string path, bool forFileSystem)
         {
-            path = path.Substring(0, path.LastIndexOf("/"));
+            path = path.Substring(0, path.LastIndexOf("/", StringComparison.Ordinal));
+            
             return forFileSystem ? path.Replace("/", @"\") : path;
         }
         #endregion
@@ -388,6 +396,7 @@ namespace ReportingServerManager.Forms
                         catch (Exception ex)
                         {
                             LogHandler.WriteLogEntry(ex);
+                            MessageBox.Show(String.Format("An error has occured: {0}", ex.Message));
                         }
                     }
                 }
@@ -431,6 +440,7 @@ namespace ReportingServerManager.Forms
                     catch (Exception ex)
                     {
                         LogHandler.WriteLogEntry(ex);
+                        MessageBox.Show(String.Format("An error has occured: {0}", ex.Message));
                     }
 
                     Cursor = Cursors.Default;
@@ -469,6 +479,7 @@ namespace ReportingServerManager.Forms
                         catch (Exception ex)
                         {
                             LogHandler.WriteLogEntry(ex);
+                            MessageBox.Show(String.Format("An error has occured: {0}", ex.Message));
                         }
                     }
 
@@ -522,6 +533,7 @@ namespace ReportingServerManager.Forms
                     catch (Exception ex)
                     {
                         LogHandler.WriteLogEntry(ex);
+                        MessageBox.Show(String.Format("An error has occured: {0}", ex.Message));
                     }
                 }
 
@@ -629,6 +641,7 @@ namespace ReportingServerManager.Forms
                     catch (Exception ex)
                     {
                         LogHandler.WriteLogEntry(ex);
+                        MessageBox.Show(String.Format("An error has occured: {0}", ex.Message));
                     }
                 }
             }
@@ -643,6 +656,7 @@ namespace ReportingServerManager.Forms
             catch (Exception ex)
             {
                 LogHandler.WriteLogEntry(ex);
+                MessageBox.Show(String.Format("An error has occured: {0}", ex.Message));
             }
         }
     }

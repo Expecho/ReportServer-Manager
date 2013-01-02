@@ -1,17 +1,17 @@
 namespace ReportingServerManager.Logic.Shared
 {
-    public struct Datasource
+    public class Datasource
     {
-        public string Name;
-        public string ConnectionString;
-        public CredentialRetrievalTypes CredentialRetrievalType;
-        public bool UsePromptedCredentialsAsWindowsCredentials;
-        public string Prompt;
-        public string Username;
-        public string Password;
-        public string Extension;
-        public bool Enabled;
-        public bool UseStoredCredentialsAsWindowsCredentials;
-        public bool SetExecutionContext;
+        public string Name { get; set; }
+        public string ConnectionString { get; set; }
+        public CredentialRetrievalTypes CredentialRetrievalType { get; set; }
+        public bool UsePromptedCredentialsAsWindowsCredentials { get; set; }
+        public string Prompt { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public string Extension { get; set; }
+        public bool Enabled { get; set; }
+        public bool UseStoredCredentialsAsWindowsCredentials { get; set; }
+        public bool SetExecutionContext { get; set; }
     }
 }

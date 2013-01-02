@@ -1,10 +1,10 @@
 namespace ReportingServerManager.Logic.Shared
 {
-    public struct ReportItemDTO
+    public class ReportItemDTO
     {
-        public string Name;
-        public bool Hidden;
-        public ReportItemTypes Type;
-        public string Path;
+        public string Name { get; set; }
+        public bool Hidden { get; set; }
+        public ReportItemTypes Type { get; set; }
+        public string Path { get; set; }
     }
 }

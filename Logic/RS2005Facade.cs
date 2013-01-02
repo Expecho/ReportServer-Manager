@@ -126,6 +126,12 @@ namespace ReportingServerManager.Logic
 
         public void SetItemSecurity(string itemPath, Dictionary<string, string[]> policies)
         {
+            if (policies == null)
+            {
+                webserviceProxy.SetPolicies(itemPath, new Policy[] {});
+                return;
+            }
+
             webserviceProxy.SetPolicies(
                 itemPath,
                 policies.Keys.Select(userName => new Policy
@@ -263,14 +269,13 @@ namespace ReportingServerManager.Logic
 
         private static ReportItemDTO ConvertCatalogItemToReportItemDTO(CatalogItem item)
         {
-            ReportItemDTO returnItem;
-
-            returnItem.Hidden = item.Hidden;
-            returnItem.Name = item.Name;
-            returnItem.Path = item.Path;
-            returnItem.Type = GetReportItemTypeFromSSRSItemType(item.Type);
-
-            return returnItem;
+            return new ReportItemDTO
+            {
+                Hidden = item.Hidden,
+                Name = item.Name,
+                Path = item.Path,
+                Type = GetReportItemTypeFromSSRSItemType(item.Type)
+            };
         }
 
         private static ReportWarning ConvertSPWarningToReportWarning(Warning warning)

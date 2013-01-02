@@ -1,6 +1,6 @@
 namespace ReportingServerManager.Logic.Shared
 {
-    public struct DatasourceExtension
+    public class DatasourceExtension
     {
         public DatasourceExtension(string name, string friendlyName)
         {
@@ -8,7 +8,7 @@ namespace ReportingServerManager.Logic.Shared
             FriendlyName = friendlyName; 
         }
 
-        public string Name;
-        public string FriendlyName;
+        public string Name { get; set; }
+        public string FriendlyName { get; set; }
     }
 }
