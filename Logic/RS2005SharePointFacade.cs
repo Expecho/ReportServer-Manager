@@ -261,14 +261,13 @@ namespace ReportingServerManager.Logic
 
         private static ReportItemDTO ConvertCatalogItemToReportItemDTO(CatalogItem item)
         {
-            ReportItemDTO returnItem;
-
-            returnItem.Hidden = item.Hidden;
-            returnItem.Name = item.Name;
-            returnItem.Path = item.Path;
-            returnItem.Type = GetReportItemTypeFromSSRSItemType(item.Type);
-
-            return returnItem;
+            return new ReportItemDTO
+                    {
+                        Hidden = item.Hidden,
+                        Name = item.Name,
+                        Path = item.Path,
+                        Type = GetReportItemTypeFromSSRSItemType(item.Type)
+                    };
         }
 
         private static CredentialRetrievalEnum GetSSRSCredentialRetrievalTypeFromEnum(CredentialRetrievalTypes type)
@@ -288,15 +287,14 @@ namespace ReportingServerManager.Logic
 
         private static ReportWarning ConvertSPWarningToReportWarning(Warning warning)
         {
-            ReportWarning returnWarning;
-            
-            returnWarning.Code = warning.Code;
-            returnWarning.Message = warning.Message;
-            returnWarning.ObjectName = warning.ObjectName;
-            returnWarning.ObjectType = warning.ObjectType;
-            returnWarning.Severity = warning.Severity;
-
-            return returnWarning;
+            return new ReportWarning
+            {
+                Code = warning.Code,
+                Message = warning.Message,
+                ObjectName = warning.ObjectName,
+                ObjectType = warning.ObjectType,
+                Severity = warning.Severity
+            };
         }
     }
 }

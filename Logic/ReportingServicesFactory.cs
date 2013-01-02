@@ -1,15 +1,14 @@
 using System;
-using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Windows.Forms;
 using ReportingServerManager.Logic.Configuration;
 
 namespace ReportingServerManager.Logic
 {
-    class ReportingServicesFactory
+    internal class ReportingServicesFactory
     {
-        public static Controller CreateFromSettings(ServerSettingsConfigElement config, TreeView tvReportServer, ToolStripStatusLabel lbl, ListView lv)
+        internal static Controller CreateFromSettings(ServerSettingsConfigElement config, TreeView tvReportServer,
+                                                      ToolStripStatusLabel lbl, ListView lv)
         {
             var controller = new Controller(tvReportServer, lbl, lv)
                                  {
@@ -19,21 +18,33 @@ namespace ReportingServerManager.Logic
             return controller;
         }
 
-        private static IRSFacade CreateFacadeFromSettings(ServerSettingsConfigElement config)
+        internal static IRSFacade CreateFacadeFromSettings(ServerSettingsConfigElement config)
         {
-            var facadeImplementationType =
-                Assembly.GetCallingAssembly()
-                    .GetTypes()
-                    .ToList()
-                    .Where(type => type.Namespace == "ReportingServerManager.Logic")
-                    .FirstOrDefault(GetTypeSpecification(config));
+            IRSFacade facade = null;
 
-            if (facadeImplementationType == null)
-                throw new NotSupportedException(String.Format("No implementation for SQL Server version '{0}'", config.SQLServerVersion));
+            switch (config.SQLServerVersion)
+            {
+                case "2000":
+                    facade = new RS2000Facade();
+                    break;
+                case "2005":
+                case "2008":
+                    facade = config.IsSharePointMode ? new RS2005SharePointFacade() : (IRSFacade) new RS2005Facade();
+                    break;
+                case "2008R2":
+                case "2012":
+                    facade = new RS2008Facade();
+                    break;
+            }
 
-            var facade = (IRSFacade)Activator.CreateInstance(facadeImplementationType);
+            if (facade == null)
+            {
+                throw new NotSupportedException("Invalid config");
+            }
 
             facade.BaseUrl = config.IsSharePointMode ? config.ReportLibrary : "/";
+            facade.NativeMode = !config.IsSharePointMode;
+            facade.SiteUrl = config.IsSharePointMode ? config.ReportLibrary : null;
             facade.PathIncludesExtension = config.IsSharePointMode;
             facade.WebServiceUrl = config.Url;
             facade.Credentials = config.UseWindowsAuth
@@ -45,32 +56,6 @@ namespace ReportingServerManager.Logic
                                            );
 
             return facade;
-        }
-
-        private static Func<Type, bool> GetTypeSpecification(ServerSettingsConfigElement config)
-        {
-            var version = String.Empty;
-
-            switch (config.SQLServerVersion)
-            {
-                case "2000":
-                    version = "2000";
-                    break;
-                case "2005":
-                case "2008":
-                    version = "2005";
-                    break;
-                case "2008R2":
-                case "2012":
-                    version = "2005";
-                    break;
-            }
-
-            var name = String.Format("RS{0}{1}Facade",
-                                     version,
-                                     config.IsSharePointMode ? "SharePoint" : String.Empty);
-
-            return type => type.Name == name;
         }
     }
 }

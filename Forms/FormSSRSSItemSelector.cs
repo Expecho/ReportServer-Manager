@@ -74,23 +74,23 @@ namespace ReportingServerManager.Forms
         /// </summary>
         private void FrmSSRSSExplorerFormClosing(object sender, FormClosingEventArgs e)
         {
-            if ((sender as FormSSRSSItemSelector).DialogResult == DialogResult.OK)
+            if ((sender as FormSSRSSItemSelector).DialogResult != DialogResult.OK) 
+                return;
+            
+            if (tvReportServer.SelectedNode == null)
             {
-                if (tvReportServer.SelectedNode == null)
-                {
-                    MessageBox.Show(String.Format("Please select a {0}.", viewItem == ViewItems.Folders ? "folder" : "datasource"), "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                    e.Cancel = true;
-                }
-                else if (viewItem == ViewItems.Datasources && (ReportItemTypes)tvReportServer.SelectedNode.Tag != ReportItemTypes.Datasource && (ReportItemTypes)tvReportServer.SelectedNode.Tag != ReportItemTypes.Model)
-                {
-                    MessageBox.Show("Please select a datasource.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                    e.Cancel = true;
-                }
-                else if (viewItem == ViewItems.Folders && (ReportItemTypes)tvReportServer.SelectedNode.Tag != ReportItemTypes.Folder)
-                {
-                    MessageBox.Show("Please select a folder.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                    e.Cancel = true;
-                }
+                MessageBox.Show(String.Format("Please select a {0}.", viewItem == ViewItems.Folders ? "folder" : "datasource"), "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                e.Cancel = true;
+            }
+            else if (viewItem == ViewItems.Datasources && (ReportItemTypes)tvReportServer.SelectedNode.Tag != ReportItemTypes.Datasource && (ReportItemTypes)tvReportServer.SelectedNode.Tag != ReportItemTypes.Model)
+            {
+                MessageBox.Show("Please select a datasource.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                e.Cancel = true;
+            }
+            else if (viewItem == ViewItems.Folders && (ReportItemTypes)tvReportServer.SelectedNode.Tag != ReportItemTypes.Folder)
+            {
+                MessageBox.Show("Please select a folder.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                e.Cancel = true;
             }
         }
 

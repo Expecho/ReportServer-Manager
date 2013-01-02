@@ -259,9 +259,8 @@ namespace ReportingServerManager.Logic
 
         public void AddPolicyForMyReports(string userName, IEnumerable<string> roles)
         {
-            ReportItemDTO currentItem;
-            currentItem.Path = "";
-
+            var currentItem = new ReportItemDTO();
+            
             try
             {
                 currentItem.Path = "/Users Folders";
@@ -293,7 +292,7 @@ namespace ReportingServerManager.Logic
 
         private void RemoveExistingUser(Dictionary<string, string[]> existingPolicies, string userName)
         {
-            if (existingPolicies.ContainsKey(userName))
+            if (existingPolicies != null && existingPolicies.ContainsKey(userName))
             {
                 existingPolicies.Remove(userName);
             }
@@ -389,7 +388,7 @@ namespace ReportingServerManager.Logic
             }
         }
 
-        private static Byte[] GetBytesFromFile(string filename)
+        internal static Byte[] GetBytesFromFile(string filename)
         {
             using (var stream = File.OpenRead(filename))
             {
@@ -431,12 +430,6 @@ namespace ReportingServerManager.Logic
         #endregion
 
         #region Move
-        /// <summary>
-        /// Move items on the ReportServer
-        /// </summary>
-        /// <param name="source">source path</param>
-        /// <param name="destination">destionation path</param>
-        /// <param name="type">Type of item</param> 
         public void MoveItem(string source, string destination, ReportItemTypes type)
         {
             RsFacade.MoveItem(source, destination, type);
