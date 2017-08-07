@@ -1,6 +1,8 @@
 ## Project Description
 This application lets you manage a Microsoft Reporting Service server. It supports SQL 2000,2005, 2008, 2008R2 & 2012, native or in SharePoint mode.
 
+This is an imported repository, original can be found on [CodePlex](https://reportservermanager.codeplex.com/)
+
 
 ## Features
 - Download reports stored on the server, optionally including any (sub)folders by recreating the folder structure on the server by selecting a folder on the server. It will then download all reports and subfolders to the client. 
