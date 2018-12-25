@@ -21,3 +21,15 @@ This is an imported repository, original can be found on [CodePlex](https://repo
 - When downloading items and the item already exists on the client the item will be overwritten. 
 - When downloading folders, empty folders will be skipped. 
 - Datasources cannot be downloaded
+
+### Connecting
+
+![Connecting](assets/rs-settings.jpg?raw=true)
+
+### Exploring
+
+![Connecting](assets/rs-explorer.jpg?raw=true)
+
+### Inspecting
+
+![Connecting](assets/rs-props.jpg?raw=true)
