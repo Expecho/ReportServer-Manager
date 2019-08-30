@@ -10,8 +10,8 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ReportingServerManager</RootNamespace>
     <AssemblyName>ReportingServerManager</AssemblyName>
-    <ManifestCertificateThumbprint>9CBEB1485BC741BECE8C16801C8C028AE68A12E9</ManifestCertificateThumbprint>
-    <ManifestKeyFile>RSS Report Retriever_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestCertificateThumbprint>69CEF2789B29CC6538746DF367A3D738B7987D11</ManifestCertificateThumbprint>
+    <ManifestKeyFile>ReportingServerManager_TemporaryKey.pfx</ManifestKeyFile>
     <GenerateManifests>true</GenerateManifests>
     <SignManifests>true</SignManifests>
     <IsWebBootstrapper>true</IsWebBootstrapper>

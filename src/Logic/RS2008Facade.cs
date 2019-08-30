@@ -238,6 +238,7 @@ namespace ReportingServerManager.Logic
                 case "Report": convertedType = ReportItemTypes.Report; break;
                 case "DataSource": convertedType = ReportItemTypes.Datasource; break;
                 case "Model": convertedType = ReportItemTypes.Model; break;
+                case "DataSet": convertedType = ReportItemTypes.Dataset; break;
             }
 
             return convertedType;

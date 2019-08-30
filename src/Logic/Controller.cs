@@ -176,6 +176,10 @@ namespace ReportingServerManager.Logic
                         lvi.Tag = ReportItemTypes.Model;
                         lvi.ImageIndex = 6;
                         break;
+                    case ReportItemTypes.Dataset:
+                        lvi.Tag = ReportItemTypes.Dataset;
+                        lvi.ImageIndex = 1;
+                        break;
                 }
                 lvItems.Items.Add(lvi);
             }
@@ -413,6 +417,7 @@ namespace ReportingServerManager.Logic
                     }
                     break;
                 case ReportItemTypes.Report:
+                case ReportItemTypes.Dataset:
                 case ReportItemTypes.Model:
 
                     RsFacade.SetItemDataSources(item, datasource);
@@ -475,6 +480,7 @@ namespace ReportingServerManager.Logic
                     }
                     break;
 
+                case ReportItemTypes.Dataset:
                 case ReportItemTypes.Report:
 
                     var definition = new XmlDocument();
@@ -508,6 +514,7 @@ namespace ReportingServerManager.Logic
                 case ReportItemTypes.Model:
                     filename = filename + ".smdl";
                     break;
+                case ReportItemTypes.Dataset:
                 case ReportItemTypes.Report:
                     filename = filename + ".rdl";
                     break;

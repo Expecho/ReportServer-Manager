@@ -3,3 +3,10 @@
 ################################################################################
 
 /.vs
+/src/.vs/ReportingServerManager/v16/Server/sqlite3
+/src/ReportingServerManager.UnitTests/obj/Debug
+/src/ReportingServerManager.UnitTests/obj/Release
+/src/Logic/Controller.cs.bak
+/src/Logic/RS2008Facade.cs.bak
+/src/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+/src/obj/Release
