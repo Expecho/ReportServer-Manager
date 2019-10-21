@@ -41,24 +41,27 @@ namespace ReportingServerManager.Forms
             this.tvReportServer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tvReportServer.ImageIndex = 2;
+            this.tvReportServer.ImageIndex = 3;
             this.tvReportServer.ImageList = this.imageList;
             this.tvReportServer.Location = new System.Drawing.Point(3, 1);
             this.tvReportServer.Name = "tvReportServer";
-            this.tvReportServer.SelectedImageIndex = 3;
+            this.tvReportServer.SelectedImageIndex = 0;
             this.tvReportServer.Size = new System.Drawing.Size(310, 269);
             this.tvReportServer.TabIndex = 0;
+            this.tvReportServer.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TvReportServer_AfterSelect);
             this.tvReportServer.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.TvReportServerMouseDoubleClick);
             // 
             // imageList
             // 
             this.imageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList.ImageStream")));
             this.imageList.TransparentColor = System.Drawing.Color.Transparent;
-            this.imageList.Images.SetKeyName(0, "16datasource.gif");
-            this.imageList.Images.SetKeyName(1, "16doc.gif");
-            this.imageList.Images.SetKeyName(2, "16fold.gif");
-            this.imageList.Images.SetKeyName(3, "folderopen.gif");
-            this.imageList.Images.SetKeyName(4, "model.png");
+            this.imageList.Images.SetKeyName(0, "model.png");
+            this.imageList.Images.SetKeyName(1, "dataset.png");
+            this.imageList.Images.SetKeyName(2, "datasource.png");
+            this.imageList.Images.SetKeyName(3, "folder_closed.png");
+            this.imageList.Images.SetKeyName(4, "folder_open.png");
+            this.imageList.Images.SetKeyName(5, "report.png");
+            this.imageList.Images.SetKeyName(6, "report_mobile.png");
             // 
             // btnCancel
             // 
@@ -90,6 +93,7 @@ namespace ReportingServerManager.Forms
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.tvReportServer);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormSSRSSItemSelector";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Item Picker";

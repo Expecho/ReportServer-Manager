@@ -32,6 +32,7 @@ namespace ReportingServerManager.Logic
                     facade = config.IsSharePointMode ? new RS2005SharePointFacade() : (IRSFacade) new RS2005Facade();
                     break;
                 case "2008R2":
+                case "2016":
                 case "2012":
                     facade = new RS2008Facade();
                     break;

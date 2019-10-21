@@ -31,6 +31,15 @@ namespace ReportingServerManager.Logic
             return warnings != null ? Array.ConvertAll(warnings, ConvertSPWarningToReportWarning) : null;
         }
 
+        public ReportWarning[] CreateDataset(string filename, string destination, bool overwrite, Byte[] definition, string properties)
+        {
+            Warning[] warnings;
+
+            webserviceProxy.CreateCatalogItem("DataSet", Path.GetFileNameWithoutExtension(filename), destination, overwrite, definition, null, out warnings);
+
+            return warnings != null ? Array.ConvertAll(warnings, ConvertSPWarningToReportWarning) : null;
+        }
+
         public ReportWarning[] CreateModel(string visibleName, string parentFolder, Byte[] definition, string properties)
         {
             Warning[] warnings;
@@ -130,11 +139,14 @@ namespace ReportingServerManager.Logic
             webserviceProxy.SetItemDataSources(item, reportDataSources);
         }
 
-        public void SetItemSecurity(string itemPath, Dictionary<string, string[]> policies)
+        public void SetItemSecurity(string itemPath, Dictionary<string, string[]> policies, bool inherit = false)
         {
             if (policies == null)
             {
-                webserviceProxy.SetPolicies(itemPath, new Policy[] { });
+                if (inherit)
+                    webserviceProxy.InheritParentSecurity(itemPath);
+                else
+                    webserviceProxy.SetPolicies(itemPath, new Policy[] { });
                 return;
             }
 
@@ -239,6 +251,7 @@ namespace ReportingServerManager.Logic
                 case "DataSource": convertedType = ReportItemTypes.Datasource; break;
                 case "Model": convertedType = ReportItemTypes.Model; break;
                 case "DataSet": convertedType = ReportItemTypes.Dataset; break;
+                case "MobileReport": convertedType = ReportItemTypes.MobileReport; break;
             }
 
             return convertedType;

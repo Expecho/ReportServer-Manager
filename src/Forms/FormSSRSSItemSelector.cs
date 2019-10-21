@@ -98,5 +98,10 @@ namespace ReportingServerManager.Forms
         {
             Text = viewItem == ViewItems.Folders ? "Select a folder" : "Select a datasource";
         }
+
+        private void TvReportServer_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            tvReportServer.SelectedImageIndex = (ReportItemTypes)tvReportServer.SelectedNode.Tag == ReportItemTypes.Folder ? 4 : 2;
+        }
     }
 }

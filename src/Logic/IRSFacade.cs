@@ -8,6 +8,7 @@ namespace ReportingServerManager.Logic
     {
         void CreateFolder(string folder, string parent, string properties);
         ReportWarning[] CreateReport(string filename, string destination, bool overwrite, byte[] definition, string properties);
+        ReportWarning[] CreateDataset(string filename, string destination, bool overwrite, byte[] definition, string properties);
         ReportWarning[] CreateModel(string filename, string folder, byte[] definition, string properties);
         ICredentials Credentials { get; set; }
         string BaseUrl { get; set; }
@@ -25,7 +26,7 @@ namespace ReportingServerManager.Logic
         ReportItemDTO[] ListChildren(string item, bool recursive);
         void MoveItem(string source, string destination, ReportItemTypes type);
         void SetItemDataSources(string item, string dataSourceName);
-        void SetItemSecurity(string itemPath, Dictionary<string, string[]> policies);
+        void SetItemSecurity(string itemPath, Dictionary<string, string[]> policies, bool inherit = false);
         void CreateDataSource(Datasource datasource, string parent);
         List<DatasourceExtension> GetDataExtensions();
         Datasource GetDatasource(string path);

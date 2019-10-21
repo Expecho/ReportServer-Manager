@@ -62,13 +62,18 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RSSReportRetriever\ReportingServerManager.csproj">
+    <ProjectReference Include="..\ReportingServerManager.csproj">
       <Project>{7e59af0f-845b-43ef-af90-8f8fcf7170cf}</Project>
       <Name>ReportingServerManager</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Catalog.rdl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\Dataset.rsd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

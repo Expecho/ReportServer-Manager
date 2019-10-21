@@ -83,11 +83,11 @@ namespace ReportingServerManager.Forms
             this.tvReportServer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tvReportServer.ImageIndex = 2;
+            this.tvReportServer.ImageIndex = 3;
             this.tvReportServer.ImageList = this.imageList;
             this.tvReportServer.Location = new System.Drawing.Point(3, 3);
             this.tvReportServer.Name = "tvReportServer";
-            this.tvReportServer.SelectedImageIndex = 3;
+            this.tvReportServer.SelectedImageIndex = 4;
             this.tvReportServer.Size = new System.Drawing.Size(252, 410);
             this.tvReportServer.TabIndex = 0;
             this.tvReportServer.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TvReportServerAfterSelect);
@@ -96,13 +96,13 @@ namespace ReportingServerManager.Forms
             // 
             this.imageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList.ImageStream")));
             this.imageList.TransparentColor = System.Drawing.Color.Transparent;
-            this.imageList.Images.SetKeyName(0, "");
-            this.imageList.Images.SetKeyName(1, "");
-            this.imageList.Images.SetKeyName(2, "");
-            this.imageList.Images.SetKeyName(3, "");
-            this.imageList.Images.SetKeyName(4, "");
-            this.imageList.Images.SetKeyName(5, "");
-            this.imageList.Images.SetKeyName(6, "model.gif");
+            this.imageList.Images.SetKeyName(0, "model.gif");
+            this.imageList.Images.SetKeyName(1, "dataset.png");
+            this.imageList.Images.SetKeyName(2, "datasource.png");
+            this.imageList.Images.SetKeyName(3, "folder_closed.png");
+            this.imageList.Images.SetKeyName(4, "folder_open.png");
+            this.imageList.Images.SetKeyName(5, "report.png");
+            this.imageList.Images.SetKeyName(6, "report_mobile.png");
             // 
             // contextMenuStrip
             // 
@@ -262,6 +262,7 @@ namespace ReportingServerManager.Forms
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lvItems.ContextMenuStrip = this.contextMenuStrip;
+            this.lvItems.HideSelection = false;
             this.lvItems.Location = new System.Drawing.Point(3, 3);
             this.lvItems.Name = "lvItems";
             this.lvItems.ShowItemToolTips = true;
@@ -408,6 +409,7 @@ namespace ReportingServerManager.Forms
             this.ClientSize = new System.Drawing.Size(781, 461);
             this.Controls.Add(this.toolStripContainer);
             this.Controls.Add(this.btnOK);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStripMain;
             this.Name = "FormSSRSExplorer";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

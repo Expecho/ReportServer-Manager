@@ -145,7 +145,7 @@ namespace ReportingServerManager.Logic
             webserviceProxy.SetItemDataSources(item, reportDataSources);
         }
 
-        public void SetItemSecurity(string itemPath, Dictionary<string, string[]> policies)
+        public void SetItemSecurity(string itemPath, Dictionary<string, string[]> policies, bool inherit = false)
         {
             webserviceProxy.SetPolicies(
                 itemPath,
@@ -295,6 +295,11 @@ namespace ReportingServerManager.Logic
                 ObjectType = warning.ObjectType,
                 Severity = warning.Severity
             };
+        }
+
+        public ReportWarning[] CreateDataset(string filename, string destination, bool overwrite, byte[] definition, string properties)
+        {
+            throw new Exception("The method or operation is not implemented.");
         }
     }
 }

@@ -159,7 +159,7 @@ namespace ReportingServerManager.Logic
             }
         }
 
-        public void SetItemSecurity(string itemPath, Dictionary<string, string[]> policies)
+        public void SetItemSecurity(string itemPath, Dictionary<string, string[]> policies, bool inherit = false)
         {
             webserviceProxy.SetPolicies(
                 itemPath,
@@ -289,6 +289,11 @@ namespace ReportingServerManager.Logic
         public IEnumerable<string> ListRoles()
         {
             return webserviceProxy.ListRoles().Select(r => r.Name);
+        }
+
+        public ReportWarning[] CreateDataset(string filename, string destination, bool overwrite, byte[] definition, string properties)
+        {
+            throw new Exception("The method or operation is not implemented.");
         }
     }
 }
