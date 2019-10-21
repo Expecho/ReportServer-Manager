@@ -10,12 +10,12 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ReportingServerManager</RootNamespace>
     <AssemblyName>ReportingServerManager</AssemblyName>
-    <ManifestCertificateThumbprint>9CBEB1485BC741BECE8C16801C8C028AE68A12E9</ManifestCertificateThumbprint>
-    <ManifestKeyFile>RSS Report Retriever_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestCertificateThumbprint>69CEF2789B29CC6538746DF367A3D738B7987D11</ManifestCertificateThumbprint>
+    <ManifestKeyFile>ReportingServerManager_TemporaryKey.pfx</ManifestKeyFile>
     <GenerateManifests>true</GenerateManifests>
     <SignManifests>true</SignManifests>
     <IsWebBootstrapper>true</IsWebBootstrapper>
-    <ApplicationIcon>Resources\MessageQueuing.ico</ApplicationIcon>
+    <ApplicationIcon>SSRS.ico</ApplicationIcon>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
@@ -148,12 +148,6 @@
     <Compile Include="Forms\FormSSRSExplorer.Designer.cs">
       <DependentUpon>FormSSRSExplorer.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FormSelectFilesystemFolder.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormSelectFilesystemFolder.Designer.cs">
-      <DependentUpon>FormSelectFilesystemFolder.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\FormSettings.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -170,6 +164,7 @@
     <Compile Include="Logic\Shared\ViewItems.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="Web References\RSS_2008R2\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -206,10 +201,6 @@
     <EmbeddedResource Include="Forms\FormSSRSExplorer.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FormSSRSExplorer.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormSelectFilesystemFolder.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>FormSelectFilesystemFolder.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormSettings.resx">
       <SubType>Designer</SubType>
@@ -405,6 +396,7 @@
   <ItemGroup>
     <Content Include="Resources\MessageQueuing.ico" />
     <Content Include="Resources\model.png" />
+    <Content Include="SSRS.ico" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -663,10 +655,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <WebReferenceUrl Include="http://dhgwk281:81/ReportServer_sql2012/ReportService2010.asmx">
+    <WebReferenceUrl Include="http://cl-mgmt3/ReportServer_MSSQL2014/ReportService2010.asmx">
       <UrlBehavior>Dynamic</UrlBehavior>
       <RelPath>Web References\RSS_2008R2\</RelPath>
-      <UpdateFromURL>http://dhgwk281:81/ReportServer_sql2012/ReportService2010.asmx</UpdateFromURL>
+      <UpdateFromURL>http://cl-mgmt3/ReportServer_MSSQL2014/ReportService2010.asmx</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>

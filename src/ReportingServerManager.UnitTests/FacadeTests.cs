@@ -17,6 +17,8 @@ namespace ReportingServerManager.UnitTests
                                                                Guid.NewGuid());
         private ReportItemDTO testFolder;
 
+        private string connectionString = @"Initial Catalog=ReportServer$MSSQL2014;Data Source=CL-MGMT3\MSSQL2014";
+
         [TestInitialize]
         public void Initialize()
         {
@@ -31,7 +33,7 @@ namespace ReportingServerManager.UnitTests
             var config2012 = new ServerSettingsConfigElement
             {
                 SQLServerVersion = "2012",
-                Url = "http://dhgwk281:81/ReportServer_sql2012/ReportService2010.asmx",
+                Url = "http://cl-mgmt3/ReportServer_MSSQL2014/ReportService2010.asmx",
                 IsSharePointMode = false,
                 UseWindowsAuth = true,
             };
@@ -52,7 +54,7 @@ namespace ReportingServerManager.UnitTests
         {
             var datasource = new Datasource
                                  {
-                                     ConnectionString = @"Initial Catalog=ReportServer$SQL2012;Data Source=DHGWK281\SQL2012",
+                                     ConnectionString = connectionString,
                                      CredentialRetrievalType = CredentialRetrievalTypes.Integrated,
                                      Enabled = true,
                                      Name = "Test Datasource",
@@ -67,7 +69,7 @@ namespace ReportingServerManager.UnitTests
         {
             var datasource = new Datasource
             {
-                ConnectionString = @"Initial Catalog=ReportServer$SQL2012;Data Source=DHGWK281\SQL2012",
+                ConnectionString = connectionString,
                 CredentialRetrievalType = CredentialRetrievalTypes.Store,
                 Enabled = true,
                 Name = "Test Datasource",
@@ -84,7 +86,7 @@ namespace ReportingServerManager.UnitTests
         {
             var datasource = new Datasource
             {
-                ConnectionString = @"Initial Catalog=ReportServer$SQL2012;Data Source=DHGWK281\SQL2012",
+                ConnectionString = connectionString,
                 CredentialRetrievalType = CredentialRetrievalTypes.Prompt,
                 Enabled = true,
                 Name = "Test Datasource",
@@ -100,7 +102,7 @@ namespace ReportingServerManager.UnitTests
         {
             var datasource = new Datasource
             {
-                ConnectionString = @"Initial Catalog=ReportServer$SQL2012;Data Source=DHGWK281\SQL2012",
+                ConnectionString = connectionString,
                 CredentialRetrievalType = CredentialRetrievalTypes.None,
                 Enabled = true,
                 Name = "Test Datasource",
@@ -115,7 +117,7 @@ namespace ReportingServerManager.UnitTests
         {
             var datasource = new Datasource
                                  {
-                                     ConnectionString = @"Initial Catalog=ReportServer$SQL2012;Data Source=DHGWK281\SQL2012",
+                                     ConnectionString = connectionString,
                                      CredentialRetrievalType = CredentialRetrievalTypes.Integrated,
                                      Enabled = true,
                                      Name = "Test Datasource",
@@ -143,12 +145,25 @@ namespace ReportingServerManager.UnitTests
             Assert.IsTrue(definition.SequenceEqual(report));
         }
 
+        [TestMethod, DeploymentItem("Assets//Dataset.rsd")]
+        public void ShouldCreateThenDownloadDataset()
+        {
+            string datasetPath;
+
+            var definition = CreateDataset(out datasetPath);
+
+            var dataset = facade.GetReportDefinition(datasetPath);
+
+            Assert.AreEqual(definition.Length, dataset.Length);
+            Assert.IsTrue(definition.SequenceEqual(dataset));
+        }
+
         [TestMethod]
         public void ShouldSetSecurity()
         {
             var datasource = new Datasource
             {
-                ConnectionString = @"Initial Catalog=ReportServer$SQL2012;Data Source=DHGWK281\SQL2012",
+                ConnectionString = connectionString,
                 CredentialRetrievalType = CredentialRetrievalTypes.Integrated,
                 Enabled = true,
                 Name = "Test Datasource",
@@ -159,7 +174,7 @@ namespace ReportingServerManager.UnitTests
 
             var security = new Dictionary<string, string[]>
                                {
-                                   { @"DHGWK281\Administrator", new[] {"Content Manager"} }
+                                   { @"cl-mgmt3\Administrator", new[] {"Content Manager"} }
                                };
 
             facade.SetItemSecurity(item.Path, security);
@@ -168,12 +183,12 @@ namespace ReportingServerManager.UnitTests
             var actualSecurity = facade.GetItemSecurity(item.Path, out inherited);
 
             Assert.IsTrue(actualSecurity.Count == 1);
-            Assert.IsTrue(actualSecurity.First().Key == @"DHGWK281\Administrator");
+            Assert.IsTrue(actualSecurity.First().Key == @"cl-mgmt3\Administrator");
             Assert.IsTrue(actualSecurity.First().Value.Count() == 1);
             Assert.IsTrue(actualSecurity.First().Value[0] == "Content Manager");
             Assert.IsFalse(inherited);
 
-            facade.SetItemSecurity(item.Path, null);
+            facade.SetItemSecurity(item.Path, null, true);
         }
 
         public byte[] CreateReport(out string reportPath)
@@ -188,6 +203,22 @@ namespace ReportingServerManager.UnitTests
             Assert.IsNotNull(item);
 
             reportPath = item.Path;
+
+            return definition;
+        }
+
+        public byte[] CreateDataset(out string datasetPath)
+        {
+            var definition = Controller.GetBytesFromFile(@"Dataset.rsd");
+
+            facade.CreateDataset("Dataset", testFolder.Path, true, definition, null);
+
+            var item = facade.ListChildren(testFolder.Path, false)
+                .FirstOrDefault(i => i.Name == "Dataset" && i.Type == ReportItemTypes.Dataset);
+
+            Assert.IsNotNull(item);
+
+            datasetPath = item.Path;
 
             return definition;
         }
@@ -207,7 +238,7 @@ namespace ReportingServerManager.UnitTests
 
             return item;
         }
-
+        
         private ReportItemDTO CreateFolder(string name, string parent)
         {
             facade.CreateFolder(name, parent, null);

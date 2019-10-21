@@ -73,7 +73,7 @@ namespace ReportingServerManager.Forms
 
                 Application.DoEvents();
 
-                if (itemType != ReportItemTypes.Report) 
+                if (itemType != ReportItemTypes.Report && itemType != ReportItemTypes.Dataset) 
                     return;
                 
                 foreach (var datasource in controller.GetReportDatasources(path))

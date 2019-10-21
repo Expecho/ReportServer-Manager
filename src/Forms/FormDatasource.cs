@@ -13,7 +13,7 @@ namespace ReportingServerManager.Forms
         }
 
         #region Properties
-        private Datasource datasource;
+        private Datasource datasource = new Datasource();
 
         public Datasource Datasource
         {

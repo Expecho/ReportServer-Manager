@@ -33,6 +33,7 @@ namespace ReportingServerManager.Forms
             this.components = new System.ComponentModel.Container();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.cmbServerVersion = new System.Windows.Forms.ComboBox();
+            this.bsServerSettings = new System.Windows.Forms.BindingSource(this.components);
             this.label2 = new System.Windows.Forms.Label();
             this.txtAlias = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -50,7 +51,6 @@ namespace ReportingServerManager.Forms
             this.txtURL = new System.Windows.Forms.TextBox();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
-            this.bsServerSettings = new System.Windows.Forms.BindingSource(this.components);
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bsServerSettings)).BeginInit();
             this.SuspendLayout();
@@ -89,12 +89,18 @@ namespace ReportingServerManager.Forms
             "2005",
             "2008",
             "2008R2",
-            "2012"});
+            "2012",
+            "2016"});
             this.cmbServerVersion.Location = new System.Drawing.Point(138, 57);
             this.cmbServerVersion.Name = "cmbServerVersion";
             this.cmbServerVersion.Size = new System.Drawing.Size(121, 21);
             this.cmbServerVersion.TabIndex = 35;
             this.cmbServerVersion.SelectedIndexChanged += new System.EventHandler(this.CmbServerVersionSelectedIndexChanged);
+            // 
+            // bsServerSettings
+            // 
+            this.bsServerSettings.AllowNew = false;
+            this.bsServerSettings.DataSource = typeof(ReportingServerManager.Logic.Configuration.ServerSettingsConfigElement);
             // 
             // label2
             // 
@@ -268,11 +274,6 @@ namespace ReportingServerManager.Forms
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.BtnCancelClick);
-            // 
-            // bsServerSettings
-            // 
-            this.bsServerSettings.AllowNew = false;
-            this.bsServerSettings.DataSource = typeof(ReportingServerManager.Logic.Configuration.ServerSettingsConfigElement);
             // 
             // FormSettings
             // 

@@ -6,6 +6,8 @@ namespace ReportingServerManager.Logic.Shared
         Datasource = 1,
         Report = 2,
         Model = 3,
-        Unknown = 4
+        Unknown = 4,
+        Dataset = 5,
+        MobileReport = 6
     }
 }

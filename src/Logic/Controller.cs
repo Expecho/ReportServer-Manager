@@ -53,11 +53,11 @@ namespace ReportingServerManager.Logic
             tvReportServer.Nodes.Clear();
 
             var root = new TreeNode(serverAlias)
-                           {
-                               Name = "/",
-                               ToolTipText = RsFacade.BaseUrl,
-                               Tag = ReportItemTypes.Folder
-                           };
+            {
+                Name = "/",
+                ToolTipText = RsFacade.BaseUrl,
+                Tag = ReportItemTypes.Folder
+            };
 
             tvReportServer.Nodes.Add(root);
 
@@ -93,12 +93,12 @@ namespace ReportingServerManager.Logic
                 if (item.Type == ReportItemTypes.Folder && (viewItem == ViewItems.Folders || viewItem == ViewItems.All || viewItem == ViewItems.Datasources))
                 {
                     var folder = new TreeNode(item.Name)
-                                     {
-                                         Name = item.Name,
-                                         ImageIndex = item.Hidden ? 4 : 2,
-                                         Tag = ReportItemTypes.Folder,
-                                         ToolTipText = item.Path
-                                     };
+                    {
+                        Name = item.Name,
+                        ImageIndex = 3,
+                        Tag = ReportItemTypes.Folder,
+                        ToolTipText = item.Path
+                    };
                     parent.Nodes.Add(folder);
 
                     if (recurseSubfolders)
@@ -107,35 +107,35 @@ namespace ReportingServerManager.Logic
                 else if (item.Type == ReportItemTypes.Datasource && (viewItem == ViewItems.Datasources || viewItem == ViewItems.All))
                 {
                     var datasource = new TreeNode(item.Name)
-                                         {
-                                             Name = item.Name,
-                                             ImageIndex = 0,
-                                             Tag = ReportItemTypes.Datasource,
-                                             ToolTipText = item.Path
-                                         };
+                    {
+                        Name = item.Name,
+                        ImageIndex = 2,
+                        Tag = ReportItemTypes.Datasource,
+                        ToolTipText = item.Path
+                    };
 
                     parent.Nodes.Add(datasource);
                 }
                 else if (item.Type == ReportItemTypes.Report && viewItem == ViewItems.All)
                 {
                     var report = new TreeNode(item.Name)
-                                     {
-                                         Name = item.Name,
-                                         ImageIndex = 1,
-                                         Tag = ReportItemTypes.Report,
-                                         ToolTipText = item.Path
-                                     };
+                    {
+                        Name = item.Name,
+                        ImageIndex = 5,
+                        Tag = ReportItemTypes.Report,
+                        ToolTipText = item.Path
+                    };
                     parent.Nodes.Add(report);
                 }
                 else if (item.Type == ReportItemTypes.Model && (viewItem == ViewItems.Datasources || viewItem == ViewItems.All))
                 {
                     var model = new TreeNode(item.Name)
-                                    {
-                                        Name = item.Name,
-                                        ImageIndex = 4,
-                                        Tag = ReportItemTypes.Model,
-                                        ToolTipText = item.Path
-                                    };
+                    {
+                        Name = item.Name,
+                        ImageIndex = 0,
+                        Tag = ReportItemTypes.Model,
+                        ToolTipText = item.Path
+                    };
 
                     parent.Nodes.Add(model);
                 }
@@ -152,33 +152,44 @@ namespace ReportingServerManager.Logic
             foreach (var item in RsFacade.ListChildren(path, false))
             {
                 var lvi = new ListViewItem
-                              {
-                                  Text = item.Name,
-                                  ToolTipText = item.Path
-                              };
+                {
+                    Text = item.Name,
+                    ToolTipText = item.Path
+                };
 
                 switch (item.Type)
                 {
                     case ReportItemTypes.Folder:
-                        lvi.ImageIndex = item.Hidden ? 4 : 2;
+                        lvi.ImageIndex = 3;
                         lvi.Tag = ReportItemTypes.Folder;
 
                         break;
                     case ReportItemTypes.Report:
-                        lvi.ImageIndex = item.Hidden ? 5 : 1;
+                        lvi.ImageIndex = 5;
                         lvi.Tag = ReportItemTypes.Report;
                         break;
                     case ReportItemTypes.Datasource:
                         lvi.Tag = ReportItemTypes.Datasource;
-                        lvi.ImageIndex = 0;
+                        lvi.ImageIndex = 2;
                         break;
                     case ReportItemTypes.Model:
                         lvi.Tag = ReportItemTypes.Model;
+                        lvi.ImageIndex = 0;
+                        break;
+                    case ReportItemTypes.Dataset:
+                        lvi.Tag = ReportItemTypes.Dataset;
+                        lvi.ImageIndex = 1;
+                        break;
+                    case ReportItemTypes.MobileReport:
+                        lvi.Tag = ReportItemTypes.MobileReport;
                         lvi.ImageIndex = 6;
                         break;
                 }
                 lvItems.Items.Add(lvi);
             }
+            //Sort the listview to display folders first
+            lvItems.ListViewItemSorter = new ListViewSorter();
+            lvItems.Sorting = SortOrder.Ascending;
         }
         #endregion
 
@@ -221,11 +232,11 @@ namespace ReportingServerManager.Logic
             }
 
             var folder = new TreeNode(name)
-                             {
-                                 Name = name,
-                                 ImageIndex = 2,
-                                 Tag = ReportItemTypes.Folder
-                             };
+            {
+                Name = name,
+                ImageIndex = 4,
+                Tag = ReportItemTypes.Folder
+            };
 
             if (parent.ToolTipText.EndsWith("/"))
             {
@@ -260,7 +271,7 @@ namespace ReportingServerManager.Logic
         public void AddPolicyForMyReports(string userName, IEnumerable<string> roles)
         {
             var currentItem = new ReportItemDTO();
-            
+
             try
             {
                 currentItem.Path = "/Users Folders";
@@ -320,6 +331,11 @@ namespace ReportingServerManager.Logic
                 UploadReport(filename, destination, overwrite);
             }
 
+            foreach (var filename in Directory.GetFiles(path, "*.rsd", SearchOption.TopDirectoryOnly))
+            {
+                UploadReport(filename, destination, overwrite);
+            }
+
             foreach (var foldername in Directory.GetDirectories(path))
             {
                 UploadFolder(foldername, destination.TrimEnd('/') + "/" + Path.GetFileName(foldername), overwrite, CreateFolder(Path.GetFileName(foldername), parent));
@@ -369,7 +385,7 @@ namespace ReportingServerManager.Logic
             RsFacade.CreateModel(visibleName, destinationFolder, def, null);
         }
 
-       public void UploadReport(string filename, string destinationFolder, bool overwrite)
+        public void UploadReport(string filename, string destinationFolder, bool overwrite)
         {
             try
             {
@@ -377,7 +393,11 @@ namespace ReportingServerManager.Logic
 
                 var visibleName = Path.GetFileName(filename);
 
-                RsFacade.CreateReport(visibleName, destinationFolder, overwrite, definition, null);
+                if (Path.GetExtension(filename) == ".rdl")
+                    RsFacade.CreateReport(visibleName, destinationFolder, overwrite, definition, null);
+                else
+                    RsFacade.CreateDataset(visibleName, destinationFolder, overwrite, definition, null);
+
 
                 toolStripStatusLabel.Text = String.Format("Uploaded item {0}", Path.GetFileName(filename));
                 Application.DoEvents();
@@ -393,9 +413,9 @@ namespace ReportingServerManager.Logic
             using (var stream = File.OpenRead(filename))
             {
                 var definition = new Byte[stream.Length];
-                
-                stream.Read(definition, 0, (int) stream.Length);
-                
+
+                stream.Read(definition, 0, (int)stream.Length);
+
                 return definition;
             }
         }
@@ -413,6 +433,8 @@ namespace ReportingServerManager.Logic
                     }
                     break;
                 case ReportItemTypes.Report:
+                case ReportItemTypes.Dataset:
+                case ReportItemTypes.MobileReport:
                 case ReportItemTypes.Model:
 
                     RsFacade.SetItemDataSources(item, datasource);
@@ -464,24 +486,34 @@ namespace ReportingServerManager.Logic
             return RsFacade.ListRoles();
         }
         #region Download
-        public void DownloadItem(string path, string destinationFolder, ReportItemTypes type, bool preserveFolders)
+        public void DownloadItem(string folderName, string path, string destinationFolder, ReportItemTypes type, bool preserveFolders)
         {
             switch (type)
             {
                 case ReportItemTypes.Folder:
+
+                    if (preserveFolders)
+                    {
+                        destinationFolder = destinationFolder + "\\" + folderName;
+                        if (!Directory.Exists(destinationFolder))
+                            Directory.CreateDirectory(destinationFolder);
+                    }
+
                     foreach (var catalogItem in RsFacade.ListChildren(path, true))
                     {
-                        DownloadItem(catalogItem.Path, destinationFolder, catalogItem.Type, preserveFolders);
+                        DownloadItem(catalogItem.Name, catalogItem.Path, destinationFolder, catalogItem.Type, preserveFolders);
                     }
                     break;
 
+                case ReportItemTypes.Dataset:
                 case ReportItemTypes.Report:
+                case ReportItemTypes.MobileReport:
 
                     var definition = new XmlDocument();
 
                     definition.Load(new MemoryStream(RsFacade.GetReportDefinition(path)));
 
-                    SaveItem(path, type, destinationFolder, preserveFolders, definition);
+                    SaveItem(path, type, destinationFolder, definition);
 
                     break;
 
@@ -490,7 +522,7 @@ namespace ReportingServerManager.Logic
 
                     model.Load(new MemoryStream(RsFacade.GetModelDefinition(path)));
 
-                    SaveItem(path, type, destinationFolder, preserveFolders, model);
+                    SaveItem(path, type, destinationFolder, model);
 
                     break;
             }
@@ -508,6 +540,12 @@ namespace ReportingServerManager.Logic
                 case ReportItemTypes.Model:
                     filename = filename + ".smdl";
                     break;
+                case ReportItemTypes.Dataset:
+                    filename = filename + ".rsd";
+                    break;
+                case ReportItemTypes.MobileReport:
+                    filename = filename + ".rsmobile";
+                    break;
                 case ReportItemTypes.Report:
                     filename = filename + ".rdl";
                     break;
@@ -516,29 +554,29 @@ namespace ReportingServerManager.Logic
             return filename;
         }
 
-        private void SaveItem(string filename, ReportItemTypes type, string destination, bool preserveFolders, XmlDocument definition)
+        private void SaveItem(string filename, ReportItemTypes type, string destination, XmlDocument definition)
         {
             if (!RsFacade.PathIncludesExtension)
             {
                 filename = AppendFileSuffix(filename, type);
             }
 
-            if (preserveFolders)
-            {
-                var sourceBaseDirectory = tvReportServer.SelectedNode.ToolTipText;
+            //if (preserveFolders)
+            //{
+            //    var sourceBaseDirectory = tvReportServer.SelectedNode.ToolTipText;
 
-                var relativeFilePath = Path.GetDirectoryName(filename.Substring(sourceBaseDirectory.Length));
+            //    var relativeFilePath = Path.GetDirectoryName(filename.Substring(sourceBaseDirectory.Length));
 
-                destination = Path.Combine(destination, relativeFilePath);
-                destination = destination.Replace('/', '\\');
-            }
+            //    destination = Path.Combine(destination, relativeFilePath);
+            //    destination = destination.Replace('/', '\\');
+            //}
 
             filename = Path.GetFileName(filename);
 
-            if (!Directory.Exists(destination))
-            {
-                Directory.CreateDirectory(destination);
-            }
+            //if (!Directory.Exists(destination))
+            //{
+            //    Directory.CreateDirectory(destination);
+            //}
 
             definition.Save(String.Format(@"{0}\{1}", destination, filename));
 
@@ -567,5 +605,24 @@ namespace ReportingServerManager.Logic
 
 
 
+    }
+
+    /// <summary>
+    /// This class is an implementation of the 'IComparer' interface.
+    /// </summary>
+    public class ListViewSorter : System.Collections.IComparer
+    {
+        public int Compare(object x, object y)
+        {
+            var lviX = (ListViewItem)x;
+            var lviY = (ListViewItem)y;
+
+            if ((lviX.Tag.Equals(ReportItemTypes.Folder) && lviY.Tag.Equals(ReportItemTypes.Folder)) || ((!lviX.Tag.Equals(ReportItemTypes.Folder) && !lviY.Tag.Equals(ReportItemTypes.Folder))))
+                return System.Collections.CaseInsensitiveComparer.Default.Compare(lviX.Text, lviY.Text);
+            else if (lviX.Tag.Equals(ReportItemTypes.Folder))
+                return -1;
+            else
+                return 1;
+        }
     }
 }

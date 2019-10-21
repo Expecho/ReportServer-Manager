@@ -12,6 +12,7 @@ namespace ReportingServerManager.Forms
     public partial class FormSSRSExplorer : Form
     {
         private const string REPORT_FILTER_STRING = "Reports|*.rdl";
+        private const string DATASET_FILTER_STRING = "Datasets|*.rsd";
         private const string MODEL_FILTER_STRING = "Models|*.smdl";
         private const string MODEL_FILEEXTENSION = ".smdl";
         private Controller controller;
@@ -164,7 +165,7 @@ namespace ReportingServerManager.Forms
         /// </summary>
         private void FilesToolStripMenuItemClick(object sender, EventArgs e)
         {
-            openFileDialog.Filter = REPORT_FILTER_STRING + "|" + MODEL_FILTER_STRING;
+            openFileDialog.Filter = REPORT_FILTER_STRING + "|" + DATASET_FILTER_STRING + "|" + MODEL_FILTER_STRING;
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 var overwrite = MessageBox.Show("Overwrite existing items?", "Upload", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
@@ -212,20 +213,22 @@ namespace ReportingServerManager.Forms
         /// </summary>
         private void FolderToolStripMenuItemClick(object sender, EventArgs e)
         {
-            var folderSelector = new FormSelectFilesystemFolder
-                                     {
-                                         EnableCreateNewFolder = false
-                                     };
+            var folderSelector = new FolderBrowserDialog();
+            folderSelector.ShowNewFolderButton = false;
+            folderSelector.SelectedPath = Properties.Settings.Default.LastSelectedFolder;
 
             if (folderSelector.ShowDialog() == DialogResult.OK)
             {
+                Properties.Settings.Default.LastSelectedFolder = folderSelector.SelectedPath.ToString();
+                Properties.Settings.Default.Save();
+
                 var overwrite = MessageBox.Show("Overwrite existing items?", "Upload", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
 
                 Cursor = Cursors.WaitCursor;
 
                 try
                 {
-                    controller.UploadFolder(folderSelector.Foldername, tvReportServer.SelectedNode.ToolTipText, overwrite, tvReportServer.SelectedNode);
+                    controller.UploadFolder(folderSelector.SelectedPath, tvReportServer.SelectedNode.ToolTipText, overwrite, tvReportServer.SelectedNode);
                     controller.PopulateItems(tvReportServer.SelectedNode.ToolTipText);
                 }
                 catch (Exception ex)
@@ -453,27 +456,27 @@ namespace ReportingServerManager.Forms
         /// </summary>
         private void DownloadToolStripMenuItemClick(object sender, EventArgs e)
         {
-            using(var folderSelector = new FormSelectFilesystemFolder())
+            using(var folderSelector = new FolderBrowserDialog())
             {
+                folderSelector.SelectedPath = Properties.Settings.Default.LastSelectedFolder;
+
                 if (folderSelector.ShowDialog() == DialogResult.OK)
                 {
+                    Properties.Settings.Default.LastSelectedFolder = folderSelector.SelectedPath.ToString();
+                    Properties.Settings.Default.Save();
+
                     var askToPreserveFolders = lvItems.SelectedItems.Cast<ListViewItem>().Any(item => (ReportItemTypes) item.Tag == ReportItemTypes.Folder);
 
                     var preserveFolders = askToPreserveFolders && 
                         MessageBox.Show("Preserve folders?", "Download items", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
-
-                    if (!Directory.Exists(folderSelector.Foldername))
-                    {
-                        Directory.CreateDirectory(folderSelector.Foldername);
-                    }
-
+                    
                     Cursor = Cursors.WaitCursor;
 
                     foreach (ListViewItem item in lvItems.SelectedItems)
                     {
                         try
                         {
-                            controller.DownloadItem(item.ToolTipText, folderSelector.Foldername,
+                            controller.DownloadItem(item.Text, item.ToolTipText, folderSelector.SelectedPath,
                                                     (ReportItemTypes) item.Tag, preserveFolders);
                         }
                         catch (Exception ex)
